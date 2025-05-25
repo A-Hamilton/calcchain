@@ -11,7 +11,7 @@ name: Deploy to Firebase Hosting on merge
 on:
   push:
     # 👇 Replace main with master if that’s your production branch
-    branches: [main]
+    branches: [master]
 
 jobs:
   build_and_deploy:
