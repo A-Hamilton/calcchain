@@ -33,7 +33,7 @@ jobs:
       # 3️⃣  Install the same Node you use locally
       - uses: actions/setup-node@v3
         with:
-          node-version: 18.x          # change if you use another major version
+          node-version: 20.x          # change if you use another major version
 
       # 4️⃣  Install deps & build
       - run: npm ci
