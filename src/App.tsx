@@ -120,8 +120,7 @@ const App: React.FC = () => {
                     sx={{
                       boxShadow: 2,
                       p: 2,
-
-                      backgroundColor: "#10131D",
+                      backgroundColor: "#1C1D2B",
                     }}
                   >
                     <Typography variant="h6" gutterBottom ml={4} mt={2}>

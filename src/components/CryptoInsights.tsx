@@ -6,7 +6,7 @@ interface CryptoInsightsProps {
 }
 
 const CryptoInsights: React.FC<CryptoInsightsProps> = ({ message }) => (
-  <Paper variant="outlined" sx={{ p: 2, display: 'flex', alignItems: 'center', margin:1 }}>
+  <Paper variant="outlined" sx={{ p: 2, alignItems: 'flex-start', margin:1, bgcolor: '#1C1D2B', display: 'flex'}}>
     <Box
       component="span"
       sx={{ fontSize: '1.25rem', color: 'primary.main', mr: 1 }}

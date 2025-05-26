@@ -26,8 +26,8 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           backgroundColor: '#0F1019',
-          boxShadow:        'none',
-          borderBottom:     '1px solid #374151',
+          boxShadow:        '10',
+          borderBottom:     '1px solid #0F1019',
           borderRadius:     0    // <-- remove rounding
         },
       },
@@ -36,7 +36,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           backgroundColor: '#10131D',
-          border: '1px solid #10131D',
+          boxShadow: '5',
           borderRadius: 8,
         },
       },

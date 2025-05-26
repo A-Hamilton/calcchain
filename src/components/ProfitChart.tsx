@@ -26,7 +26,7 @@ const CustomTooltip: React.FC<TooltipProps<number, string>> = ({ active, payload
   const profit = (payload[0].value ?? 0) as number;
 
   return (
-    <Paper sx={{ p: 1, bgcolor: 'background.paper' }}>
+    <Paper>
       <Typography variant="subtitle2" color="text.secondary">
         Day: {label}
       </Typography>

@@ -12,7 +12,7 @@ export interface ResultsDisplayProps {
 }
 
 const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ title, metrics }) => (
-  <Card elevation={0} sx={{ backgroundColor: '#10131D', borderRadius: 2, boxShadow: 2 }}>
+  <Card elevation={0} sx={{ backgroundColor: '#1C1D2B', borderRadius: 2, boxShadow: 2 }}>
     <CardContent>
       <Typography variant="h6" gutterBottom>
         {title}
