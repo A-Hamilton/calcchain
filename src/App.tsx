@@ -88,7 +88,7 @@ const App: React.FC = () => {
                       },
                       {
                         label: "Trades per Day",
-                        value: results.estimatedTradesPerDay.toString(),
+                        value: results.estimatedTradesPerDay.toFixed(2),
                       },
                     ]}
                   />
