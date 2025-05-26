@@ -15,10 +15,6 @@ import {
   Grid,
   TextField,
   InputAdornment,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   Button,
   SxProps,
   Theme,
@@ -29,7 +25,6 @@ import { GridParameters, GridResults } from '../types';
 /** All the form fields we care about */
 type FieldKey =
   | 'symbol'
-  | 'botType'
   | 'principal'
   | 'lowerBound'
   | 'upperBound'
@@ -49,7 +44,6 @@ interface FieldConfig {
 
 const fieldConfigs: FieldConfig[] = [
   { key: 'symbol',     label: 'Crypto Symbol',   type: 'text' },
-  { key: 'botType',    label: 'Bot Type',        type: 'text' },
   { key: 'principal',  label: 'Principal',       type: 'number', adornment: '$', adornPos: 'start' },
   { key: 'lowerBound', label: 'Lower Bound',     type: 'number', adornment: '$', adornPos: 'start' },
   { key: 'upperBound', label: 'Upper Bound',     type: 'number', adornment: '$', adornPos: 'start' },
@@ -62,7 +56,6 @@ const fieldConfigs: FieldConfig[] = [
 /** Initial form state with requested defaults */
 const initialForm: Record<FieldKey, string> = {
   symbol:     'BTC',
-  botType:    'Long',
   principal: '1000',  // default $1,000
   lowerBound: '0',
   upperBound: '0',
@@ -102,69 +95,52 @@ export default function InputForm({ onCalculate }: InputFormProps) {
     []
   );
 
-  // Validate all fields; return true if valid
+  // Validate fields
   const validate = useCallback(() => {
     const newErr: Partial<Record<FieldKey,string>> = {};
     fieldConfigs.forEach(({ key, type, integerOnly }) => {
       const val = form[key].trim();
-      if (!val) {
-        newErr[key] = 'Required';
-      } else if (type === 'number') {
+      if (!val) newErr[key] = 'Required';
+      else if (type === 'number') {
         const num = Number(val);
-        if (isNaN(num) || num <= 0) {
-          newErr[key] = 'Must be > 0';
-        } else if (integerOnly && num % 1 !== 0) {
-          newErr[key] = 'Must be whole';
-        }
+        if (isNaN(num) || num <= 0) newErr[key] = 'Must be > 0';
+        else if (integerOnly && num % 1 !== 0) newErr[key] = 'Must be whole';
       }
     });
     setErrors(newErr);
     return Object.keys(newErr).length === 0;
   }, [form]);
 
-  // Fetch last 5 daily candles and fill bounds/count
+  // Optimize values via Binance 5-day candle
   const handleOptimize = useCallback(async () => {
     try {
-      const symbolPair = form.symbol.toUpperCase() + 'USDT';
-      const resp = await axios.get(
-        `https://api.binance.com/api/v3/klines?symbol=${symbolPair}&interval=1d&limit=5`
+      const pair = form.symbol.toUpperCase() + 'USDT';
+      const res = await axios.get(
+        `https://api.binance.com/api/v3/klines?symbol=${pair}&interval=1d&limit=5`
       );
-      const data = resp.data as any[][];
+      const data = res.data as any[][];
       const lows = data.map(k => parseFloat(k[3]));
       const highs = data.map(k => parseFloat(k[2]));
       const lower = Math.min(...lows);
       const upper = Math.max(...highs);
-      const count = 10; // adjust as needed
+      const count = 10;
 
-      setForm(f => ({
-        ...f,
-        lowerBound: String(lower),
-        upperBound: String(upper),
-        gridCount:  String(count),
-      }));
-      setErrors(err => ({
-        ...err,
-        lowerBound: undefined,
-        upperBound: undefined,
-        gridCount:  undefined,
-      }));
-    } catch (err) {
-      console.error('Failed to optimize values', err);
+      setForm(f => ({ ...f, lowerBound: String(lower), upperBound: String(upper), gridCount: String(count) }));
+      setErrors(err => ({ ...err, lowerBound: undefined, upperBound: undefined, gridCount: undefined }));
+    } catch (e) {
+      console.error(e);
     }
   }, [form.symbol]);
 
-  // On mount/refresh, auto-optimize
-  useEffect(() => {
-    handleOptimize();
-  }, [handleOptimize]);
+  // Auto-optimize on mount
+  useEffect(() => { handleOptimize(); }, [handleOptimize]);
 
-  // Submit handler
+  // Submit
   const handleSubmit = useCallback((e: FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
     const params: GridParameters = {
       symbol:       form.symbol,
-      botType:      form.botType as 'Long'|'Short',
       principal:    Number(form.principal),
       lowerBound:   Number(form.lowerBound),
       upperBound:   Number(form.upperBound),
@@ -177,86 +153,41 @@ export default function InputForm({ onCalculate }: InputFormProps) {
     onCalculate(calculateGridProfit(params));
   }, [form, onCalculate, validate]);
 
-  // Re-validate whenever form changes
   const isValid = useMemo(() => validate(), [form, validate]);
 
   return (
     <Card sx={{ bgcolor: 'background.paper' }}>
       <CardContent>
-        <Typography variant="h6" gutterBottom sx={{ color: '#FFF' }}>
+        <Typography variant="h6" sx={{ color: '#FFF', mb: 1 }}>
           Grid Parameters
         </Typography>
         <form onSubmit={handleSubmit} noValidate>
           <Grid container spacing={2}>
             {fieldConfigs.map(cfg => (
               <Grid item xs={6} key={cfg.key}>
-                {cfg.key === 'botType' ? (
-                  <FormControl
-                    fullWidth
-                    required
-                    error={!!errors[cfg.key]}
-                    sx={whiteFieldSx}
-                  >
-                    <InputLabel>{cfg.label}</InputLabel>
-                    <Select
-                      value={form[cfg.key]}
-                      label={cfg.label}
-                      onChange={e => handleChange(cfg.key)(e.target as any)}
-                      sx={{ color: '#FFF' }}
-                    >
-                      <MenuItem value="Long">Long</MenuItem>
-                      <MenuItem value="Short">Short</MenuItem>
-                    </Select>
-                  </FormControl>
-                ) : (
-                  <TextField
-                    label={cfg.label}
-                    type={cfg.type}
-                    value={form[cfg.key]}
-                    onChange={handleChange(cfg.key)}
-                    required
-                    error={!!errors[cfg.key]}
-                    helperText={errors[cfg.key]}
-                    fullWidth
-                    InputProps={
-                      cfg.adornment
-                        ? {
-                            [`${cfg.adornPos}Adornment`]: (
-                              <InputAdornment position={cfg.adornPos!}>
-                                {cfg.adornment}
-                              </InputAdornment>
-                            ),
-                          }
-                        : undefined
-                    }
-                    inputProps={
-                      cfg.type === 'number'
-                        ? { min: 1, step: cfg.integerOnly ? 1 : 'any' }
-                        : undefined
-                    }
-                    sx={whiteFieldSx}
-                  />
-                )}
+                <TextField
+                  label={cfg.label}
+                  type={cfg.type}
+                  value={form[cfg.key]}
+                  onChange={handleChange(cfg.key)}
+                  required
+                  error={!!errors[cfg.key]}
+                  helperText={errors[cfg.key]}
+                  fullWidth
+                  InputProps={cfg.adornment ? { [`${cfg.adornPos}Adornment`]: <InputAdornment position={cfg.adornPos!}>{cfg.adornment}</InputAdornment> } : undefined}
+                  inputProps={cfg.type==='number' ? { min:1, step: cfg.integerOnly?1:'any' } : undefined}
+                  sx={whiteFieldSx}
+                />
               </Grid>
             ))}
 
-            {/* Optimize & Calculate buttons */}
             <Grid item xs={6}>
-              <Button
-                variant="outlined"
-                fullWidth
-                onClick={handleOptimize}
-              >
+              <Button variant="outlined" fullWidth onClick={handleOptimize}>
                 Optimize Values
               </Button>
             </Grid>
             <Grid item xs={6}>
-              <Button
-                type="submit"
-                variant="contained"
-                fullWidth
-                disabled={!isValid}
-              >
+              <Button type="submit" variant="contained" fullWidth disabled={!isValid}>
                 Calculate
               </Button>
             </Grid>
