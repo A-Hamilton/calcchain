@@ -7,6 +7,7 @@ import {
   Grid,
   Paper,
   Typography,
+  Link,
 } from '@mui/material';
 import logo from './assets/calcchainlogo.png';
 import InputForm from './components/InputForm';
@@ -36,22 +37,22 @@ const App: React.FC = () => {
         position="static"
         elevation={0}
         sx={{
-          backgroundColor: '#0D0D0D',
-          boxShadow: 'none',    // no shadow
-          border: 'none',       // no border at all
+          boxShadow: '5',   
+          border: '0',      
         }}
       >
-        <Toolbar>
-          <Box
+        <Toolbar >
+          <Link href="/" sx={{ display: 'flex', alignItems: 'center' }}>
+            <Box
             component="img"
             src={logo}
             alt="CalcChain Logo"
             sx={{
-              height: 24,       // much larger
-              width: 'auto',
+              height: 24,     
               objectFit: 'contain',
-            }}
-          />
+            }} 
+            />
+          </Link>
         </Toolbar>
       </AppBar>
 
@@ -92,16 +93,27 @@ const App: React.FC = () => {
                   />
                 </Grid>
                 <Grid item>
-                  <Paper
+                  <Paper 
                     variant="outlined"
                     sx={{
-                      p: 2,
-                      backgroundColor: '#1A1A1A',
-                      borderColor: '#374151',
+                      boxShadow: 2,
+                      p: 2
+                      
+                      
+                    ,
+                      backgroundColor: '#10131D',
                     }}
                   >
-                    <Typography variant="h6" gutterBottom>
+                    <Typography variant="h6" gutterBottom ml={4} mt={2}>
                       Profit Projection
+                    </Typography>
+                    <Typography variant="subtitle2" align="right" mb={2}>
+                      <Box component="span" sx={{ color: '#2B66F6' }}>
+    ━
+  </Box>
+  {' '}
+  Cummulative profit over time
+  {' '}
                     </Typography>
                     <ProfitChart data={chartData} />
                   </Paper>

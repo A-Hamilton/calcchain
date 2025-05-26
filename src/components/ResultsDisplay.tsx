@@ -12,12 +12,12 @@ export interface ResultsDisplayProps {
 }
 
 const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ title, metrics }) => (
-  <Card elevation={0} sx={{ backgroundColor: '#1F2937', border: '1px solid #374151', borderRadius: 2 }}>
+  <Card elevation={0} sx={{ backgroundColor: '#10131D', borderRadius: 2, boxShadow: 2 }}>
     <CardContent>
       <Typography variant="h6" gutterBottom>
         {title}
       </Typography>
-      <Grid container spacing={2}>
+      <Grid container spacing={1} justifyContent="space-between">
         {metrics.map((m, i) => (
           <Grid key={i} item xs={12} sm={4}>
             <Typography variant="subtitle2" color="text.secondary">

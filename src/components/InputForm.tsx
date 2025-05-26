@@ -22,13 +22,13 @@ interface InputFormProps {
 const InputForm: React.FC<InputFormProps> = ({ onCalculate }) => {
   const [symbol, setSymbol]         = useState('BTC');
   const [botType, setBotType]       = useState<'Long'|'Short'>('Long');
-  const [principal, setPrincipal]   = useState(1000);
-  const [lowerBound, setLowerBound] = useState(50000);
-  const [upperBound, setUpperBound] = useState(150000);
-  const [gridCount, setGridCount]   = useState(200);
-  const [leverage, setLeverage]     = useState(1);
-  const [fee, setFee]               = useState(0.1);
-  const [duration, setDuration]     = useState(100);
+  const [principal, setPrincipal]   = useState(0);
+  const [lowerBound, setLowerBound] = useState(0);
+  const [upperBound, setUpperBound] = useState(0);
+  const [gridCount, setGridCount]   = useState(0);
+  const [leverage, setLeverage]     = useState(0);
+  const [fee, setFee]               = useState(0);
+  const [duration, setDuration]     = useState(0);
   const [unit, setUnit]             = useState<'Days'|'Hours'>('Days');
 
   const handleSubmit = (e: React.FormEvent) => {
