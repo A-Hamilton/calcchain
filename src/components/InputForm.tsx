@@ -1,183 +1,206 @@
-// src/components/InputForm.tsx
-
 import React, { useState } from 'react';
 import {
+  Card,
+  CardContent,
+  Typography,
   Grid,
   TextField,
-  Button,
+  InputAdornment,
+  FormControl,
+  InputLabel,
+  Select,
   MenuItem,
-  IconButton,
-  Tooltip,
+  Button,
 } from '@mui/material';
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-
-import { GridParameters } from '../types';
 import { calculateGridProfit } from '../utils/calculator';
+import { GridParameters, GridResults } from '../types';
 
 interface InputFormProps {
-  onCalculate: (results: ReturnType<typeof calculateGridProfit>) => void;
+  onCalculate: (results: GridResults) => void;
 }
 
 const InputForm: React.FC<InputFormProps> = ({ onCalculate }) => {
-  // --- form state ---
-  const [symbol, setSymbol] = useState('BTC');
-  const [botType, setBotType] = useState<'Long' | 'Short'>('Long');
-  const [principal, setPrincipal] = useState(1000);
+  const [symbol, setSymbol]         = useState('BTC');
+  const [botType, setBotType]       = useState<'Long'|'Short'>('Long');
+  const [principal, setPrincipal]   = useState(1000);
   const [lowerBound, setLowerBound] = useState(50000);
   const [upperBound, setUpperBound] = useState(150000);
-  const [gridCount, setGridCount] = useState(200);
-  const [leverage, setLeverage] = useState(1);
-  const [fee, setFee] = useState(0.001); // e.g. 0.001 = 0.1%
+  const [gridCount, setGridCount]   = useState(200);
+  const [leverage, setLeverage]     = useState(1);
+  const [fee, setFee]               = useState(0.1);
+  const [duration, setDuration]     = useState(100);
+  const [unit, setUnit]             = useState<'Days'|'Hours'>('Days');
 
-  // Duration inputs
-  const [durationAmount, setDurationAmount] = useState(100);
-  const [durationUnit, setDurationUnit] =
-    useState<'Days' | 'Months' | 'Years'>('Days');
-
-  // ATR state
-  const [atr1m, setAtr1m] = useState<number | null>(null);
-  const [atrDaily, setAtrDaily] = useState<number | null>(null);
-  const [combinedAtr, setCombinedAtr] = useState<number | null>(null);
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Basic validation
-    if (
-      principal <= 0 ||
-      lowerBound <= 0 ||
-      upperBound <= lowerBound ||
-      gridCount < 1 ||
-      leverage <= 0 ||
-      fee < 0 ||
-      durationAmount <= 0
-    ) {
-      alert('Please check your inputs—some values are invalid.');
-      return;
-    }
+    // Convert duration to days
+    const durationDays = unit === 'Days' ? duration : duration / 24;
 
-    // Convert duration into days
-    let durationDays = durationAmount;
-    if (durationUnit === 'Months') durationDays *= 30;
-    else if (durationUnit === 'Years') durationDays *= 365;
+    // Build params (using a default atrPerMin=1 so you see non-zero trades/day)
+    const params: GridParameters = {
+      symbol,
+      botType,
+      principal,
+      lowerBound,
+      upperBound,
+      gridCount,
+      leverage,
+      atrPerMin: 1,                // ← Must be >0 or your trades/day = 0!
+      feePercent: fee / 100,
+      durationDays,
+    };
 
-    try {
-      // Build symbol string
-      const apiSymbol = symbol.toUpperCase().endsWith('USDT')
-        ? symbol.toUpperCase()
-        : symbol.toUpperCase() + 'USDT';
-
-      // 1) Fetch 1m ATR (200 bars)
-      const res1m = await fetch(
-        `https://api.binance.com/api/v3/klines?symbol=${apiSymbol}&interval=1m&limit=200`
-      );
-      if (!res1m.ok) throw new Error('Failed to fetch 1m candles');
-      const data1m: any[] = await res1m.json();
-      let tr1m = 0;
-      data1m.forEach((c, i) => {
-        const high = parseFloat(c[2]),
-          low = parseFloat(c[3]),
-          prev = i > 0 ? parseFloat(data1m[i - 1][4]) : null;
-        tr1m += i === 0
-          ? high - low
-          : Math.max(high - low, Math.abs(high - prev!), Math.abs(low - prev!));
-      });
-      const atrMinute = tr1m / data1m.length;
-      setAtr1m(atrMinute);
-
-      // 2) Fetch daily ATR (200 bars)
-      const resD = await fetch(
-        `https://api.binance.com/api/v3/klines?symbol=${apiSymbol}&interval=1d&limit=200`
-      );
-      if (!resD.ok) throw new Error('Failed to fetch daily candles');
-      const dataD: any[] = await resD.json();
-      let trD = 0;
-      dataD.forEach((c, i) => {
-        const high = parseFloat(c[2]),
-          low = parseFloat(c[3]),
-          prev = i > 0 ? parseFloat(dataD[i - 1][4]) : null;
-        trD += i === 0
-          ? high - low
-          : Math.max(high - low, Math.abs(high - prev!), Math.abs(low - prev!));
-      });
-      const atrDay = trD / dataD.length;
-      setAtrDaily(atrDay);
-
-      // 3) Combine: (dailyATR/1440 + ATR1m) / 2
-      const combo = (atrDay / 1440 + atrMinute) / 2;
-      setCombinedAtr(combo);
-
-      // 4) Build params & calculate
-      const params: GridParameters = {
-        symbol,
-        botType,
-        principal,
-        lowerBound,
-        upperBound,
-        gridCount,
-        leverage,
-        atrPerMin: combo,
-        feePercent: fee,
-        durationDays,
-      };
-
-      onCalculate(calculateGridProfit(params));
-    } catch (err) {
-      console.error(err);
-      alert(
-        'Failed to fetch ATR data from Binance. Please check your internet or symbol.'
-      );
-    }
+    // **Call your real calculator**
+    const results: GridResults = calculateGridProfit(params);
+    onCalculate(results);
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Grid container spacing={2}>
-        {/* ... existing inputs for symbol, bounds, etc ... */}
+    <Card>
+      <CardContent>
+        <Typography variant="h6" gutterBottom>
+          Grid Parameters
+        </Typography>
+        <form onSubmit={handleSubmit}>
+          <Grid container spacing={2}>
+            {/* Crypto Symbol */}
+            <Grid item xs={6}>
+              <TextField
+                label="Crypto Symbol"
+                value={symbol}
+                onChange={e => setSymbol(e.target.value.toUpperCase())}
+                fullWidth
+              />
+            </Grid>
+            {/* Bot Type */}
+            <Grid item xs={6}>
+              <FormControl fullWidth margin="dense">
+                <InputLabel>Bot Type</InputLabel>
+                <Select
+                  value={botType}
+                  label="Bot Type"
+                  onChange={e => setBotType(e.target.value as any)}
+                >
+                  <MenuItem value="Long">Long</MenuItem>
+                  <MenuItem value="Short">Short</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
 
-        {/* Display ATRs */}
-        <Grid item xs={12} sm={4}>
-          <TextField
-            label="ATR₁ₘ (200)"
-            value={atr1m !== null ? atr1m.toFixed(2) : ''}
-            InputProps={{ readOnly: true }}
-            fullWidth
-            helperText="1-minute ATR"
-          />
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <TextField
-            label="ATR₁d (200)"
-            value={atrDaily !== null ? atrDaily.toFixed(2) : ''}
-            InputProps={{ readOnly: true }}
-            fullWidth
-            helperText="Daily ATR"
-          />
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <TextField
-            label="Combined ATR/min"
-            value={combinedAtr !== null ? combinedAtr.toFixed(2) : ''}
-            InputProps={{ readOnly: true }}
-            fullWidth
-            helperText="(ATR₁d/1440 + ATR₁ₘ)/2"
-          />
-        </Grid>
+            {/* Principal */}
+            <Grid item xs={6}>
+              <TextField
+                label="Principal"
+                type="number"
+                value={principal}
+                onChange={e => setPrincipal(Number(e.target.value))}
+                InputProps={{
+                  startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                }}
+                fullWidth
+              />
+            </Grid>
+            {/* Lower Bound */}
+            <Grid item xs={6}>
+              <TextField
+                label="Lower Bound"
+                type="number"
+                value={lowerBound}
+                onChange={e => setLowerBound(Number(e.target.value))}
+                InputProps={{
+                  startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                }}
+                fullWidth
+              />
+            </Grid>
 
-        {/* Calculate */}
-        <Grid item xs={12}>
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            fullWidth
-            size="large"
-          >
-            CALCULATE
-          </Button>
-        </Grid>
-      </Grid>
-    </form>
+            {/* Upper Bound */}
+            <Grid item xs={6}>
+              <TextField
+                label="Upper Bound"
+                type="number"
+                value={upperBound}
+                onChange={e => setUpperBound(Number(e.target.value))}
+                InputProps={{
+                  startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                }}
+                fullWidth
+              />
+            </Grid>
+            {/* Grid Count */}
+            <Grid item xs={6}>
+              <TextField
+                label="Grid Count"
+                type="number"
+                value={gridCount}
+                onChange={e => setGridCount(Number(e.target.value))}
+                fullWidth
+              />
+            </Grid>
+
+            {/* Leverage */}
+            <Grid item xs={6}>
+              <TextField
+                label="Leverage"
+                type="number"
+                value={leverage}
+                onChange={e => setLeverage(Number(e.target.value))}
+                InputProps={{
+                  endAdornment: <InputAdornment position="end">×</InputAdornment>,
+                }}
+                fullWidth
+              />
+            </Grid>
+            {/* Fee (%) */}
+            <Grid item xs={6}>
+              <TextField
+                label="Fee (%)"
+                type="number"
+                value={fee}
+                onChange={e => setFee(Number(e.target.value))}
+                InputProps={{
+                  endAdornment: <InputAdornment position="end">%</InputAdornment>,
+                }}
+                fullWidth
+              />
+            </Grid>
+
+            {/* Duration */}
+            <Grid item xs={6}>
+              <TextField
+                label="Duration"
+                type="number"
+                value={duration}
+                onChange={e => setDuration(Number(e.target.value))}
+                fullWidth
+              />
+            </Grid>
+            {/* Unit */}
+            <Grid item xs={6}>
+              <FormControl fullWidth margin="dense">
+                <InputLabel>Unit</InputLabel>
+                <Select
+                  value={unit}
+                  label="Unit"
+                  onChange={e => setUnit(e.target.value as any)}
+                >
+                  <MenuItem value="Days">Days</MenuItem>
+                  <MenuItem value="Hours">Hours</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+
+            {/* Calculate */}
+            <Grid item xs={12}>
+              <Button type="submit" variant="contained" fullWidth>
+                Calculate
+              </Button>
+            </Grid>
+          </Grid>
+        </form>
+      </CardContent>
+    </Card>
   );
 };
 

@@ -1,63 +1,36 @@
-// src/components/ResultsDisplay.tsx
-
 import React from 'react';
-import { Card, CardContent, Typography } from '@mui/material';
-import { GridResults } from '../types';
+import { Card, CardContent, Typography, Grid } from '@mui/material';
 
-interface ResultsDisplayProps {
-  result: GridResults;
+interface Metric {
+  label: string;
+  value: string | number;
 }
 
-const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ result }) => {
-  const {
-    totalEstimatedProfit,
-    estimatedDailyProfit,
-    investmentPerGrid,
-    gridSpacing,
-    estimatedTradesPerDay,
-    netProfitPerGridTransaction,
-    durationDays,
-  } = result;
+export interface ResultsDisplayProps {
+  title:   string;
+  metrics: Metric[];
+}
 
-  // Format numbers for display
-  const formatNum = (num: number, decimals: number = 2) =>
-    num.toFixed(decimals);
-
-  return (
-    <Card elevation={3} sx={{ marginTop: 4 }}>
-      <CardContent>
-        <Typography variant="h6" gutterBottom>
-          Estimated Results:
-        </Typography>
-        <Typography>
-          <strong>Total Estimated Profit:</strong>{' '}
-          {formatNum(totalEstimatedProfit)}
-        </Typography>
-        <Typography>
-          <strong>Estimated Daily Profit:</strong>{' '}
-          {formatNum(estimatedDailyProfit)}
-        </Typography>
-        <Typography>
-          <strong>Investment per Grid:</strong>{' '}
-          {formatNum(investmentPerGrid)}
-        </Typography>
-        <Typography>
-          <strong>Grid Spacing:</strong> {formatNum(gridSpacing)}
-        </Typography>
-        <Typography>
-          <strong>Estimated Trades per Day:</strong>{' '}
-          {formatNum(estimatedTradesPerDay, 1)}
-        </Typography>
-        <Typography>
-          <strong>Net Profit per Grid Transaction:</strong>{' '}
-          {formatNum(netProfitPerGridTransaction)}
-        </Typography>
-        <Typography>
-          <strong>Duration (Days):</strong> {durationDays}
-        </Typography>
-      </CardContent>
-    </Card>
-  );
-};
+const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ title, metrics }) => (
+  <Card elevation={0} sx={{ backgroundColor: '#1F2937', border: '1px solid #374151', borderRadius: 2 }}>
+    <CardContent>
+      <Typography variant="h6" gutterBottom>
+        {title}
+      </Typography>
+      <Grid container spacing={2}>
+        {metrics.map((m, i) => (
+          <Grid key={i} item xs={12} sm={4}>
+            <Typography variant="subtitle2" color="text.secondary">
+              {m.label}
+            </Typography>
+            <Typography variant="h6" color="text.primary">
+              {m.value}
+            </Typography>
+          </Grid>
+        ))}
+      </Grid>
+    </CardContent>
+  </Card>
+);
 
 export default ResultsDisplay;

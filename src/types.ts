@@ -1,8 +1,9 @@
 // src/types.ts
 
 /**
- * Parameters passed to grid profit calculator.
+ * Parameters for the grid trading calculator.
  */
+
 export interface GridParameters {
   symbol: string;
   botType: 'Long' | 'Short';
@@ -11,15 +12,12 @@ export interface GridParameters {
   upperBound: number;
   gridCount: number;
   leverage: number;
-  /** Combined ATR per minute (blend of daily & 1m) */
-  atrPerMin: number;
-  feePercent: number;
-  /** Duration for the calculation, in days. */
+  atrPerMin: number;      // must be nonzero!
+  feePercent: number;     // decimal, e.g. 0.001 for 0.1%
   durationDays: number;
 }
-
 /**
- * Results returned by grid profit calculator.
+ * Results returned by the grid trading calculator.
  */
 export interface GridResults {
   totalEstimatedProfit: number;
@@ -29,4 +27,12 @@ export interface GridResults {
   estimatedTradesPerDay: number;
   netProfitPerGridTransaction: number;
   durationDays: number;
+}
+
+/**
+ * Single point for profit-over-time chart.
+ */
+export interface ChartPoint {
+  day: number;
+  profit: number;
 }

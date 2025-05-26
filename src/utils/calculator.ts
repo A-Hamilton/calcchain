@@ -15,7 +15,7 @@ export function calculateGridProfit(
     lowerBound,
     upperBound,
     leverage,
-    atrPerMin,      // blended ATR per minute
+    atrPerMin,
     feePercent,
     durationDays,
   } = params;
@@ -24,15 +24,14 @@ export function calculateGridProfit(
   const gridSpacing = (upperBound - lowerBound) / gridCount;
 
   // 2. Estimated full round-trip trades per day:
-  //    total intraday distance ≈ atrPerMin * 1440 minutes
-  //    trades = (atrPerMin * 1440) / gridSpacing
-  const estimatedTradesPerDay = (atrPerMin * 1440) / gridSpacing / 2; 
-  // divide by 2 because atrPerMin*1440 is one-way distance sum
+  //    (atrPerMin * 1440) gives total one-way distance per day
+  //    divide by gridSpacing to get one-way moves, then /2 for round-trips
+  const estimatedTradesPerDay = (atrPerMin * 1440) / gridSpacing / 2;
 
   // 3. Money allocated to each grid level
   const investmentPerGrid = principal / gridCount;
 
-  // 4. Gross profit per round-trip (buy low → sell high)
+  // 4. Gross profit per round-trip
   const grossProfitPerGrid =
     investmentPerGrid * (gridSpacing / lowerBound) * leverage;
 
