@@ -1,3 +1,4 @@
+// src/components/ProfitChart.tsx
 import React, { useMemo } from 'react';
 import {
   AreaChart,
@@ -20,19 +21,12 @@ interface ProfitChartProps {
   data: DataPoint[];
 }
 
-interface CustomTooltipProps extends TooltipProps<number, string> {}
-
-const CustomTooltip: React.FC<CustomTooltipProps> = ({ active, payload, label }) => {
+const CustomTooltip: React.FC<TooltipProps<number, string>> = ({ active, payload, label }) => {
   if (!active || !payload || !payload.length) return null;
-  const profit = payload[0].value as number;
+  const profit = (payload[0].value ?? 0) as number;
+
   return (
-    <Paper
-      elevation={1}
-      sx={{
-        p: 1,
-        borderRadius: 2,
-      }}
-    >
+    <Paper sx={{ p: 1, bgcolor: 'background.paper' }}>
       <Typography variant="subtitle2" color="text.secondary">
         Day: {label}
       </Typography>
@@ -45,27 +39,35 @@ const CustomTooltip: React.FC<CustomTooltipProps> = ({ active, payload, label })
 
 const ProfitChart: React.FC<ProfitChartProps> = ({ data }) => {
   // dynamic domain calculations
-  const maxDay = useMemo(() => (data.length ? data[data.length - 1].day : 0), [data]);
+  const maxDay = useMemo(
+    () => (data.length ? data[data.length - 1].day : 0),
+    [data]
+  );
   const maxProfitRaw = useMemo(
-    () => (data.length ? Math.max(...data.map((d) => d.profit)) : 0),
+    () => (data.length ? Math.max(...data.map(d => d.profit)) : 0),
     [data]
   );
   const maxProfit = Math.ceil(maxProfitRaw);
+
+  // ← compute minimum too
+  const minProfitRaw = useMemo(
+    () => (data.length ? Math.min(...data.map(d => d.profit)) : 0),
+    [data]
+  );
+  const minProfit = Math.floor(minProfitRaw);
 
   return (
     <ResponsiveContainer width="100%" height={280}>
       <AreaChart
         data={data}
-        margin={{ top: 0, right: 0, left: 0, bottom: 10 }}  // increased left & bottom
+        margin={{ top: 0, right: 0, left: 0, bottom: 10 }}
       >
         <defs>
           <linearGradient id="profitGradient" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#2B66F6" stopOpacity={0.9} />
-            <stop offset="100%" stopColor="#2B66F6" stopOpacity={0.1} />
+            <stop offset="5%" stopColor="#2B66F6" stopOpacity={0.3} />
+            <stop offset="95%" stopColor="#2B66F6" stopOpacity={0} />
           </linearGradient>
         </defs>
-
-        <CartesianGrid stroke="#374151" strokeOpacity={0.1} />
 
         <XAxis
           dataKey="day"
@@ -74,7 +76,13 @@ const ProfitChart: React.FC<ProfitChartProps> = ({ data }) => {
           stroke="#9CA3AF"
           tick={{ fill: '#9CA3AF', fontSize: 12 }}
           axisLine={{ stroke: '#9CA3AF' }}
-          ticks={[0, Math.floor(maxDay * 0.25), Math.floor(maxDay * 0.5), Math.floor(maxDay * 0.75), maxDay]}
+          ticks={[
+            0,
+            Math.floor(maxDay * 0.25),
+            Math.floor(maxDay * 0.5),
+            Math.floor(maxDay * 0.75),
+            maxDay,
+          ]}
           label={{
             value: 'Days',
             position: 'bottom',
@@ -84,20 +92,21 @@ const ProfitChart: React.FC<ProfitChartProps> = ({ data }) => {
           }}
         />
 
+        {/* ← set YAxis from minProfit up to maxProfit so negatives show */}
         <YAxis
           type="number"
-          domain={[0, maxProfit]}
+          domain={[minProfit, maxProfit]}
           stroke="#9CA3AF"
           tick={{ fill: '#9CA3AF', fontSize: 12 }}
-          axisLine={{ stroke: '#9CA3AF', strokeWidth: 1}}
-          // ticks= {[0, maxProfit * 0.25, maxProfit * 0.5, maxProfit, maxProfit]}
-          ticks= {[0, -10, -20, maxProfit]}
+          axisLine={{ stroke: '#9CA3AF', strokeWidth: 1 }}
         />
 
         <Tooltip
           content={<CustomTooltip />}
           cursor={{ stroke: '#2B66F6', strokeWidth: 2, opacity: 0.3 }}
         />
+
+        <CartesianGrid stroke="#333" strokeDasharray="3 3" />
 
         <Area
           type="monotone"

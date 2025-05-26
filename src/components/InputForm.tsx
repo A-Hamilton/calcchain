@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+// src/components/InputForm.tsx
+import React, { useState, ChangeEvent, FormEvent, useCallback, useMemo, memo } from 'react';
 import {
   Card,
   CardContent,
@@ -11,189 +12,159 @@ import {
   Select,
   MenuItem,
   Button,
+  SxProps,
+  Theme,
 } from '@mui/material';
 import { calculateGridProfit } from '../utils/calculator';
 import { GridParameters, GridResults } from '../types';
 
-interface InputFormProps {
-  onCalculate: (results: GridResults) => void;
+/**
+ * Configuration for each form field.
+ */
+type FieldKey =
+  | 'symbol'
+  | 'botType'
+  | 'principal'
+  | 'lowerBound'
+  | 'upperBound'
+  | 'gridCount'
+  | 'leverage'
+  | 'fee'
+  | 'duration';
+interface FieldConfig {
+  key: FieldKey;
+  label: string;
+  type: 'text' | 'number';
+  adornment?: string;
+  adornPos?: 'start' | 'end';
+  integerOnly?: boolean;
 }
+const fieldConfigs: FieldConfig[] = [
+  { key: 'symbol', label: 'Crypto Symbol', type: 'text' },
+  { key: 'botType', label: 'Bot Type', type: 'text' },
+  { key: 'principal', label: 'Principal', type: 'number', adornment: '$', adornPos: 'start' },
+  { key: 'lowerBound', label: 'Lower Bound', type: 'number', adornment: '$', adornPos: 'start' },
+  { key: 'upperBound', label: 'Upper Bound', type: 'number', adornment: '$', adornPos: 'start' },
+  { key: 'gridCount', label: 'Grid Count', type: 'number', integerOnly: true },
+  { key: 'leverage', label: 'Leverage', type: 'number', integerOnly: true, adornment: '×', adornPos: 'end' },
+  { key: 'fee', label: 'Fee (%)', type: 'number' },
+  { key: 'duration', label: 'Duration (Days)', type: 'number', integerOnly: true },
+];
+const initialForm: Record<FieldKey, string> = {
+  symbol: 'BTC', botType: 'Long', principal: '0', lowerBound: '0', upperBound: '0', gridCount: '0', leverage: '0', fee: '0', duration: '0',
+};
 
-const InputForm: React.FC<InputFormProps> = ({ onCalculate }) => {
-  const [symbol, setSymbol]         = useState('BTC');
-  const [botType, setBotType]       = useState<'Long'|'Short'>('Long');
-  const [principal, setPrincipal]   = useState(0);
-  const [lowerBound, setLowerBound] = useState(0);
-  const [upperBound, setUpperBound] = useState(0);
-  const [gridCount, setGridCount]   = useState(0);
-  const [leverage, setLeverage]     = useState(0);
-  const [fee, setFee]               = useState(0);
-  const [duration, setDuration]     = useState(0);
-  const [unit, setUnit]             = useState<'Days'|'Hours'>('Days');
+// Shared styling for white inputs + hide number spinners
+const whiteFieldSx: SxProps<Theme> = {
+  '& input[type=number]': { MozAppearance: 'textfield' },
+  '& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button': { WebkitAppearance: 'none' },
+  '& .MuiInputBase-input': { color: '#FFF' },
+  '& .MuiInputAdornment-root, & .MuiInputLabel-root': { color: '#FFF' },
+  '& .MuiOutlinedInput-notchedOutline': { borderColor: '#4B5563' },
+  '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: '#9CA3AF' },
+  '& .Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#2B66F6' },
+};
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+interface InputFormProps { onCalculate: (results: GridResults) => void; }
+export default function InputForm({ onCalculate }: InputFormProps) {
+  const [form, setForm] = useState(initialForm);
+  const [errors, setErrors] = useState<Partial<Record<FieldKey,string>>>({});
 
-    // Convert duration to days
-    const durationDays = unit === 'Days' ? duration : duration / 24;
+  // Stable change handler
+  const handleChange = useCallback(
+    (key: FieldKey) => (e: ChangeEvent<HTMLInputElement>) => {
+      const newVal = key === 'symbol' || key === 'botType'
+        ? e.target.value
+        : e.target.value.trim();
+      setForm(f => ({ ...f, [key]: newVal }));
+      setErrors(err => ({ ...err, [key]: undefined }));
+    },
+    []
+  );
 
-    // Build params (using a default atrPerMin=1 so you see non-zero trades/day)
-    const params: GridParameters = {
-      symbol,
-      botType,
-      principal,
-      lowerBound,
-      upperBound,
-      gridCount,
-      leverage,
-      atrPerMin: 1,                // ← Must be >0 or your trades/day = 0!
-      feePercent: fee / 100,
-      durationDays,
-    };
+  // Validate each field
+  const validate = useCallback(() => {
+    const newErr: Partial<Record<FieldKey,string>> = {};
+    fieldConfigs.forEach(({ key, type, integerOnly }) => {
+      const val = form[key].trim();
+      if (!val) newErr[key] = 'Required';
+      else if (type === 'number') {
+        const num = Number(val);
+        if (isNaN(num) || num <= 0) newErr[key] = 'Must be > 0';
+        else if (integerOnly && num % 1 !== 0) newErr[key] = 'Must be whole';
+      }
+    });
+    setErrors(newErr);
+    return !Object.keys(newErr).length;
+  }, [form]);
 
-    // **Call your real calculator**
-    const results: GridResults = calculateGridProfit(params);
-    onCalculate(results);
-  };
+  // Submit form
+  const handleSubmit = useCallback(
+    (e: FormEvent) => {
+      e.preventDefault();
+      if (!validate()) return;
+      const params: GridParameters = {
+        symbol: form.symbol,
+        botType: form.botType as 'Long'|'Short',
+        principal: +form.principal,
+        lowerBound: +form.lowerBound,
+        upperBound: +form.upperBound,
+        gridCount: +form.gridCount,
+        leverage: +form.leverage,
+        atrPerMin: 1,
+        feePercent: +form.fee/100,
+        durationDays: +form.duration,
+      };
+      onCalculate(calculateGridProfit(params));
+    }, [form, onCalculate, validate]
+  );
+
+  const isValid = useMemo(() => validate(), [form, validate]);
 
   return (
-    <Card>
+    <Card sx={{ bgcolor:'background.paper' }}>
       <CardContent>
-        <Typography variant="h6" gutterBottom>
+        <Typography variant="h6" gutterBottom sx={{ color:'#FFF' }}>
           Grid Parameters
         </Typography>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} noValidate>
           <Grid container spacing={2}>
-            {/* Crypto Symbol */}
-            <Grid item xs={6}>
-              <TextField
-                label="Crypto Symbol"
-                value={symbol}
-                onChange={e => setSymbol(e.target.value.toUpperCase())}
-                fullWidth
-              />
-            </Grid>
-            {/* Bot Type */}
-            <Grid item xs={6}>
-              <FormControl fullWidth margin="dense">
-                <InputLabel>Bot Type</InputLabel>
-                <Select
-                  value={botType}
-                  label="Bot Type"
-                  onChange={e => setBotType(e.target.value as any)}
-                >
-                  <MenuItem value="Long">Long</MenuItem>
-                  <MenuItem value="Short">Short</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-
-            {/* Principal */}
-            <Grid item xs={6}>
-              <TextField
-                label="Principal"
-                type="number"
-                value={principal}
-                onChange={e => setPrincipal(Number(e.target.value))}
-                InputProps={{
-                  startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                }}
-                fullWidth
-              />
-            </Grid>
-            {/* Lower Bound */}
-            <Grid item xs={6}>
-              <TextField
-                label="Lower Bound"
-                type="number"
-                value={lowerBound}
-                onChange={e => setLowerBound(Number(e.target.value))}
-                InputProps={{
-                  startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                }}
-                fullWidth
-              />
-            </Grid>
-
-            {/* Upper Bound */}
-            <Grid item xs={6}>
-              <TextField
-                label="Upper Bound"
-                type="number"
-                value={upperBound}
-                onChange={e => setUpperBound(Number(e.target.value))}
-                InputProps={{
-                  startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                }}
-                fullWidth
-              />
-            </Grid>
-            {/* Grid Count */}
-            <Grid item xs={6}>
-              <TextField
-                label="Grid Count"
-                type="number"
-                value={gridCount}
-                onChange={e => setGridCount(Number(e.target.value))}
-                fullWidth
-              />
-            </Grid>
-
-            {/* Leverage */}
-            <Grid item xs={6}>
-              <TextField
-                label="Leverage"
-                type="number"
-                value={leverage}
-                onChange={e => setLeverage(Number(e.target.value))}
-                InputProps={{
-                  endAdornment: <InputAdornment position="end">×</InputAdornment>,
-                }}
-                fullWidth
-              />
-            </Grid>
-            {/* Fee (%) */}
-            <Grid item xs={6}>
-              <TextField
-                label="Fee (%)"
-                type="number"
-                value={fee}
-                onChange={e => setFee(Number(e.target.value))}
-                InputProps={{
-                  endAdornment: <InputAdornment position="end">%</InputAdornment>,
-                }}
-                fullWidth
-              />
-            </Grid>
-
-            {/* Duration */}
-            <Grid item xs={6}>
-              <TextField
-                label="Duration"
-                type="number"
-                value={duration}
-                onChange={e => setDuration(Number(e.target.value))}
-                fullWidth
-              />
-            </Grid>
-            {/* Unit */}
-            <Grid item xs={6}>
-              <FormControl fullWidth margin="dense">
-                <InputLabel>Unit</InputLabel>
-                <Select
-                  value={unit}
-                  label="Unit"
-                  onChange={e => setUnit(e.target.value as any)}
-                >
-                  <MenuItem value="Days">Days</MenuItem>
-                  <MenuItem value="Hours">Hours</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-
-            {/* Calculate */}
+            {fieldConfigs.map(cfg => (
+              <Grid item xs={6} key={cfg.key}>
+                {cfg.key === 'botType' ? (
+                  <FormControl fullWidth required error={!!errors[cfg.key]} sx={whiteFieldSx}>
+                    <InputLabel>{cfg.label}</InputLabel>
+                    <Select
+                      value={form[cfg.key]}
+                      label={cfg.label}
+                      onChange={e => handleChange(cfg.key)(e as any)}
+                      sx={{ color:'#FFF' }}
+                    >
+                      <MenuItem value="Long">Long</MenuItem>
+                      <MenuItem value="Short">Short</MenuItem>
+                    </Select>
+                  </FormControl>
+                ) : (
+                  <TextField
+                    label={cfg.label}
+                    type={cfg.type}
+                    value={form[cfg.key]}
+                    onChange={handleChange(cfg.key)}
+                    required
+                    error={!!errors[cfg.key]}
+                    helperText={errors[cfg.key]}
+                    fullWidth
+                    InputProps={cfg.adornment
+                      ? { [`${cfg.adornPos}Adornment`]: <InputAdornment position={cfg.adornPos!}>{cfg.adornment}</InputAdornment> }
+                      : undefined}
+                    inputProps={cfg.type==='number' ? { min:1, step: cfg.integerOnly ? 1 : 'any' } : undefined}
+                    sx={whiteFieldSx}
+                  />
+                )}
+              </Grid>
+            ))}
             <Grid item xs={12}>
-              <Button type="submit" variant="contained" fullWidth>
+              <Button type="submit" variant="contained" fullWidth disabled={!isValid}>
                 Calculate
               </Button>
             </Grid>
@@ -202,6 +173,4 @@ const InputForm: React.FC<InputFormProps> = ({ onCalculate }) => {
       </CardContent>
     </Card>
   );
-};
-
-export default InputForm;
+}
