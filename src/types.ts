@@ -1,6 +1,7 @@
-// src/types.ts
+// File: src/types.ts
+
 export interface GridParameters {
-  symbol: string;
+  symbol?: string;        // e.g. "BTCUSDT"
   principal: number;
   lowerBound: number;
   upperBound: number;
@@ -8,7 +9,7 @@ export interface GridParameters {
   leverage: number;
   feePercent: number;
   durationDays: number;
-  atrPerMin: number;
+  atrPerMin?: number;     // override fetch/blend if desired
 }
 
 export interface GridResults {
@@ -20,5 +21,6 @@ export interface GridResults {
   netProfitPerGridTransaction: number;
   estimatedDailyProfit: number;
   totalEstimatedProfit: number;
-  durationDays: number;
+  atrPerMin: number;      // newly added
+  durationDays: number; // newly added
 }

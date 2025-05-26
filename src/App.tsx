@@ -18,9 +18,7 @@ import { GridResults } from "./types";
 
 const App: React.FC = () => {
   const [results, setResults] = useState<GridResults | null>(null);
-  const [chartData, setChartData] = useState<{ day: number; profit: number }[]>(
-    []
-  );
+  const [chartData, setChartData] = useState<{ day: number; profit: number }[]>([]);
 
   const handleCalculate = (res: GridResults) => {
     setResults(res);
@@ -35,24 +33,14 @@ const App: React.FC = () => {
   return (
     <>
       {/* Header */}
-      <AppBar
-        position="static"
-        elevation={0}
-        sx={{
-          boxShadow: "5",
-          border: "0",
-        }}
-      >
+      <AppBar position="static" elevation={0} sx={{ boxShadow: 5, border: 0 }}>
         <Toolbar>
           <Link href="/" sx={{ display: "flex", alignItems: "center" }}>
             <Box
               component="img"
               src={logo}
               alt="CalcChain Logo"
-              sx={{
-                height: 24,
-                objectFit: "contain",
-              }}
+              sx={{ height: 24, objectFit: "contain" }}
             />
           </Link>
         </Toolbar>
@@ -107,9 +95,11 @@ const App: React.FC = () => {
                       },
                       {
                         label: "Net Profit/Tx",
-                        value: `$${results.netProfitPerGridTransaction.toFixed(
-                          4
-                        )}`,
+                        value: `$${results.netProfitPerGridTransaction.toFixed(4)}`,
+                      },
+                      {
+                        label: "ATR / Min",
+                        value: results.atrPerMin.toFixed(4),
                       },
                     ]}
                   />
@@ -127,13 +117,10 @@ const App: React.FC = () => {
                       Profit Projection
                     </Typography>
                     <Typography variant="subtitle2" align="right" mb={2}>
-                      <Box
-                        component="span"
-                        sx={{ color: "#2B66F6", fontWeight: "900" }}
-                      >
+                      <Box component="span" sx={{ color: "#2B66F6", fontWeight: "900" }}>
                         ━
                       </Box>{" "}
-                      Cummulative profit over time{" "}
+                      Cumulative profit over time
                     </Typography>
                     <ProfitChart data={chartData} />
                   </Paper>
@@ -142,14 +129,50 @@ const App: React.FC = () => {
                   <Typography variant="h6" sx={{ whiteSpace: "pre-line" }}>
                     What is Grid Trading?
                     <CryptoInsights
-                      message={`Automated Strategy: Sets up a series of buy and sell orders at predefined price intervals, creating a 'grid.'
-Goal: To profit from market volatility by automatically buying low and selling high as the price fluctuates within a defined range.
-Ideal Market: Best suited for sideways, range-bound, or oscillating markets rather than strong, one-directional trending markets.`}
+                      message={`Grid trading places buy and sell orders at fixed price intervals to profit from market volatility.`}
+                    />
+                    <CryptoInsights
+                      message={`It aims to buy and sell repeatedly as the price fluctuates within a range.`}
+                    />
+                    <CryptoInsights
+                      message={`This strategy works best in sideways or ranging markets without strong trends.`}
                     />
                   </Typography>
                   <Typography variant="h6">
-                    Key Advantages?
-                    <CryptoInsights message="Grid trading works best in sideways markets. Consider asset volatility when setting grid parameters." />
+                    Why Use Grid Trading?
+                    <CryptoInsights
+                      message={`Generates consistent profit in volatile, sideways markets.`}
+                    />
+                    <CryptoInsights
+                      message={`Removes emotional decision-making by automating trades.`}
+                    />
+                    <CryptoInsights
+                      message={`Works without needing to predict market direction.`}
+                    />
+                  </Typography>
+                  <Typography variant="h6">
+                    What are the risks?
+                    <CryptoInsights
+                      message={`If the price breaks decisively out of your set grid range (either up or down), it can lead to losses (e.g., buying all the way down in a crash, or selling all your assets too early in a strong rally).`}
+                    />
+                    <CryptoInsights
+                      message={`Setting the correct price range, number of grids, and investment per grid is crucial and requires careful analysis. Incorrect parameters lead to poor performance.`}
+                    />
+                    <CryptoInsights
+                      message={`Frequent buying and selling can lead to accumulating transaction fees, which can eat into profits.`}
+                    />
+                  </Typography>
+                  <Typography variant="h6">
+                    Important Considerations & Best Practices?
+                    <CryptoInsights
+                      message={`Choose cryptocurrencies that are currently in a ranging phase with decent volatility and good liquidity.`}
+                    />
+                    <CryptoInsights
+                      message={`Carefully define the upper and lower price limits for your grid (e.g., based on support and resistance levels).`}
+                    />
+                    <CryptoInsights
+                      message={`Use a reputable exchange or bot provider that offers reliable grid trading tools with low fees.`}
+                    />
                   </Typography>
                 </Grid>
               </>

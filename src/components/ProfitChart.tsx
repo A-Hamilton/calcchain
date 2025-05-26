@@ -65,22 +65,18 @@ const ProfitChart: React.FC<ProfitChartProps> = ({ data }) => {
         <defs>
           <linearGradient id="profitGradient" x1="0" y1="0" x2="0" y2="1">
             <stop offset="5%" stopColor="#2B66F6" stopOpacity={0.3} />
-            <stop offset="95%" stopColor="#2B66F6" stopOpacity={0} />
+            <stop offset="95%" stopColor="#2B66F6" stopOpacity={0.1} />
           </linearGradient>
         </defs>
 
         <XAxis
           dataKey="day"
           type="number"
-          domain={[0, maxDay]}
+          domain={[1, maxDay]}
           stroke="#9CA3AF"
           tick={{ fill: '#9CA3AF', fontSize: 12 }}
           axisLine={{ stroke: '#9CA3AF' }}
           ticks={[
-            0,
-            Math.floor(maxDay * 0.25),
-            Math.floor(maxDay * 0.5),
-            Math.floor(maxDay * 0.75),
             maxDay,
           ]}
           label={{
@@ -97,6 +93,13 @@ const ProfitChart: React.FC<ProfitChartProps> = ({ data }) => {
           type="number"
           domain={[minProfit, maxProfit]}
           stroke="#9CA3AF"
+          ticks={[
+            0,
+            maxProfit / 4,
+            maxProfit / 2,  
+            (3 * maxProfit) / 4,
+            maxProfit,
+          ]}
           tick={{ fill: '#9CA3AF', fontSize: 12 }}
           axisLine={{ stroke: '#9CA3AF', strokeWidth: 1 }}
         />
@@ -106,7 +109,7 @@ const ProfitChart: React.FC<ProfitChartProps> = ({ data }) => {
           cursor={{ stroke: '#2B66F6', strokeWidth: 2, opacity: 0.3 }}
         />
 
-        <CartesianGrid stroke="#333" strokeDasharray="3 3" />
+        <CartesianGrid stroke="#333" strokeDasharray="0" />
 
         <Area
           type="monotone"
