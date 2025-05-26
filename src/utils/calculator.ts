@@ -56,5 +56,7 @@ export function calculateGridProfit(
     estimatedTradesPerDay,
     netProfitPerGridTransaction,
     durationDays,
+    grossProfitPerGrid,
+    feePerRoundTrip,
   };
 }
