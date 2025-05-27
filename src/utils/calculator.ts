@@ -30,7 +30,6 @@ export const calculateGridProfit = async (
     }
     atrPerMin = await getAtrPerMin(params.symbol, 200);
   }
-  console.log(`🔍 Blended ATR/min for ${params.symbol}:`, atrPerMin);
 
   // Include two extra grid lines at the bounds
   const effectiveGridCount = gridCount + 2;
