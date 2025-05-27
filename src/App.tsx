@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import {
   Box,
   Container,
@@ -20,14 +20,19 @@ import { GridParameters, GridResults } from "./types";
 
 const App: React.FC = () => {
   const [results, setResults] = useState<GridResults | null>(null);
-  const [chartData, setChartData] = useState<{ day: number; profit: number }[]>([]);
+  const [chartData, setChartData] = useState<{ day: number; profit: number }[]>(
+    []
+  );
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleCalculate = async (params: GridParameters) => {
+  // Memoized calculation handler for better performance on rerenders
+  const handleCalculate = useCallback(async (params: GridParameters) => {
     setIsLoading(true);
     try {
       const res = await calculateGridProfit(params);
       setResults(res);
+
+      // Prepare chart data
       const days = res.durationDays;
       const data = Array.from({ length: days }, (_, i) => ({
         day: i + 1,
@@ -37,7 +42,7 @@ const App: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   return (
     <>
@@ -60,7 +65,7 @@ const App: React.FC = () => {
 
       {/* Main content */}
       <Container maxWidth="lg" sx={{ py: 4 }}>
-        {/* Logo Row (inline with grid) */}
+        {/* Logo Row */}
         <Box
           sx={{
             display: "flex",
@@ -89,7 +94,7 @@ const App: React.FC = () => {
             <InputForm onCalculate={handleCalculate} />
           </Grid>
 
-          {/* Right: results, chart, insights, OR placeholder */}
+          {/* Right: results, chart, insights, or placeholder */}
           <Grid item xs={12} md={7}>
             <AnimatePresence mode="wait">
               {results ? (
@@ -170,53 +175,30 @@ const App: React.FC = () => {
                       </Paper>
                     </Grid>
                     <Grid item>
+                      {/* Educational Insights */}
                       <Typography variant="h6" sx={{ whiteSpace: "pre-line" }}>
                         What is Grid Trading?
-                        <CryptoInsights
-                          message={`Grid trading places buy and sell orders at fixed price intervals to profit from market volatility.`}
-                        />
-                        <CryptoInsights
-                          message={`It aims to buy and sell repeatedly as the price fluctuates within a range.`}
-                        />
-                        <CryptoInsights
-                          message={`This strategy works best in sideways or ranging markets without strong trends.`}
-                        />
+                        <CryptoInsights message="Grid trading places buy and sell orders at fixed price intervals to profit from market volatility." />
+                        <CryptoInsights message="It aims to buy and sell repeatedly as the price fluctuates within a range." />
+                        <CryptoInsights message="This strategy works best in sideways or ranging markets without strong trends." />
                       </Typography>
                       <Typography variant="h6">
                         Why Use Grid Trading?
-                        <CryptoInsights
-                          message={`Generates consistent profit in volatile, sideways markets.`}
-                        />
-                        <CryptoInsights
-                          message={`Removes emotional decision-making by automating trades.`}
-                        />
-                        <CryptoInsights
-                          message={`Works without needing to predict market direction.`}
-                        />
+                        <CryptoInsights message="Generates consistent profit in volatile, sideways markets." />
+                        <CryptoInsights message="Removes emotional decision-making by automating trades." />
+                        <CryptoInsights message="Works without needing to predict market direction." />
                       </Typography>
                       <Typography variant="h6">
                         What are the risks?
-                        <CryptoInsights
-                          message={`If the price breaks decisively out of your set grid range, it can lead to losses.`}
-                        />
-                        <CryptoInsights
-                          message={`Setting the correct price range and grid count requires careful analysis.`}
-                        />
-                        <CryptoInsights
-                          message={`Frequent trades incur fees that can eat into profits.`}
-                        />
+                        <CryptoInsights message="If the price breaks decisively out of your set grid range, it can lead to losses." />
+                        <CryptoInsights message="Setting the correct price range and grid count requires careful analysis." />
+                        <CryptoInsights message="Frequent trades incur fees that can eat into profits." />
                       </Typography>
                       <Typography variant="h6">
                         Important Considerations & Best Practices?
-                        <CryptoInsights
-                          message={`Choose assets in a ranging phase with good liquidity.`}
-                        />
-                        <CryptoInsights
-                          message={`Define your upper/lower limits based on support & resistance.`}
-                        />
-                        <CryptoInsights
-                          message={`Use reliable grid tools on low-fee exchanges.`}
-                        />
+                        <CryptoInsights message="Choose assets in a ranging phase with good liquidity." />
+                        <CryptoInsights message="Define your upper/lower limits based on support & resistance." />
+                        <CryptoInsights message="Use reliable grid tools on low-fee exchanges." />
                       </Typography>
                     </Grid>
                   </Grid>
@@ -245,13 +227,28 @@ const App: React.FC = () => {
                       border: "1.5px dashed #384050",
                     }}
                   >
-                    <InfoOutlinedIcon sx={{ fontSize: 50, color: "#2B66F6", mb: 2, opacity: 0.7 }} />
-                    <Typography variant="h5" color="#CDD2F6" align="center" fontWeight={600}>
+                    <InfoOutlinedIcon
+                      sx={{ fontSize: 50, color: "#2B66F6", mb: 2, opacity: 0.7 }}
+                    />
+                    <Typography
+                      variant="h5"
+                      color="#CDD2F6"
+                      align="center"
+                      fontWeight={600}
+                    >
                       No results yet
                     </Typography>
-                    <Typography variant="body1" color="#9CA3AF" align="center" sx={{ maxWidth: 360 }}>
+                    <Typography
+                      variant="body1"
+                      color="#9CA3AF"
+                      align="center"
+                      sx={{ maxWidth: 360 }}
+                    >
                       Enter your grid parameters on the left and click
-                      <Box component="span" sx={{ color: "#2B66F6", fontWeight: 700, mx: 0.5 }}>
+                      <Box
+                        component="span"
+                        sx={{ color: "#2B66F6", fontWeight: 700, mx: 0.5 }}
+                      >
                         Calculate
                       </Box>
                       to see your estimated profit, trade metrics, and visual projections.

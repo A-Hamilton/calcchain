@@ -152,7 +152,7 @@ export default function InputForm({ onCalculate }: InputFormProps) {
     []
   );
 
-  const validate = useCallback(() => {
+  const validate = useCallback((): boolean => {
     const newErr: Partial<Record<FieldKey, string>> = {};
     fieldConfigs.forEach(({ key, type, integerOnly }) => {
       const val = form[key].trim();
@@ -167,7 +167,7 @@ export default function InputForm({ onCalculate }: InputFormProps) {
     return Object.keys(newErr).length === 0;
   }, [form]);
 
-  // Accepts a showAlert arg: true to show the snackbar, false to suppress
+  // Optimize grid parameters using Binance API and ATR
   const handleOptimize = useCallback(
     async (showAlert = true) => {
       try {
@@ -234,14 +234,65 @@ export default function InputForm({ onCalculate }: InputFormProps) {
         durationDays: Number(form.duration),
       };
 
-      const results = await calculateGridProfit(params);
-      console.log("🔍 ATR/min in submit handler:", results.atrPerMin);
+      await calculateGridProfit(params); // Ensure computation (could be removed if not needed)
       onCalculate(params);
     },
     [form, onCalculate, validate]
   );
 
   const isValid = useMemo(() => validate(), [form, validate]);
+
+  // Render field as a separate function
+  const renderField = (cfg: FieldConfig) => (
+    <TextField
+      key={cfg.key}
+      label={
+        <span style={{ display: "flex", alignItems: "center" }}>
+          {cfg.label}
+          {cfg.helpText && (
+            <Tooltip title={cfg.helpText} arrow>
+              <IconButton
+                size="small"
+                tabIndex={-1}
+                sx={{ ml: 0.5, color: "#9CA3AF", p: 0 }}
+                aria-label={`Help for ${cfg.label}`}
+              >
+                <InfoOutlinedIcon fontSize="inherit" />
+              </IconButton>
+            </Tooltip>
+          )}
+        </span>
+      }
+      type={cfg.type}
+      value={form[cfg.key]}
+      onChange={handleChange(cfg.key)}
+      required={false}
+      InputLabelProps={{ required: false }}
+      error={!!errors[cfg.key]}
+      helperText={errors[cfg.key]}
+      fullWidth
+      InputProps={
+        cfg.adornment
+          ? {
+              [`${cfg.adornPos}Adornment`]: (
+                <InputAdornment position={cfg.adornPos!}>
+                  {cfg.adornment}
+                </InputAdornment>
+              ),
+            }
+          : undefined
+      }
+      inputProps={
+        cfg.type === "number"
+          ? {
+              min: 1,
+              step: cfg.integerOnly ? 1 : "any",
+            }
+          : undefined
+      }
+      sx={whiteFieldSx}
+    />
+  );
 
   return (
     <Card sx={{ bgcolor: "background.paper" }}>
@@ -253,52 +304,7 @@ export default function InputForm({ onCalculate }: InputFormProps) {
           <Grid container spacing={2}>
             {fieldConfigs.map((cfg) => (
               <Grid item xs={6} key={cfg.key}>
-                <TextField
-                  label={
-                    <span style={{ display: "flex", alignItems: "center" }}>
-                      {cfg.label}
-                      {cfg.helpText && (
-                        <Tooltip title={cfg.helpText} arrow>
-                          <IconButton
-                            size="small"
-                            tabIndex={-1}
-                            sx={{ ml: 0.5, color: "#9CA3AF", p: 0 }}
-                          >
-                            <InfoOutlinedIcon fontSize="inherit" />
-                          </IconButton>
-                        </Tooltip>
-                      )}
-                    </span>
-                  }
-                  type={cfg.type}
-                  value={form[cfg.key]}
-                  onChange={handleChange(cfg.key)}
-                  required={false}
-                  InputLabelProps={{ required: false }}
-                  error={!!errors[cfg.key]}
-                  helperText={errors[cfg.key]}
-                  fullWidth
-                  InputProps={
-                    cfg.adornment
-                      ? {
-                          [`${cfg.adornPos}Adornment`]: (
-                            <InputAdornment position={cfg.adornPos!}>
-                              {cfg.adornment}
-                            </InputAdornment>
-                          ),
-                        }
-                      : undefined
-                  }
-                  inputProps={
-                    cfg.type === "number"
-                      ? {
-                          min: 1,
-                          step: cfg.integerOnly ? 1 : "any",
-                        }
-                      : undefined
-                  }
-                  sx={whiteFieldSx}
-                />
+                {renderField(cfg)}
               </Grid>
             ))}
 
@@ -329,7 +335,7 @@ export default function InputForm({ onCalculate }: InputFormProps) {
       >
         <Alert
           onClose={() => setShowSnackbar(false)}
-          icon={<InfoOutlinedIcon sx={{ color: "#FFF" }}/> }
+          icon={<InfoOutlinedIcon sx={{ color: "#FFF" }}/>}
           severity="success"
           variant="filled"
           sx={{

@@ -4,6 +4,7 @@ import App from './App';
 import { ThemeProvider, CssBaseline } from '@mui/material';
 import theme from './theme';
 
+// Create root and render app with theme provider
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );

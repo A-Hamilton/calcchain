@@ -6,12 +6,12 @@ import { GridParameters, GridResults } from '../types';
  * Calculate estimated grid trading profit. If `atrPerMin` is omitted,
  * this will fetch a 200-period 1m and daily ATR from Binance and auto-blend.
  *
- * We now always include two extra grid lines at the absolute lower and upper bounds,
+ * Includes two extra grid lines at the absolute lower and upper bounds,
  * so the effective number of grid levels is (gridCount + 2).
  */
-export async function calculateGridProfit(
+export const calculateGridProfit = async (
   params: GridParameters
-): Promise<GridResults> {
+): Promise<GridResults> => {
   const {
     principal,
     lowerBound,
@@ -22,11 +22,11 @@ export async function calculateGridProfit(
     durationDays,
   } = params;
 
-  // Determine ATR per minute (either passed in or fetched & blended)
+  // Determine ATR per minute (either provided or fetched & blended)
   let atrPerMin = params.atrPerMin;
   if (atrPerMin === undefined) {
     if (!params.symbol) {
-      throw new Error('Either atrPerMin or symbol must be provided');
+      throw new Error('Either atrPerMin or symbol must be provided.');
     }
     atrPerMin = await getAtrPerMin(params.symbol, 200);
   }
@@ -35,8 +35,7 @@ export async function calculateGridProfit(
   // Include two extra grid lines at the bounds
   const effectiveGridCount = gridCount + 2;
 
-  // Grid spacing = (upper - lower) divided by the number of intervals
-  // which is (effectiveGridCount - 1)
+  // Grid spacing = (upper - lower) / intervals
   const gridSpacing = (upperBound - lowerBound) / (effectiveGridCount - 1);
 
   // Estimated round-trip trades per day
@@ -68,4 +67,4 @@ export async function calculateGridProfit(
     atrPerMin,
     durationDays
   };
-}
+};

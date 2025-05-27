@@ -11,15 +11,15 @@ export interface ResultsDisplayProps {
   metrics: Metric[];
 }
 
-const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ title, metrics }) => (
+const ResultsDisplay: React.FC<ResultsDisplayProps> = React.memo(({ title, metrics }) => (
   <Card elevation={0} sx={{ backgroundColor: '#1C1D2B', borderRadius: 2, boxShadow: 2 }}>
     <CardContent>
       <Typography variant="h6" gutterBottom>
         {title}
       </Typography>
-      <Grid container spacing={1} justifyContent="space-between">
+      <Grid container spacing={1} justifyContent="space-between" role="list">
         {metrics.map((m, i) => (
-          <Grid key={i} item xs={12} sm={4}>
+          <Grid key={`${m.label}-${i}`} item xs={12} sm={4} role="listitem">
             <Typography variant="subtitle2" color="text.secondary">
               {m.label}
             </Typography>
@@ -31,6 +31,6 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ title, metrics }) => (
       </Grid>
     </CardContent>
   </Card>
-);
+));
 
 export default ResultsDisplay;

@@ -13,27 +13,31 @@ interface Candle {
 /**
  * Fetch candlestick data from Binance public API.
  */
-export async function fetchCandles(
+export const fetchCandles = async (
   symbol: string,
   interval: string,
   limit: number
-): Promise<Candle[]> {
+): Promise<Candle[]> => {
   const url = `https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=${interval}&limit=${limit}`;
-  const resp = await axios.get(url);
-  return resp.data.map((d: any) => ({
-    openTime: d[0],
-    open: parseFloat(d[1]),
-    high: parseFloat(d[2]),
-    low: parseFloat(d[3]),
-    close: parseFloat(d[4]),
-    volume: parseFloat(d[5]),
-  }));
-}
+  try {
+    const resp = await axios.get(url);
+    return resp.data.map((d: any) => ({
+      openTime: d[0],
+      open: parseFloat(d[1]),
+      high: parseFloat(d[2]),
+      low: parseFloat(d[3]),
+      close: parseFloat(d[4]),
+      volume: parseFloat(d[5]),
+    }));
+  } catch (error) {
+    throw new Error("Failed to fetch candle data from Binance.");
+  }
+};
 
 /**
  * Compute the Average True Range (ATR) over a given period.
  */
-export function computeAtr(candles: Candle[], period: number): number {
+export const computeAtr = (candles: Candle[], period: number): number => {
   if (candles.length < period + 1) {
     throw new Error(`Not enough candles: got ${candles.length}, need ${period + 1}`);
   }
@@ -49,31 +53,31 @@ export function computeAtr(candles: Candle[], period: number): number {
     trs.push(tr);
   }
   return trs.reduce((sum, x) => sum + x, 0) / period;
-}
+};
 
 /**
  * Get ATR for a symbol/interval/period by fetching candles then computing.
  */
-export async function getAtr(
+export const getAtr = async (
   symbol: string,
   interval: string,
   period: number
-): Promise<number> {
+): Promise<number> => {
   const candles = await fetchCandles(symbol, interval, period + 1);
   return computeAtr(candles, period);
-}
+};
 
 /**
  * Get blended per-minute ATR by averaging 1m ATR and daily ATR scaled to minutes.
  */
-export async function getAtrPerMin(
+export const getAtrPerMin = async (
   symbol: string,
   period: number = 200
-): Promise<number> {
+): Promise<number> => {
   const [atr1m, atrDaily] = await Promise.all([
     getAtr(symbol, '1m', period),
     getAtr(symbol, '1d', period)
   ]);
   const atrDailyPerMin = atrDaily / 1440;
   return (atr1m + atrDailyPerMin) / 2;
-}
+};

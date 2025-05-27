@@ -18,7 +18,7 @@ export interface OptimalGridParams {
   upper: number;
   /**
    * Number of grid intervals so that
-   * (upper – lower) / count ≈ net‐positive spacing
+   * (upper – lower) / count ≈ net-positive spacing
    */
   count: number;
 }
@@ -27,15 +27,15 @@ export interface OptimalGridParams {
  * computeOptimalGridParams
  *
  * Builds a ±10% band around the current price, then determines
- * grid count so that each grid‐step spacing is at least
- * max(ATR, fees+0.2% buffer), ensuring post‐fee spacing.
+ * grid count so that each grid-step spacing is at least
+ * max(ATR, fees+0.2% buffer), ensuring post-fee spacing.
  */
-export function computeOptimalGridParams(
+export const computeOptimalGridParams = (
   ctx: OptimizeContext
-): OptimalGridParams {
-  const { principal /* actual price */, atr, feePercent } = ctx;
+): OptimalGridParams => {
+  const { principal, atr, feePercent } = ctx;
 
-  // Define bounds ±10% around current price
+  // Define bounds ±5% around current price for a total ±10% band
   const lower = principal * 0.95;
   const upper = principal * 1.05;
 
@@ -45,7 +45,7 @@ export function computeOptimalGridParams(
   // Compute minimum spacing needed to cover both entry & exit + buffer
   const feeSpacing = 2 * bufferedFeeRate * lower;
 
-  // Our actual spacing per grid step must be at least this:
+  // Actual spacing per grid step must be at least this:
   const spacing = Math.max(atr, feeSpacing);
 
   // Derive count so that (upper−lower)/count ≈ spacing
@@ -53,4 +53,4 @@ export function computeOptimalGridParams(
   const count    = Math.max(1, Math.floor(rawCount));
 
   return { lower, upper, count };
-}
+};

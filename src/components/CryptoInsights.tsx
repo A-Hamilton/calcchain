@@ -5,11 +5,14 @@ interface CryptoInsightsProps {
   message: string;
 }
 
-const CryptoInsights: React.FC<CryptoInsightsProps> = ({ message }) => (
-  <Paper variant="outlined" sx={{ p: 2, alignItems: 'center', margin:1, bgcolor: '#1C1D2B', display: 'flex'}}>
+// Lightbulb emoji with aria-label for accessibility
+const CryptoInsights: React.FC<CryptoInsightsProps> = React.memo(({ message }) => (
+  <Paper variant="outlined" sx={{ p: 2, alignItems: 'center', margin: 1, bgcolor: '#1C1D2B', display: 'flex' }}>
     <Box
       component="span"
       sx={{ fontSize: '1.25rem', color: 'primary.main', mr: 1 }}
+      aria-label="Insight"
+      role="img"
     >
       💡
     </Box>
@@ -17,6 +20,6 @@ const CryptoInsights: React.FC<CryptoInsightsProps> = ({ message }) => (
       {message}
     </Typography>
   </Paper>
-);
+));
 
 export default CryptoInsights;

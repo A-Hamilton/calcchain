@@ -21,12 +21,13 @@ interface ProfitChartProps {
   data: DataPoint[];
 }
 
+// Custom Tooltip with accessible aria-live region
 const CustomTooltip: React.FC<TooltipProps<number, string>> = ({ active, payload, label }) => {
   if (!active || !payload || !payload.length) return null;
   const profit = (payload[0].value ?? 0) as number;
 
   return (
-    <Paper>
+    <Paper aria-live="polite">
       <Typography variant="subtitle2" color="text.secondary">
         Day: {label}
       </Typography>
@@ -37,7 +38,7 @@ const CustomTooltip: React.FC<TooltipProps<number, string>> = ({ active, payload
   );
 };
 
-const ProfitChart: React.FC<ProfitChartProps> = ({ data }) => {
+const ProfitChart: React.FC<ProfitChartProps> = React.memo(({ data }) => {
   // dynamic domain calculations
   const maxDay = useMemo(
     () => (data.length ? data[data.length - 1].day : 0),
@@ -49,7 +50,6 @@ const ProfitChart: React.FC<ProfitChartProps> = ({ data }) => {
   );
   const maxProfit = Math.ceil(maxProfitRaw);
 
-  // ← compute minimum too
   const minProfitRaw = useMemo(
     () => (data.length ? Math.min(...data.map(d => d.profit)) : 0),
     [data]
@@ -76,9 +76,6 @@ const ProfitChart: React.FC<ProfitChartProps> = ({ data }) => {
           stroke="#9CA3AF"
           tick={{ fill: '#9CA3AF', fontSize: 12 }}
           axisLine={{ stroke: '#9CA3AF' }}
-          ticks={[
-            maxDay,
-          ]}
           label={{
             value: 'Days',
             position: 'bottom',
@@ -88,7 +85,7 @@ const ProfitChart: React.FC<ProfitChartProps> = ({ data }) => {
           }}
         />
 
-        {/* ← set YAxis from minProfit up to maxProfit so negatives show */}
+        {/* Set YAxis from minProfit up to maxProfit so negatives show */}
         <YAxis
           type="number"
           domain={[minProfit, maxProfit]}
@@ -122,6 +119,6 @@ const ProfitChart: React.FC<ProfitChartProps> = ({ data }) => {
       </AreaChart>
     </ResponsiveContainer>
   );
-};
+});
 
 export default ProfitChart;
