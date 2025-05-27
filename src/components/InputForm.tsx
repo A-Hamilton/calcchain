@@ -21,13 +21,18 @@ import {
   Alert,
   Tooltip,
   IconButton,
+  Collapse,
   Box,
+  MenuItem,
+  Divider,
 } from "@mui/material";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import { calculateGridProfit } from "../utils/calculator";
 import { getAtrPerMin } from "../utils/atr";
 import { computeOptimalGridParams } from "../utils/optimizer";
-import { GridParameters } from "../types";
+import { GridParameters, EntryType } from "../types";
 
 type FieldKey =
   | "symbol"
@@ -37,16 +42,21 @@ type FieldKey =
   | "gridCount"
   | "leverage"
   | "fee"
-  | "duration";
+  | "duration"
+  | "buyPrice"
+  | "sellPrice"
+  | "gridType"
+  | "entryType";
 
 interface FieldConfig {
   key: FieldKey;
   label: string;
-  type: "text" | "number";
+  type: "text" | "number" | "select";
   adornment?: string;
   adornPos?: "start" | "end";
   integerOnly?: boolean;
   helpText?: string;
+  selectOptions?: { value: string; label: string }[];
 }
 
 const fieldConfigs: FieldConfig[] = [
@@ -111,6 +121,46 @@ const fieldConfigs: FieldConfig[] = [
   },
 ];
 
+const advancedFieldConfigs: FieldConfig[] = [
+  {
+    key: "buyPrice",
+    label: "Buy Price",
+    type: "number",
+    adornment: "$",
+    adornPos: "start",
+    helpText: "Optional: Override the price at which to trigger buys.",
+  },
+  {
+    key: "sellPrice",
+    label: "Sell Price",
+    type: "number",
+    adornment: "$",
+    adornPos: "start",
+    helpText: "Optional: Override the price at which to trigger sells.",
+  },
+  {
+    key: "gridType",
+    label: "Grid Type",
+    type: "select",
+    selectOptions: [
+      { value: "arithmetic", label: "Arithmetic" },
+      { value: "geometric", label: "Geometric" },
+    ],
+    helpText: "Choose the grid calculation method.",
+  },
+  {
+    key: "entryType",
+    label: "Entry Type",
+    type: "select",
+    selectOptions: [
+      { value: "long", label: "Long" },
+      { value: "short", label: "Short" },
+      { value: "neutral", label: "Neutral" },
+    ],
+    helpText: "Direction of grid trading: Long (buy low, sell high), Short (buy high, sell low), Neutral (mean reversion).",
+  },
+];
+
 const initialForm: Record<FieldKey, string> = {
   symbol: "BTC",
   principal: "1000",
@@ -120,6 +170,10 @@ const initialForm: Record<FieldKey, string> = {
   leverage: "1",
   fee: "0.05",
   duration: "365",
+  buyPrice: "",
+  sellPrice: "",
+  gridType: "arithmetic",
+  entryType: "long",
 };
 
 const whiteFieldSx: SxProps<Theme> = {
@@ -143,9 +197,10 @@ export default function InputForm({ onCalculate }: InputFormProps) {
   const [errors, setErrors] = useState<Partial<Record<FieldKey, string>>>({});
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [isFirstLoad, setIsFirstLoad] = useState(true);
+  const [advancedOpen, setAdvancedOpen] = useState(false);
 
   const handleChange = useCallback(
-    (key: FieldKey) => (e: ChangeEvent<HTMLInputElement>) => {
+    (key: FieldKey) => (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       setForm((f) => ({ ...f, [key]: e.target.value.trim() }));
       setErrors((err) => ({ ...err, [key]: undefined }));
     },
@@ -154,20 +209,32 @@ export default function InputForm({ onCalculate }: InputFormProps) {
 
   const validate = useCallback((): boolean => {
     const newErr: Partial<Record<FieldKey, string>> = {};
-    fieldConfigs.forEach(({ key, type, integerOnly }) => {
-      const val = form[key].trim();
-      if (!val) newErr[key] = "Required";
-      else if (type === "number") {
+    [...fieldConfigs, ...advancedFieldConfigs].forEach(({ key, type, integerOnly }) => {
+      const val = form[key]?.trim();
+      if (
+        fieldConfigs.map(f => f.key).includes(key) &&
+        !val
+      ) {
+        newErr[key] = "Required";
+      } else if (type === "number" && val) {
         const num = Number(val);
         if (isNaN(num) || num <= 0) newErr[key] = "Must be > 0";
         else if (integerOnly && num % 1 !== 0) newErr[key] = "Must be whole";
+      }
+      const advConfig = advancedFieldConfigs.find(f => f.key === key);
+      if (
+        advConfig &&
+        advConfig.type === 'number' &&
+        val
+      ) {
+        const num = Number(val);
+        if (isNaN(num) || num <= 0) newErr[key] = "Must be > 0";
       }
     });
     setErrors(newErr);
     return Object.keys(newErr).length === 0;
   }, [form]);
 
-  // Optimize grid parameters using Binance API and ATR
   const handleOptimize = useCallback(
     async (showAlert = true) => {
       try {
@@ -182,14 +249,20 @@ export default function InputForm({ onCalculate }: InputFormProps) {
           principal: price,
           atr,
           feePercent: Number(form.fee) / 100,
+          buyPrice: form.buyPrice ? Number(form.buyPrice) : undefined,
+          sellPrice: form.sellPrice ? Number(form.sellPrice) : undefined,
+          gridType: form.gridType as "arithmetic" | "geometric",
+          entryType: form.entryType as EntryType,
         };
         const { lower, upper, count } = computeOptimalGridParams(ctx);
 
         setForm((f) => ({
           ...f,
-          lowerBound: String(lower.toFixed(2)),
-          upperBound: String(upper.toFixed(2)),
+          lowerBound: form.buyPrice ? form.buyPrice : String(lower.toFixed(2)),
+          upperBound: form.sellPrice ? form.sellPrice : String(upper.toFixed(2)),
           gridCount: String(count),
+          buyPrice: form.buyPrice || String(lower.toFixed(2)),
+          sellPrice: form.sellPrice || String(upper.toFixed(2)),
         }));
 
         setErrors((err) => ({
@@ -204,14 +277,12 @@ export default function InputForm({ onCalculate }: InputFormProps) {
         console.error(e);
       }
     },
-    [form.symbol, form.principal, form.fee]
+    [form.symbol, form.principal, form.fee, form.buyPrice, form.sellPrice, form.gridType, form.entryType]
   );
 
   useEffect(() => {
-    // Run optimize, but do NOT show the alert on first load
     handleOptimize(false);
     setIsFirstLoad(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // only run on mount
 
   const handleOptimizeButton = useCallback(() => {
@@ -232,9 +303,13 @@ export default function InputForm({ onCalculate }: InputFormProps) {
         leverage: Number(form.leverage),
         feePercent: Number(form.fee) / 100,
         durationDays: Number(form.duration),
+        buyPrice: form.buyPrice ? Number(form.buyPrice) : undefined,
+        sellPrice: form.sellPrice ? Number(form.sellPrice) : undefined,
+        gridType: form.gridType as "arithmetic" | "geometric",
+        entryType: form.entryType as EntryType,
       };
 
-      await calculateGridProfit(params); // Ensure computation (could be removed if not needed)
+      await calculateGridProfit(params);
       onCalculate(params);
     },
     [form, onCalculate, validate]
@@ -242,57 +317,97 @@ export default function InputForm({ onCalculate }: InputFormProps) {
 
   const isValid = useMemo(() => validate(), [form, validate]);
 
-  // Render field as a separate function
-  const renderField = (cfg: FieldConfig) => (
-    <TextField
-      key={cfg.key}
-      label={
-        <span style={{ display: "flex", alignItems: "center" }}>
-          {cfg.label}
-          {cfg.helpText && (
-            <Tooltip title={cfg.helpText} arrow>
-              <IconButton
-                size="small"
-                tabIndex={-1}
-                sx={{ ml: 0.5, color: "#9CA3AF", p: 0 }}
-                aria-label={`Help for ${cfg.label}`}
-              >
-                <InfoOutlinedIcon fontSize="inherit" />
-              </IconButton>
-            </Tooltip>
-          )}
-        </span>
-      }
-      type={cfg.type}
-      value={form[cfg.key]}
-      onChange={handleChange(cfg.key)}
-      required={false}
-      InputLabelProps={{ required: false }}
-      error={!!errors[cfg.key]}
-      helperText={errors[cfg.key]}
-      fullWidth
-      InputProps={
-        cfg.adornment
-          ? {
-              [`${cfg.adornPos}Adornment`]: (
-                <InputAdornment position={cfg.adornPos!}>
-                  {cfg.adornment}
-                </InputAdornment>
-              ),
-            }
-          : undefined
-      }
-      inputProps={
-        cfg.type === "number"
-          ? {
-              min: 1,
-              step: cfg.integerOnly ? 1 : "any",
-            }
-          : undefined
-      }
-      sx={whiteFieldSx}
-    />
-  );
+  const renderField = (cfg: FieldConfig) => {
+    if (cfg.type === "select") {
+      return (
+        <TextField
+          key={cfg.key}
+          select
+          label={
+            <span style={{ display: "flex", alignItems: "center" }}>
+              {cfg.label}
+              {cfg.helpText && (
+                <Tooltip title={cfg.helpText} arrow>
+                  <IconButton
+                    size="small"
+                    tabIndex={-1}
+                    sx={{ ml: 0.5, color: "#9CA3AF", p: 0 }}
+                    aria-label={`Help for ${cfg.label}`}
+                  >
+                    <InfoOutlinedIcon fontSize="inherit" />
+                  </IconButton>
+                </Tooltip>
+              )}
+            </span>
+          }
+          value={form[cfg.key]}
+          onChange={handleChange(cfg.key)}
+          required={false}
+          InputLabelProps={{ required: false }}
+          error={!!errors[cfg.key]}
+          helperText={errors[cfg.key]}
+          fullWidth
+          sx={whiteFieldSx}
+        >
+          {cfg.selectOptions?.map(opt => (
+            <MenuItem key={opt.value} value={opt.value}>
+              {opt.label}
+            </MenuItem>
+          ))}
+        </TextField>
+      );
+    }
+    return (
+      <TextField
+        key={cfg.key}
+        label={
+          <span style={{ display: "flex", alignItems: "center" }}>
+            {cfg.label}
+            {cfg.helpText && (
+              <Tooltip title={cfg.helpText} arrow>
+                <IconButton
+                  size="small"
+                  tabIndex={-1}
+                  sx={{ ml: 0.5, color: "#9CA3AF", p: 0 }}
+                  aria-label={`Help for ${cfg.label}`}
+                >
+                  <InfoOutlinedIcon fontSize="inherit" />
+                </IconButton>
+              </Tooltip>
+            )}
+          </span>
+        }
+        type={cfg.type}
+        value={form[cfg.key]}
+        onChange={handleChange(cfg.key)}
+        required={false}
+        InputLabelProps={{ required: false }}
+        error={!!errors[cfg.key]}
+        helperText={errors[cfg.key]}
+        fullWidth
+        InputProps={
+          cfg.adornment
+            ? {
+                [`${cfg.adornPos}Adornment`]: (
+                  <InputAdornment position={cfg.adornPos!}>
+                    {cfg.adornment}
+                  </InputAdornment>
+                ),
+              }
+            : undefined
+        }
+        inputProps={
+          cfg.type === "number"
+            ? {
+                min: 1,
+                step: cfg.integerOnly ? 1 : "any",
+              }
+            : undefined
+        }
+        sx={whiteFieldSx}
+      />
+    );
+  };
 
   return (
     <Card sx={{ bgcolor: "background.paper" }}>
@@ -302,12 +417,14 @@ export default function InputForm({ onCalculate }: InputFormProps) {
         </Typography>
         <form onSubmit={handleSubmit} noValidate>
           <Grid container spacing={2}>
+            {/* Main Fields */}
             {fieldConfigs.map((cfg) => (
               <Grid item xs={6} key={cfg.key}>
                 {renderField(cfg)}
               </Grid>
             ))}
 
+            {/* Buttons */}
             <Grid item xs={6}>
               <Button variant="outlined" fullWidth onClick={handleOptimizeButton}>
                 Optimize Values
@@ -323,10 +440,33 @@ export default function InputForm({ onCalculate }: InputFormProps) {
                 Calculate
               </Button>
             </Grid>
+
+            {/* Advanced Settings Toggle */}
+            <Grid item xs={12}>
+              <Box display="flex" alignItems="center" sx={{ mt: 2 }}>
+                <Button
+                  variant="text"
+                  startIcon={advancedOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                  onClick={() => setAdvancedOpen(o => !o)}
+                  sx={{ color: "#FFF", fontWeight: 600, textTransform: "none" }}
+                >
+                  Advanced Settings
+                </Button>
+                <Divider sx={{ flexGrow: 1, ml: 2, borderColor: "#FFF" }} />
+              </Box>
+              <Collapse in={advancedOpen} unmountOnExit>
+                <Grid container spacing={2} sx={{ mt: 1, mb: 1 }}>
+                  {advancedFieldConfigs.map(cfg => (
+                    <Grid item xs={6} key={cfg.key}>
+                      {renderField(cfg)}
+                    </Grid>
+                  ))}
+                </Grid>
+              </Collapse>
+            </Grid>
           </Grid>
         </form>
       </CardContent>
-      {/* Snackbar Message */}
       <Snackbar
         open={showSnackbar}
         autoHideDuration={3000}

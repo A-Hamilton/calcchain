@@ -105,7 +105,7 @@ const App: React.FC = () => {
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 0.4 }}
                 >
-                  <Grid container direction="column" spacing={3}>
+                  <Grid container direction="column" spacing={1}>
                     <Grid item>
                       <ResultsDisplay
                         title="Estimated Results"

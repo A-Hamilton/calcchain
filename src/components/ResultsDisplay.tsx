@@ -17,7 +17,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = React.memo(({ title, metri
       <Typography variant="h6" gutterBottom>
         {title}
       </Typography>
-      <Grid container spacing={1} justifyContent="space-between" role="list">
+      <Grid container justifyContent="space-between" role="list" spacing={1}>
         {metrics.map((m, i) => (
           <Grid key={`${m.label}-${i}`} item xs={12} sm={4} role="listitem">
             <Typography variant="subtitle2" color="text.secondary">

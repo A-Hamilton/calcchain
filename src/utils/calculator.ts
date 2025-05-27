@@ -1,17 +1,13 @@
-// File: src/utils/calculator.ts
 import { getAtrPerMin } from './atr';
-import { GridParameters, GridResults } from '../types';
+import { GridParameters, GridResults, EntryType } from '../types';
 
-/**
- * Calculate estimated grid trading profit. If `atrPerMin` is omitted,
- * this will fetch a 200-period 1m and daily ATR from Binance and auto-blend.
- *
- * Includes two extra grid lines at the absolute lower and upper bounds,
- * so the effective number of grid levels is (gridCount + 2).
- */
 export const calculateGridProfit = async (
   params: GridParameters
-): Promise<GridResults> => {
+): Promise<GridResults & {
+  totalNetProfit: number;
+  totalGridProfit: number;
+  estimatedDailyGridProfit: number;
+}> => {
   const {
     principal,
     lowerBound,
@@ -20,39 +16,78 @@ export const calculateGridProfit = async (
     leverage,
     feePercent,
     durationDays,
+    gridType,
+    atrPerMin: atrArg,
+    symbol,
+    entryType = "long",
   } = params;
 
-  // Determine ATR per minute (either provided or fetched & blended)
-  let atrPerMin = params.atrPerMin;
+  // Always use lowerBound/upperBound for grid spacing
+  const effectiveLower = lowerBound;
+  const effectiveUpper = upperBound;
+
+  let atrPerMin = atrArg;
   if (atrPerMin === undefined) {
-    if (!params.symbol) {
+    if (!symbol) {
       throw new Error('Either atrPerMin or symbol must be provided.');
     }
-    atrPerMin = await getAtrPerMin(params.symbol, 200);
+    atrPerMin = await getAtrPerMin(symbol, 200);
   }
 
-  // Include two extra grid lines at the bounds
+  // Grid Spacing
+  let gridSpacing = 0;
+  if (gridType === "geometric") {
+    gridSpacing = (effectiveUpper / effectiveLower) ** (1 / (gridCount + 1));
+  } else {
+    gridSpacing = (effectiveUpper - effectiveLower) / (gridCount + 1);
+  }
+
+  // Estimated trades per day (always positive)
+  let estimatedTradesPerDay = 0;
+  if (gridType === "geometric") {
+    const avgStep = effectiveLower * (gridSpacing - 1);
+    estimatedTradesPerDay = (atrPerMin * 1440) / avgStep / 2;
+  } else {
+    estimatedTradesPerDay = (atrPerMin * 1440) / gridSpacing / 2;
+  }
+  estimatedTradesPerDay = Math.max(estimatedTradesPerDay, 0);
+
+  // Per-grid investment (split across gridCount+2 grids)
   const effectiveGridCount = gridCount + 2;
-
-  // Grid spacing = (upper - lower) / intervals
-  const gridSpacing = (upperBound - lowerBound) / (effectiveGridCount - 1);
-
-  // Estimated round-trip trades per day
-  const estimatedTradesPerDay = (atrPerMin * 1440) / gridSpacing / 2;
-
-  // Capital per grid level (now split across effectiveGridCount levels)
   const investmentPerGrid = principal / effectiveGridCount;
 
-  // Profit per round-trip
-  const grossProfitPerGrid =
-    investmentPerGrid * (gridSpacing / lowerBound) * leverage;
-  const feePerRoundTrip = investmentPerGrid * feePercent * 2;
-  const netProfitPerGridTransaction = grossProfitPerGrid - feePerRoundTrip;
+  // Grid profit per round-trip (before fees)
+  let grossProfitPerGrid = 0;
+  if (gridType === "geometric") {
+    const avgStep = effectiveLower * (gridSpacing - 1);
+    grossProfitPerGrid = investmentPerGrid * (avgStep / effectiveLower) * leverage;
+  } else {
+    grossProfitPerGrid = investmentPerGrid * (gridSpacing / effectiveLower) * leverage;
+  }
 
-  // Daily & total profit
-  const estimatedDailyProfit =
-    netProfitPerGridTransaction * estimatedTradesPerDay;
-  const totalEstimatedProfit = estimatedDailyProfit * durationDays;
+  // Fees per round-trip
+  const feePerRoundTrip = investmentPerGrid * feePercent * 2;
+
+  // Net profit per grid round-trip (after fees)
+  let netProfitPerGridTransaction = grossProfitPerGrid - feePerRoundTrip;
+
+  // Entry Type
+  if (entryType === "short") {
+    // In short, grid profits are still grid profits, but people may expect negative sign for net profit if the bot is losing money
+    // (i.e., grid profit could be negative if price is trending up)
+    // Still, we do NOT flip trades per day sign.
+  } else if (entryType === "neutral") {
+    netProfitPerGridTransaction = 0;
+    estimatedTradesPerDay = 0;
+  }
+
+  // Key values
+  const estimatedDailyGridProfit = netProfitPerGridTransaction * estimatedTradesPerDay;
+  const totalGridProfit = estimatedDailyGridProfit * durationDays;
+
+  // "Total Net Profit" for a grid bot is usually just the sum of all completed grid profits (not including any holding/unrealized PnL).
+  // If you want, you can add any unrealized PnL here, but for most calculators, it's just grid profit.
+  const totalNetProfit = totalGridProfit;
 
   return {
     gridSpacing,
@@ -61,9 +96,12 @@ export const calculateGridProfit = async (
     grossProfitPerGrid,
     feePerRoundTrip,
     netProfitPerGridTransaction,
-    estimatedDailyProfit,
-    totalEstimatedProfit,
+    estimatedDailyProfit: estimatedDailyGridProfit, // for backcompat in UI
+    totalEstimatedProfit: totalGridProfit, // for backcompat in UI
     atrPerMin,
-    durationDays
+    durationDays,
+    totalNetProfit,
+    totalGridProfit,
+    estimatedDailyGridProfit,
   };
 };
