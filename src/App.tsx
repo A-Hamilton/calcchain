@@ -136,7 +136,7 @@ const App: React.FC = () => {
                             )}`,
                           },
                           {
-                            label: "ATR / Min",
+                            label: "Average ATR per minute",
                             value: results.atrPerMin.toFixed(4),
                           },
                         ]}

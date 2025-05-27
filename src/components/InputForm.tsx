@@ -17,11 +17,16 @@ import {
   Button,
   SxProps,
   Theme,
+  Snackbar,
+  Alert,
+  Tooltip,
+  IconButton,
 } from "@mui/material";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { calculateGridProfit } from "../utils/calculator";
 import { getAtrPerMin } from "../utils/atr";
 import { computeOptimalGridParams } from "../utils/optimizer";
-import { GridParameters, GridResults } from "../types";
+import { GridParameters } from "../types";
 
 /** All the form fields we care about */
 type FieldKey =
@@ -41,16 +46,23 @@ interface FieldConfig {
   adornment?: string;
   adornPos?: "start" | "end";
   integerOnly?: boolean;
+  helpText?: string; // ADDED
 }
 
 const fieldConfigs: FieldConfig[] = [
-  { key: "symbol", label: "Crypto Symbol", type: "text" },
+  {
+    key: "symbol",
+    label: "Crypto Symbol",
+    type: "text",
+    helpText: "Enter the trading symbol for the cryptocurrency (e.g., BTC, ETH, SOL).",
+  },
   {
     key: "principal",
     label: "Principal",
     type: "number",
     adornment: "$",
     adornPos: "start",
+    helpText: "The total capital you want to allocate to this grid trading strategy.",
   },
   {
     key: "lowerBound",
@@ -58,6 +70,7 @@ const fieldConfigs: FieldConfig[] = [
     type: "number",
     adornment: "$",
     adornPos: "start",
+    helpText: "Lowest price where your bot will place buy orders.",
   },
   {
     key: "upperBound",
@@ -65,8 +78,15 @@ const fieldConfigs: FieldConfig[] = [
     type: "number",
     adornment: "$",
     adornPos: "start",
+    helpText: "Highest price where your bot will place sell orders.",
   },
-  { key: "gridCount", label: "Grid Count", type: "number", integerOnly: true },
+  {
+    key: "gridCount",
+    label: "Grid Count",
+    type: "number",
+    integerOnly: true,
+    helpText: "How many grid levels between your lower and upper bounds. More grids = more frequent, smaller trades.",
+  },
   {
     key: "leverage",
     label: "Leverage",
@@ -74,13 +94,20 @@ const fieldConfigs: FieldConfig[] = [
     integerOnly: true,
     adornment: "×",
     adornPos: "end",
+    helpText: "Multiplier on your position size. Use with caution; increases both risk and reward.",
   },
-  { key: "fee", label: "Fee (%)", type: "number" },
+  {
+    key: "fee",
+    label: "Fee (%)",
+    type: "number",
+    helpText: "Trading fee percentage per transaction, typically set by your exchange.",
+  },
   {
     key: "duration",
     label: "Duration (Days)",
     type: "number",
     integerOnly: true,
+    helpText: "Number of days you want to simulate or plan the grid for.",
   },
 ];
 
@@ -114,6 +141,7 @@ interface InputFormProps {
 export default function InputForm({ onCalculate }: InputFormProps) {
   const [form, setForm] = useState(initialForm);
   const [errors, setErrors] = useState<Partial<Record<FieldKey, string>>>({});
+  const [showSnackbar, setShowSnackbar] = useState(false);
 
   const handleChange = useCallback(
     (key: FieldKey) => (e: ChangeEvent<HTMLInputElement>) => {
@@ -140,28 +168,20 @@ export default function InputForm({ onCalculate }: InputFormProps) {
 
   const handleOptimize = useCallback(async () => {
     try {
-      // Build full symbol (e.g. BTC → BTCUSDT)
       const pair = form.symbol.toUpperCase() + "USDT";
-
-      // 1. Fetch current market price, not use principal as price
       const priceRes = await axios.get(
         `https://api.binance.com/api/v3/ticker/price?symbol=${pair}`
       );
       const price = parseFloat(priceRes.data.price);
-
-      // 2. Now fetch your blended ATR
       const atr = await getAtrPerMin(pair, 200);
-
-      // 3. Compute optimal params around actual price
       const ctx = {
         symbol: pair,
-        principal: price, // use price for range
+        principal: price,
         atr,
         feePercent: Number(form.fee) / 100,
       };
       const { lower, upper, count } = computeOptimalGridParams(ctx);
 
-      // 4. Update the form
       setForm((f) => ({
         ...f,
         lowerBound: String(lower.toFixed(2)),
@@ -175,12 +195,13 @@ export default function InputForm({ onCalculate }: InputFormProps) {
         upperBound: undefined,
         gridCount: undefined,
       }));
+
+      setShowSnackbar(true);
     } catch (e) {
       console.error(e);
     }
   }, [form.symbol, form.principal, form.fee]);
 
-  // Auto-optimize on mount
   useEffect(() => {
     handleOptimize();
   }, [handleOptimize]);
@@ -199,7 +220,6 @@ export default function InputForm({ onCalculate }: InputFormProps) {
         leverage: Number(form.leverage),
         feePercent: Number(form.fee) / 100,
         durationDays: Number(form.duration),
-        // no atrPerMin → fetched & blended under the hood
       };
 
       const results = await calculateGridProfit(params);
@@ -222,11 +242,27 @@ export default function InputForm({ onCalculate }: InputFormProps) {
             {fieldConfigs.map((cfg) => (
               <Grid item xs={6} key={cfg.key}>
                 <TextField
-                  label={cfg.label}
+                  label={
+                    <span style={{ display: "flex", alignItems: "center" }}>
+                      {cfg.label}
+                      {cfg.helpText && (
+                        <Tooltip title={cfg.helpText} arrow>
+                          <IconButton
+                            size="small"
+                            tabIndex={-1}
+                            sx={{ ml: 0.5, color: "#9CA3AF", p: 0 }}
+                          >
+                            <InfoOutlinedIcon fontSize="inherit" />
+                          </IconButton>
+                        </Tooltip>
+                      )}
+                    </span>
+                  }
                   type={cfg.type}
                   value={form[cfg.key]}
                   onChange={handleChange(cfg.key)}
-                  required
+                  required={false} // Remove asterisk
+                  InputLabelProps={{ required: false }} // Remove asterisk
                   error={!!errors[cfg.key]}
                   helperText={errors[cfg.key]}
                   fullWidth
@@ -272,6 +308,22 @@ export default function InputForm({ onCalculate }: InputFormProps) {
           </Grid>
         </form>
       </CardContent>
+      {/* Snackbar Message */}
+      <Snackbar
+        open={showSnackbar}
+        autoHideDuration={3000}
+        onClose={() => setShowSnackbar(false)}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={() => setShowSnackbar(false)}
+          severity="success"
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          Optimized values have been set!
+        </Alert>
+      </Snackbar>
     </Card>
   );
 }
