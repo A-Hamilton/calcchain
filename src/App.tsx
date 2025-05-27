@@ -1,8 +1,5 @@
-// File: src/App.tsx
 import React, { useState } from "react";
 import {
-  AppBar,
-  Toolbar,
   Box,
   Container,
   Grid,
@@ -12,6 +9,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import logo from "./assets/calcchainlogo.png";
 import InputForm from "./components/InputForm";
 import ResultsDisplay from "./components/ResultsDisplay";
@@ -43,20 +41,6 @@ const App: React.FC = () => {
 
   return (
     <>
-      {/* Header */}
-      <AppBar position="static" elevation={0} sx={{ boxShadow: 5, border: 0 }}>
-        <Toolbar>
-          <Link href="/" sx={{ display: "flex", alignItems: "center" }}>
-            <Box
-              component="img"
-              src={logo}
-              alt="CalcChain Logo"
-              sx={{ height: 24, objectFit: "contain" }}
-            />
-          </Link>
-        </Toolbar>
-      </AppBar>
-
       {/* Full-screen loading overlay */}
       {isLoading && (
         <Box
@@ -76,6 +60,25 @@ const App: React.FC = () => {
 
       {/* Main content */}
       <Container maxWidth="lg" sx={{ py: 4 }}>
+        {/* Logo Row (inline with grid) */}
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            minHeight: 56,
+            mb: 2,
+          }}
+        >
+          <Link href="/" sx={{ display: "flex", alignItems: "center" }}>
+            <Box
+              component="img"
+              src={logo}
+              alt="CalcChain Logo"
+              sx={{ height: 32, objectFit: "contain" }}
+            />
+          </Link>
+        </Box>
+
         <Typography variant="h4" gutterBottom>
           Grid Trading Profit Estimator
         </Typography>
@@ -86,10 +89,10 @@ const App: React.FC = () => {
             <InputForm onCalculate={handleCalculate} />
           </Grid>
 
-          {/* Right: results, chart, insights */}
+          {/* Right: results, chart, insights, OR placeholder */}
           <Grid item xs={12} md={7}>
             <AnimatePresence mode="wait">
-              {results && (
+              {results ? (
                 <motion.div
                   key="results"
                   initial={{ opacity: 0, y: 20 }}
@@ -136,7 +139,7 @@ const App: React.FC = () => {
                             )}`,
                           },
                           {
-                            label: "Average ATR per minute",
+                            label: "ATR / Min",
                             value: results.atrPerMin.toFixed(4),
                           },
                         ]}
@@ -217,6 +220,82 @@ const App: React.FC = () => {
                       </Typography>
                     </Grid>
                   </Grid>
+                </motion.div>
+              ) : (
+                // Placeholder state BEFORE calculation
+                <motion.div
+                  key="placeholder"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.4 }}
+                >
+                  <Box
+                    sx={{
+                      background: "#1C1D2B",
+                      borderRadius: 3,
+                      p: 4,
+                      boxShadow: 2,
+                      minHeight: 420,
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: 2,
+                      border: "1.5px dashed #384050",
+                    }}
+                  >
+                    <InfoOutlinedIcon sx={{ fontSize: 50, color: "#2B66F6", mb: 2, opacity: 0.7 }} />
+                    <Typography variant="h5" color="#CDD2F6" align="center" fontWeight={600}>
+                      No results yet
+                    </Typography>
+                    <Typography variant="body1" color="#9CA3AF" align="center" sx={{ maxWidth: 360 }}>
+                      Enter your grid parameters on the left and click
+                      <Box component="span" sx={{ color: "#2B66F6", fontWeight: 700, mx: 0.5 }}>
+                        Calculate
+                      </Box>
+                      to see your estimated profit, trade metrics, and visual projections.
+                    </Typography>
+                    <Box
+                      sx={{
+                        mt: 4,
+                        width: "100%",
+                        display: "grid",
+                        gridTemplateColumns: "1fr 1fr",
+                        gap: 2,
+                        opacity: 0.3,
+                      }}
+                    >
+                      <Paper
+                        sx={{
+                          minHeight: 70,
+                          borderRadius: 2,
+                          bgcolor: "#24253A",
+                          border: "1.5px dashed #2B66F6",
+                          boxShadow: "none",
+                        }}
+                      />
+                      <Paper
+                        sx={{
+                          minHeight: 70,
+                          borderRadius: 2,
+                          bgcolor: "#24253A",
+                          border: "1.5px dashed #2B66F6",
+                          boxShadow: "none",
+                        }}
+                      />
+                      <Paper
+                        sx={{
+                          minHeight: 160,
+                          gridColumn: "1 / span 2",
+                          borderRadius: 2,
+                          bgcolor: "#24253A",
+                          border: "1.5px dashed #2B66F6",
+                          boxShadow: "none",
+                        }}
+                      />
+                    </Box>
+                  </Box>
                 </motion.div>
               )}
             </AnimatePresence>

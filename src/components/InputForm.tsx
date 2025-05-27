@@ -21,6 +21,7 @@ import {
   Alert,
   Tooltip,
   IconButton,
+  Box,
 } from "@mui/material";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { calculateGridProfit } from "../utils/calculator";
@@ -28,7 +29,6 @@ import { getAtrPerMin } from "../utils/atr";
 import { computeOptimalGridParams } from "../utils/optimizer";
 import { GridParameters } from "../types";
 
-/** All the form fields we care about */
 type FieldKey =
   | "symbol"
   | "principal"
@@ -46,7 +46,7 @@ interface FieldConfig {
   adornment?: string;
   adornPos?: "start" | "end";
   integerOnly?: boolean;
-  helpText?: string; // ADDED
+  helpText?: string;
 }
 
 const fieldConfigs: FieldConfig[] = [
@@ -142,6 +142,7 @@ export default function InputForm({ onCalculate }: InputFormProps) {
   const [form, setForm] = useState(initialForm);
   const [errors, setErrors] = useState<Partial<Record<FieldKey, string>>>({});
   const [showSnackbar, setShowSnackbar] = useState(false);
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
 
   const handleChange = useCallback(
     (key: FieldKey) => (e: ChangeEvent<HTMLInputElement>) => {
@@ -166,44 +167,55 @@ export default function InputForm({ onCalculate }: InputFormProps) {
     return Object.keys(newErr).length === 0;
   }, [form]);
 
-  const handleOptimize = useCallback(async () => {
-    try {
-      const pair = form.symbol.toUpperCase() + "USDT";
-      const priceRes = await axios.get(
-        `https://api.binance.com/api/v3/ticker/price?symbol=${pair}`
-      );
-      const price = parseFloat(priceRes.data.price);
-      const atr = await getAtrPerMin(pair, 200);
-      const ctx = {
-        symbol: pair,
-        principal: price,
-        atr,
-        feePercent: Number(form.fee) / 100,
-      };
-      const { lower, upper, count } = computeOptimalGridParams(ctx);
+  // Accepts a showAlert arg: true to show the snackbar, false to suppress
+  const handleOptimize = useCallback(
+    async (showAlert = true) => {
+      try {
+        const pair = form.symbol.toUpperCase() + "USDT";
+        const priceRes = await axios.get(
+          `https://api.binance.com/api/v3/ticker/price?symbol=${pair}`
+        );
+        const price = parseFloat(priceRes.data.price);
+        const atr = await getAtrPerMin(pair, 200);
+        const ctx = {
+          symbol: pair,
+          principal: price,
+          atr,
+          feePercent: Number(form.fee) / 100,
+        };
+        const { lower, upper, count } = computeOptimalGridParams(ctx);
 
-      setForm((f) => ({
-        ...f,
-        lowerBound: String(lower.toFixed(2)),
-        upperBound: String(upper.toFixed(2)),
-        gridCount: String(count),
-      }));
+        setForm((f) => ({
+          ...f,
+          lowerBound: String(lower.toFixed(2)),
+          upperBound: String(upper.toFixed(2)),
+          gridCount: String(count),
+        }));
 
-      setErrors((err) => ({
-        ...err,
-        lowerBound: undefined,
-        upperBound: undefined,
-        gridCount: undefined,
-      }));
+        setErrors((err) => ({
+          ...err,
+          lowerBound: undefined,
+          upperBound: undefined,
+          gridCount: undefined,
+        }));
 
-      setShowSnackbar(true);
-    } catch (e) {
-      console.error(e);
-    }
-  }, [form.symbol, form.principal, form.fee]);
+        if (showAlert) setShowSnackbar(true);
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    [form.symbol, form.principal, form.fee]
+  );
 
   useEffect(() => {
-    handleOptimize();
+    // Run optimize, but do NOT show the alert on first load
+    handleOptimize(false);
+    setIsFirstLoad(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // only run on mount
+
+  const handleOptimizeButton = useCallback(() => {
+    handleOptimize(true);
   }, [handleOptimize]);
 
   const handleSubmit = useCallback(
@@ -261,8 +273,8 @@ export default function InputForm({ onCalculate }: InputFormProps) {
                   type={cfg.type}
                   value={form[cfg.key]}
                   onChange={handleChange(cfg.key)}
-                  required={false} // Remove asterisk
-                  InputLabelProps={{ required: false }} // Remove asterisk
+                  required={false}
+                  InputLabelProps={{ required: false }}
                   error={!!errors[cfg.key]}
                   helperText={errors[cfg.key]}
                   fullWidth
@@ -291,7 +303,7 @@ export default function InputForm({ onCalculate }: InputFormProps) {
             ))}
 
             <Grid item xs={6}>
-              <Button variant="outlined" fullWidth onClick={handleOptimize}>
+              <Button variant="outlined" fullWidth onClick={handleOptimizeButton}>
                 Optimize Values
               </Button>
             </Grid>
@@ -317,9 +329,20 @@ export default function InputForm({ onCalculate }: InputFormProps) {
       >
         <Alert
           onClose={() => setShowSnackbar(false)}
+          icon={<InfoOutlinedIcon sx={{ color: "#FFF" }}/> }
           severity="success"
           variant="filled"
-          sx={{ width: "100%" }}
+          sx={{
+            width: "100%",
+            bgcolor: "#2B66F6",
+            color: "#FFF",
+            "& .MuiAlert-icon": {
+              color: "#FFF",
+            },
+            border: "2px solid #1641A9",
+            fontWeight: 500,
+            letterSpacing: "0.02em",
+          }}
         >
           Optimized values have been set!
         </Alert>
