@@ -108,7 +108,7 @@ const whiteFieldSx: SxProps<Theme> = {
 };
 
 interface InputFormProps {
-  onCalculate: (results: GridResults) => void;
+  onCalculate: (params: GridParameters) => Promise<void>;
 }
 
 export default function InputForm({ onCalculate }: InputFormProps) {
@@ -204,7 +204,7 @@ export default function InputForm({ onCalculate }: InputFormProps) {
 
       const results = await calculateGridProfit(params);
       console.log("🔍 ATR/min in submit handler:", results.atrPerMin);
-      onCalculate(results);
+      onCalculate(params);
     },
     [form, onCalculate, validate]
   );
