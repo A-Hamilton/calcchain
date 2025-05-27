@@ -105,7 +105,7 @@ const App: React.FC = () => {
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 0.4 }}
                 >
-                  <Grid container direction="column" spacing={1}>
+                  <Grid container direction="column" spacing={3}>
                     <Grid item>
                       <ResultsDisplay
                         title="Estimated Results"
@@ -121,6 +121,32 @@ const App: React.FC = () => {
                           {
                             label: "Trades per Day",
                             value: results.estimatedTradesPerDay.toFixed(2),
+                          },
+                        ]}
+                      />
+                    </Grid>
+                    {/* --- NEW Profit Breakdown Card --- */}
+                    <Grid item>
+                      <ResultsDisplay
+                        title="Profit Breakdown"
+                        metrics={[
+                          {
+                            label: "Total Net Profit",
+                            value: results.totalNetProfit !== undefined
+                              ? `$${results.totalNetProfit.toFixed(2)}`
+                              : "--",
+                          },
+                          {
+                            label: "Total Grid Profit (before fees)",
+                            value: results.totalGridProfit !== undefined
+                              ? `$${results.totalGridProfit.toFixed(2)}`
+                              : "--",
+                          },
+                          {
+                            label: "Estimated Daily Grid Profit (before fees)",
+                            value: results.estimatedDailyGridProfit !== undefined
+                              ? `$${results.estimatedDailyGridProfit.toFixed(2)}`
+                              : "--",
                           },
                         ]}
                       />
@@ -216,82 +242,34 @@ const App: React.FC = () => {
                     sx={{
                       background: "#1C1D2B",
                       borderRadius: 3,
-                      p: 4,
-                      boxShadow: 2,
-                      minHeight: 420,
+                      minHeight: 320,
                       display: "flex",
                       flexDirection: "column",
                       alignItems: "center",
                       justifyContent: "center",
-                      gap: 2,
-                      border: "1.5px dashed #384050",
+                      p: 6,
                     }}
                   >
-                    <InfoOutlinedIcon
-                      sx={{ fontSize: 50, color: "#2B66F6", mb: 2, opacity: 0.7 }}
-                    />
                     <Typography
                       variant="h5"
-                      color="#CDD2F6"
+                      color="text.secondary"
                       align="center"
-                      fontWeight={600}
+                      gutterBottom
                     >
-                      No results yet
-                    </Typography>
-                    <Typography
-                      variant="body1"
-                      color="#9CA3AF"
-                      align="center"
-                      sx={{ maxWidth: 360 }}
-                    >
-                      Enter your grid parameters on the left and click
+                      Enter your grid trading parameters and click{" "}
                       <Box
                         component="span"
-                        sx={{ color: "#2B66F6", fontWeight: 700, mx: 0.5 }}
+                        sx={{
+                          color: "#2B66F6",
+                          fontWeight: "bold",
+                          px: 0.5,
+                          fontSize: 20,
+                        }}
                       >
                         Calculate
                       </Box>
                       to see your estimated profit, trade metrics, and visual projections.
                     </Typography>
-                    <Box
-                      sx={{
-                        mt: 4,
-                        width: "100%",
-                        display: "grid",
-                        gridTemplateColumns: "1fr 1fr",
-                        gap: 2,
-                        opacity: 0.3,
-                      }}
-                    >
-                      <Paper
-                        sx={{
-                          minHeight: 70,
-                          borderRadius: 2,
-                          bgcolor: "#24253A",
-                          border: "1.5px dashed #2B66F6",
-                          boxShadow: "none",
-                        }}
-                      />
-                      <Paper
-                        sx={{
-                          minHeight: 70,
-                          borderRadius: 2,
-                          bgcolor: "#24253A",
-                          border: "1.5px dashed #2B66F6",
-                          boxShadow: "none",
-                        }}
-                      />
-                      <Paper
-                        sx={{
-                          minHeight: 160,
-                          gridColumn: "1 / span 2",
-                          borderRadius: 2,
-                          bgcolor: "#24253A",
-                          border: "1.5px dashed #2B66F6",
-                          boxShadow: "none",
-                        }}
-                      />
-                    </Box>
                   </Box>
                 </motion.div>
               )}
