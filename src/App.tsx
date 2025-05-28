@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import { ThemeProvider } from "@mui/material/styles";
 import {
   CssBaseline,
@@ -14,7 +14,7 @@ import {
   MenuItem,
   Divider,
   ListItemIcon,
-  Container
+  Container,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import TimelineIcon from "@mui/icons-material/Timeline";
@@ -29,42 +29,53 @@ import logo from "./assets/calcchainlogo.png";
 import { GridResults, GridParameters, Metric } from "./types";
 import { calculateGridProfit } from "./utils/calculator";
 
-// Set padding and width values for both nav and main content
+// Layout constants
 const NAV_HORIZONTAL_PADDING = { xs: 1, md: 4 };
 const CONTENT_MAX_WIDTH = 1200;
 
+// Memoized Crypto Insights List
+const TradingTips = React.memo(() => (
+  <>
+    <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>
+      Why Use Grid Trading?
+    </Typography>
+    <CryptoInsights message="Generates consistent profit in volatile, sideways markets." />
+    <CryptoInsights message="Removes emotional decision-making by automating trades." />
+    <CryptoInsights message="Works best for assets with predictable price swings." />
+    <Typography variant="h6" sx={{ fontWeight: 600, mt: 2, mb: 1 }}>
+      What is Grid Trading?
+    </Typography>
+    <CryptoInsights message="Grid trading places buy and sell orders at fixed price intervals to profit from market volatility." />
+    <Typography variant="h6" sx={{ fontWeight: 600, mt: 2, mb: 1 }}>
+      What are the risks?
+    </Typography>
+    <CryptoInsights message="If the price breaks out of your set range, it can lead to losses." />
+    <CryptoInsights message="Grid trading is not suitable for all market conditions—trending markets can reduce profit." />
+    <CryptoInsights message="Always start with small amounts and manage risk carefully." />
+  </>
+));
+
+/** Main application component: handles global state, layout, theming, and core logic. */
 const App: React.FC = () => {
   const [results, setResults] = useState<GridResults | null>(null);
-  const [chartData, setChartData] = useState<{ day: number; profit: number }[]>(
-    []
-  );
   const [isLoading, setIsLoading] = useState(false);
   const [symbolError, setSymbolError] = useState<string | null>(null);
-
-  // Dropdown menu state
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+  // Open/close nav menu
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
+  const handleMenuClose = () => setAnchorEl(null);
 
+  // Main calculation handler
   const handleCalculate = useCallback(
     async (params: GridParameters) => {
       setIsLoading(true);
-      setSymbolError(null); // Clear previous errors
+      setSymbolError(null);
       try {
         const res = await calculateGridProfit(params);
         setResults(res);
-
-        // Generate chart data
-        const chartDataArr = [];
-        const perDay = res.estimatedDailyProfit ?? 0;
-        for (let day = 1; day <= params.durationDays; day++) {
-          chartDataArr.push({ day, profit: Number((perDay * day).toFixed(2)) });
-        }
-        setChartData(chartDataArr);
       } catch (err: any) {
         const errMsg =
           err?.response?.data?.msg ||
@@ -91,6 +102,68 @@ const App: React.FC = () => {
     []
   );
 
+  // Memoized metrics for results display (performance optimization)
+  const metrics = useMemo(() => {
+    if (!results) return { estimated: [], breakdown: [], more: [] };
+    const estimated: Metric[] = [
+      results.overallTotalValue !== undefined && results.overallTotalValue !== null
+        ? {
+            label: "Total Value (After All Grid & Buy/Sell)",
+            value: `$${results.overallTotalValue.toLocaleString(undefined, { maximumFractionDigits: 2 })}`,
+          }
+        : null,
+      results.principalReturnFromEntryExit !== undefined && results.principalReturnFromEntryExit !== null
+        ? {
+            label: "Net Principal Change (Buy at X, Sell at Y)",
+            value: `$${results.principalReturnFromEntryExit.toLocaleString(undefined, { maximumFractionDigits: 2 })}`,
+          }
+        : null,
+      {
+        label: "Estimated Daily Profit",
+        value: `$${results.estimatedDailyProfit?.toLocaleString(undefined, { maximumFractionDigits: 2 })}`,
+      },
+      {
+        label: "Trades per Day",
+        value: results.estimatedTradesPerDay?.toLocaleString(undefined, { maximumFractionDigits: 2 }),
+      },
+    ].filter(Boolean) as Metric[];
+
+    const breakdown: Metric[] = [
+      {
+        label: "Total Net Profit",
+        value: `$${results.totalNetProfit?.toLocaleString(undefined, { maximumFractionDigits: 2 })}`,
+      },
+      {
+        label: "Total Grid Profit (before fees)",
+        value: `$${results.totalGridProfit?.toLocaleString(undefined, { maximumFractionDigits: 2 })}`,
+      },
+      {
+        label: "Estimated Daily Grid Profit (before fees)",
+        value: `$${results.estimatedDailyGridProfit?.toLocaleString(undefined, { maximumFractionDigits: 2 })}`,
+      },
+    ];
+
+    const more: Metric[] = [
+      {
+        label: "Investment per Grid",
+        value: `$${results.investmentPerGrid?.toLocaleString(undefined, { maximumFractionDigits: 2 })}`,
+      },
+      {
+        label: "Grid Spacing",
+        value: `$${results.gridSpacing?.toLocaleString(undefined, { maximumFractionDigits: 6 })}`,
+      },
+      {
+        label: "Net Profit/Tx",
+        value: `$${results.netProfitPerGridTransaction?.toLocaleString(undefined, { maximumFractionDigits: 4 })}`,
+      },
+      {
+        label: "Average ATR per Minute",
+        value: results.atrPerMin?.toLocaleString(undefined, { maximumFractionDigits: 6 }),
+      },
+    ];
+    return { estimated, breakdown, more };
+  }, [results]);
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -107,7 +180,6 @@ const App: React.FC = () => {
             backdropFilter: "blur(8px)",
           }}
         >
-          {/* Alignment wrapper - same as Container */}
           <Box
             sx={{
               maxWidth: CONTENT_MAX_WIDTH,
@@ -128,12 +200,8 @@ const App: React.FC = () => {
             >
               {/* Logo */}
               <Box sx={{ display: "flex", alignItems: "center" }}>
-                <a href="https://calcchain.com">
-                  <img
-                    src={logo}
-                    alt="CalcChain"
-                    style={{ height: 36 }}
-                  />
+                <a href="https://calcchain.com" aria-label="CalcChain Home">
+                  <img src={logo} alt="CalcChain" style={{ height: 36 }} />
                 </a>
               </Box>
               {/* Hamburger Dropdown */}
@@ -271,136 +339,15 @@ const App: React.FC = () => {
                 {/* Results or Placeholder */}
                 {results ? (
                   <Box>
-                    <ResultsDisplay
-                      title="Estimated Results"
-                      metrics={
-                        [
-                          results.overallTotalValue !== undefined &&
-                          results.overallTotalValue !== null
-                            ? {
-                                label: "Total Value (After All Grid & Buy/Sell)",
-                                value: `$${results.overallTotalValue.toLocaleString(
-                                  undefined,
-                                  { maximumFractionDigits: 2 }
-                                )}`,
-                              }
-                            : null,
-                          results.principalReturnFromEntryExit !== undefined &&
-                          results.principalReturnFromEntryExit !== null
-                            ? {
-                                label:
-                                  "Net Principal Change (Buy at X, Sell at Y)",
-                                value: `$${results.principalReturnFromEntryExit.toLocaleString(
-                                  undefined,
-                                  { maximumFractionDigits: 2 }
-                                )}`,
-                              }
-                            : null,
-                          {
-                            label: "Estimated Daily Profit",
-                            value: `$${results.estimatedDailyProfit?.toLocaleString(
-                              undefined,
-                              { maximumFractionDigits: 2 }
-                            )}`,
-                          },
-                          {
-                            label: "Trades per Day",
-                            value: results.estimatedTradesPerDay?.toLocaleString(
-                              undefined,
-                              { maximumFractionDigits: 2 }
-                            ),
-                          },
-                        ].filter(Boolean) as Metric[]
-                      }
-                    />
+                    <ResultsDisplay title="Estimated Results" metrics={metrics.estimated} />
                     <Box sx={{ mt: 2 }}>
-                      <ResultsDisplay
-                        title="Profit Breakdown"
-                        metrics={[
-                          {
-                            label: "Total Net Profit",
-                            value: `$${results.totalNetProfit?.toLocaleString(
-                              undefined,
-                              { maximumFractionDigits: 2 }
-                            )}`,
-                          },
-                          {
-                            label: "Total Grid Profit (before fees)",
-                            value: `$${results.totalGridProfit?.toLocaleString(
-                              undefined,
-                              { maximumFractionDigits: 2 }
-                            )}`,
-                          },
-                          {
-                            label: "Estimated Daily Grid Profit (before fees)",
-                            value: `$${results.estimatedDailyGridProfit?.toLocaleString(
-                              undefined,
-                              { maximumFractionDigits: 2 }
-                            )}`,
-                          },
-                        ]}
-                      />
+                      <ResultsDisplay title="Profit Breakdown" metrics={metrics.breakdown} />
                     </Box>
                     <Box sx={{ mt: 2 }}>
-                      <ResultsDisplay
-                        title="More Metrics"
-                        metrics={[
-                          {
-                            label: "Investment per Grid",
-                            value: `$${results.investmentPerGrid?.toLocaleString(
-                              undefined,
-                              { maximumFractionDigits: 2 }
-                            )}`,
-                          },
-                          {
-                            label: "Grid Spacing",
-                            value: `$${results.gridSpacing?.toLocaleString(
-                              undefined,
-                              { maximumFractionDigits: 6 }
-                            )}`,
-                          },
-                          {
-                            label: "Net Profit/Tx",
-                            value: `$${results.netProfitPerGridTransaction?.toLocaleString(
-                              undefined,
-                              { maximumFractionDigits: 4 }
-                            )}`,
-                          },
-                          {
-                            label: "Average ATR per Minute",
-                            value: results.atrPerMin?.toLocaleString(undefined, {
-                              maximumFractionDigits: 6,
-                            }),
-                          },
-                        ]}
-                      />
+                      <ResultsDisplay title="More Metrics" metrics={metrics.more} />
                     </Box>
                     <Box sx={{ mt: 3 }}>
-                      <Typography
-                        variant="h6"
-                        sx={{ fontWeight: 600, mb: 1 }}
-                      >
-                        Why Use Grid Trading?
-                      </Typography>
-                      <CryptoInsights message="Generates consistent profit in volatile, sideways markets." />
-                      <CryptoInsights message="Removes emotional decision-making by automating trades." />
-                      <CryptoInsights message="Works best for assets with predictable price swings." />
-                      <Typography
-                        variant="h6"
-                        sx={{ fontWeight: 600, mt: 2, mb: 1 }}
-                      >
-                        What is Grid Trading?
-                      </Typography>
-                      <CryptoInsights message="Grid trading places buy and sell orders at fixed price intervals to profit from market volatility." />
-                      <Typography
-                        variant="h6"
-                        sx={{ fontWeight: 600, mt: 2, mb: 1 }}
-                      >
-                        What are the risks?
-                      </Typography>
-                      <CryptoInsights message="If the price breaks out of your set range, it can lead to losses." />
-                      <CryptoInsights message="Grid trading is not suitable for all market conditions—trending markets can reduce profit." />
-                      <CryptoInsights message="Always start with small amounts and manage risk carefully." />
+                      <TradingTips />
                     </Box>
                   </Box>
                 ) : (
