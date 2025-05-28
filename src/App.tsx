@@ -1,22 +1,22 @@
 import React, { useState, useCallback } from "react";
+import { ThemeProvider } from "@mui/material/styles";
 import {
+  CssBaseline,
   Box,
-  Container,
+  Typography,
   Grid,
   Paper,
-  Typography,
-  Link,
   CircularProgress,
 } from "@mui/material";
-import { motion, AnimatePresence } from "framer-motion";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import logo from "./assets/calcchainlogo.png";
 import InputForm from "./components/InputForm";
 import ResultsDisplay from "./components/ResultsDisplay";
-import ProfitChart from "./components/ProfitChart";
 import CryptoInsights from "./components/CryptoInsights";
-import { calculateGridProfit } from "./utils/calculator";
-import { GridParameters, GridResults } from "./types";
+import ErrorBoundary from "./ErrorBoundary";
+import theme from "./theme";
+import logo from "./assets/calcchainlogo.png";
+import { GridResults, GridParameters, Metric } from "./types";
+import {calculateGridProfit} from "./utils/calculator";
+
 
 const App: React.FC = () => {
   const [results, setResults] = useState<GridResults | null>(null);
@@ -24,260 +24,295 @@ const App: React.FC = () => {
     []
   );
   const [isLoading, setIsLoading] = useState(false);
+  const [symbolError, setSymbolError] = useState<string | null>(null);
 
-  // Memoized calculation handler for better performance on rerenders
-  const handleCalculate = useCallback(async (params: GridParameters) => {
-    setIsLoading(true);
-    try {
-      const res = await calculateGridProfit(params);
-      setResults(res);
+  const handleCalculate = useCallback(
+    async (params: GridParameters) => {
+      setIsLoading(true);
+      setSymbolError(null); // Clear previous errors
+      try {
+        const res = await calculateGridProfit(params);
+        setResults(res);
 
-      // Prepare chart data
-      const days = res.durationDays;
-      const data = Array.from({ length: days }, (_, i) => ({
-        day: i + 1,
-        profit: (res.totalEstimatedProfit / days) * (i + 1),
-      }));
-      setChartData(data);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+        // Generate chart data
+        const chartDataArr = [];
+        const perDay = res.estimatedDailyProfit ?? 0;
+        for (let day = 1; day <= params.durationDays; day++) {
+          chartDataArr.push({ day, profit: Number((perDay * day).toFixed(2)) });
+        }
+        setChartData(chartDataArr);
+      } catch (err: any) {
+        // Binance invalid symbol errors typically return as a string error message
+        const errMsg =
+          err?.response?.data?.msg ||
+          err?.message ||
+          String(err) ||
+          "";
+        if (
+          errMsg.toLowerCase().includes("invalid symbol") ||
+          errMsg.toLowerCase().includes("symbol not found")
+        ) {
+          setSymbolError(
+            "The trading symbol is invalid. Please enter a valid trading pair, e.g. BTCUSDT, ETHBTC, DOGEUSDT, etc."
+          );
+        } else {
+          setSymbolError(
+            "Calculation failed. Please check your parameters and try again."
+          );
+        }
+        setResults(null);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    []
+  );
 
   return (
-    <>
-      {/* Full-screen loading overlay */}
-      {isLoading && (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <ErrorBoundary>
+        {/* NAVBAR / HEADER */}
         <Box
-          sx={{
-            position: "fixed",
-            inset: 0,
-            bgcolor: "rgba(0,0,0,0.6)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: 2000,
-          }}
-        >
-          <CircularProgress color="primary" />
-        </Box>
-      )}
-
-      {/* Main content */}
-      <Container maxWidth="lg" sx={{ py: 4 }}>
-        {/* Logo Row */}
-        <Box
+          component="header"
           sx={{
             display: "flex",
             alignItems: "center",
-            minHeight: 56,
-            mb: 2,
+            px: 4,
+            py: 2,
+            bgcolor: "background.paper",
+            boxShadow: 1,
+            minHeight: 60,
           }}
         >
-          <Link href="/" sx={{ display: "flex", alignItems: "center" }}>
-            <Box
-              component="img"
-              src={logo}
-              alt="CalcChain Logo"
-              sx={{ height: 32, objectFit: "contain" }}
-            />
-          </Link>
+          <img
+            src={logo}
+            alt="CalcChain"
+            style={{ height: 36, marginRight: 16 }}
+          />
+          {/* Future: Navigation/tool links can be added here */}
         </Box>
 
-        <Typography variant="h4" gutterBottom>
-          Grid Trading Profit Estimator
-        </Typography>
+        {/* MAIN PAGE CONTENT */}
+        <Box sx={{ px: { xs: 1, md: 4 }, pt: 3, pb: 2 }}>
+          <Typography
+            variant="h4"
+            sx={{ fontWeight: 600, mb: 2, color: "#fff" }}
+          >
+            Grid Trading Profit Estimator
+          </Typography>
 
-        <Grid container spacing={4}>
-          {/* Left: form */}
-          <Grid item xs={12} md={5}>
-            <InputForm onCalculate={handleCalculate} />
-          </Grid>
-
-          {/* Right: results, chart, insights, or placeholder */}
-          <Grid item xs={12} md={7}>
-            <AnimatePresence mode="wait">
-              {results ? (
-                <motion.div
-                  key="results"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.4 }}
+          {/* Intro Banner */}
+          <Paper
+            sx={{ p: 2, mb: 3, bgcolor: "primary.dark", color: "#fff" }}
+            elevation={0}
+          >
+            <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 1 }}>
+              What is Grid Trading?{" "}
+              <span style={{ fontWeight: 400 }}>
+                Grid trading automatically places buy and sell orders at preset
+                intervals within a price range to profit from volatility.{" "}
+                <a
+                  href="https://b2broker.com/news/understanding-grid-trading-purpose-pros-cons/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    color: "#bbdefb",
+                    textDecoration: "underline",
+                  }}
                 >
-                  <Grid container direction="column" spacing={3}>
-                    <Grid item>
-                      <ResultsDisplay
-                        title="Estimated Results"
-                        metrics={[
-                          {
-                            label: "Total Estimated Profit",
-                            value: `$${results.totalEstimatedProfit.toFixed(2)}`,
-                          },
-                          {
-                            label: "Estimated Daily Profit",
-                            value: `$${results.estimatedDailyProfit.toFixed(2)}`,
-                          },
-                          {
-                            label: "Trades per Day",
-                            value: results.estimatedTradesPerDay.toFixed(2),
-                          },
-                        ]}
-                      />
-                    </Grid>
-                    {/* --- NEW Profit Breakdown Card --- */}
-                    <Grid item>
+                  Learn more.
+                </a>
+              </span>
+            </Typography>
+          </Paper>
+
+          {/* Main Grid Layout */}
+          <Grid container spacing={3}>
+            {/* LEFT: Input Form */}
+            <Grid item xs={12} md={5}>
+              <InputForm onCalculate={handleCalculate} symbolError={symbolError} />
+            </Grid>
+            {/* RIGHT: Results/Chart */}
+            <Grid item xs={12} md={7}>
+              <Box
+                sx={{
+                  height: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "stretch",
+                  position: "relative",
+                }}
+              >
+                {/* Loader Overlay */}
+                {isLoading && (
+                  <Box
+                    sx={{
+                      position: "absolute",
+                      inset: 0,
+                      zIndex: 20,
+                      bgcolor: "rgba(0,0,0,0.4)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <CircularProgress color="primary" />
+                  </Box>
+                )}
+                {/* Results or Placeholder */}
+                {results ? (
+                  <Box>
+                    <ResultsDisplay
+  title="Estimated Results"
+  metrics={
+    [
+      results.overallTotalValue !== undefined && results.overallTotalValue !== null
+        ? {
+            label: "Total Value (After All Grid & Buy/Sell)",
+            value: `$${results.overallTotalValue.toLocaleString(undefined, { maximumFractionDigits: 2 })}`,
+          }
+        : null,
+      results.principalReturnFromEntryExit !== undefined && results.principalReturnFromEntryExit !== null
+        ? {
+            label: "Net Principal Change (Buy at X, Sell at Y)",
+            value: `$${results.principalReturnFromEntryExit.toLocaleString(undefined, { maximumFractionDigits: 2 })}`,
+          }
+        : null,
+      {
+        label: "Estimated Daily Profit",
+        value: `$${results.estimatedDailyProfit?.toLocaleString(undefined, { maximumFractionDigits: 2 })}`,
+      },
+      {
+        label: "Trades per Day",
+        value: results.estimatedTradesPerDay?.toLocaleString(undefined, { maximumFractionDigits: 2 }),
+      },
+      ].filter(Boolean) as Metric[]
+  }
+/>
+                    <Box sx={{ mt: 2 }}>
                       <ResultsDisplay
                         title="Profit Breakdown"
                         metrics={[
                           {
                             label: "Total Net Profit",
-                            value: results.totalNetProfit !== undefined
-                              ? `$${results.totalNetProfit.toFixed(2)}`
-                              : "--",
+                            value: `$${results.totalNetProfit?.toLocaleString(
+                              undefined,
+                              { maximumFractionDigits: 2 }
+                            )}`,
                           },
                           {
                             label: "Total Grid Profit (before fees)",
-                            value: results.totalGridProfit !== undefined
-                              ? `$${results.totalGridProfit.toFixed(2)}`
-                              : "--",
+                            value: `$${results.totalGridProfit?.toLocaleString(
+                              undefined,
+                              { maximumFractionDigits: 2 }
+                            )}`,
                           },
                           {
                             label: "Estimated Daily Grid Profit (before fees)",
-                            value: results.estimatedDailyGridProfit !== undefined
-                              ? `$${results.estimatedDailyGridProfit.toFixed(2)}`
-                              : "--",
+                            value: `$${results.estimatedDailyGridProfit?.toLocaleString(
+                              undefined,
+                              { maximumFractionDigits: 2 }
+                            )}`,
                           },
                         ]}
                       />
-                    </Grid>
-                    <Grid item>
+                    </Box>
+                    <Box sx={{ mt: 2 }}>
                       <ResultsDisplay
                         title="More Metrics"
                         metrics={[
                           {
                             label: "Investment per Grid",
-                            value: `$${results.investmentPerGrid.toFixed(2)}`,
-                          },
-                          {
-                            label: "Grid Spacing",
-                            value: `$${results.gridSpacing.toFixed(2)}`,
-                          },
-                          {
-                            label: "Net Profit/Tx",
-                            value: `$${results.netProfitPerGridTransaction.toFixed(
-                              4
+                            value: `$${results.investmentPerGrid?.toLocaleString(
+                              undefined,
+                              { maximumFractionDigits: 2 }
                             )}`,
                           },
                           {
-                            label: "ATR / Min",
-                            value: results.atrPerMin.toFixed(4),
+                            label: "Grid Spacing",
+                            value: results.gridSpacing?.toLocaleString(
+                              undefined,
+                              { maximumFractionDigits: 6 }
+                            ),
+                          },
+                          {
+                            label: "Net Profit/Tx",
+                            value: `$${results.netProfitPerGridTransaction?.toLocaleString(
+                              undefined,
+                              { maximumFractionDigits: 4 }
+                            )}`,
+                          },
+                          {
+                            label: "Average ATR per Minute",
+                            value: results.atrPerMin?.toLocaleString(undefined, {
+                              maximumFractionDigits: 6,
+                            }),
                           },
                         ]}
                       />
-                    </Grid>
-                    <Grid item>
-                      <Paper
-                        variant="outlined"
-                        sx={{
-                          boxShadow: 2,
-                          p: 2,
-                          backgroundColor: "#1C1D2B",
-                        }}
+                    </Box>
+                    <Box sx={{ mt: 3 }}>
+                      <Typography
+                        variant="h6"
+                        sx={{ fontWeight: 600, mb: 1 }}
                       >
-                        <Typography variant="h6" gutterBottom ml={4} mt={2}>
-                          Profit Projection
-                        </Typography>
-                        <Typography variant="subtitle2" align="right" mb={2}>
-                          <Box
-                            component="span"
-                            sx={{ color: "#2B66F6", fontWeight: "900" }}
-                          >
-                            ━
-                          </Box>{" "}
-                          Cumulative profit over time
-                        </Typography>
-                        <ProfitChart data={chartData} />
-                      </Paper>
-                    </Grid>
-                    <Grid item>
-                      {/* Educational Insights */}
-                      <Typography variant="h6" sx={{ whiteSpace: "pre-line" }}>
-                        What is Grid Trading?
-                        <CryptoInsights message="Grid trading places buy and sell orders at fixed price intervals to profit from market volatility." />
-                        <CryptoInsights message="It aims to buy and sell repeatedly as the price fluctuates within a range." />
-                        <CryptoInsights message="This strategy works best in sideways or ranging markets without strong trends." />
-                      </Typography>
-                      <Typography variant="h6">
                         Why Use Grid Trading?
-                        <CryptoInsights message="Generates consistent profit in volatile, sideways markets." />
-                        <CryptoInsights message="Removes emotional decision-making by automating trades." />
-                        <CryptoInsights message="Works without needing to predict market direction." />
                       </Typography>
-                      <Typography variant="h6">
+                      <CryptoInsights message="Generates consistent profit in volatile, sideways markets." />
+                      <CryptoInsights message="Removes emotional decision-making by automating trades." />
+                      <CryptoInsights message="Works best for assets with predictable price swings." />
+                      <Typography
+                        variant="h6"
+                        sx={{ fontWeight: 600, mt: 2, mb: 1 }}
+                      >
+                        What is Grid Trading?
+                      </Typography>
+                      <CryptoInsights message="Grid trading places buy and sell orders at fixed price intervals to profit from market volatility." />
+                      <Typography
+                        variant="h6"
+                        sx={{ fontWeight: 600, mt: 2, mb: 1 }}
+                      >
                         What are the risks?
-                        <CryptoInsights message="If the price breaks decisively out of your set grid range, it can lead to losses." />
-                        <CryptoInsights message="Setting the correct price range and grid count requires careful analysis." />
-                        <CryptoInsights message="Frequent trades incur fees that can eat into profits." />
                       </Typography>
-                      <Typography variant="h6">
-                        Important Considerations & Best Practices?
-                        <CryptoInsights message="Choose assets in a ranging phase with good liquidity." />
-                        <CryptoInsights message="Define your upper/lower limits based on support & resistance." />
-                        <CryptoInsights message="Use reliable grid tools on low-fee exchanges." />
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                </motion.div>
-              ) : (
-                // Placeholder state BEFORE calculation
-                <motion.div
-                  key="placeholder"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.4 }}
-                >
-                  <Box
+                      <CryptoInsights message="If the price breaks out of your set range, it can lead to losses." />
+                      <CryptoInsights message="Grid trading is not suitable for all market conditions—trending markets can reduce profit." />
+                      <CryptoInsights message="Always start with small amounts and manage risk carefully." />
+                    </Box>
+                  </Box>
+                ) : (
+                  <Paper
                     sx={{
-                      background: "#1C1D2B",
-                      borderRadius: 3,
-                      minHeight: 320,
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      p: 6,
+                      p: 4,
+                      textAlign: "center",
+                      bgcolor: "background.paper",
+                      color: "#fff",
                     }}
                   >
-                    <Typography
-                      variant="h5"
-                      color="text.secondary"
-                      align="center"
-                      gutterBottom
-                    >
-                      Enter your grid trading parameters and click{" "}
-                      <Box
-                        component="span"
-                        sx={{
-                          color: "#2B66F6",
-                          fontWeight: "bold",
-                          px: 0.5,
-                          fontSize: 20,
-                        }}
-                      >
-                        Calculate
-                      </Box>
-                      to see your estimated profit, trade metrics, and visual projections.
+                    <img
+                      src="https://cdn-icons-png.flaticon.com/512/1995/1995526.png"
+                      alt="Get Started"
+                      style={{ height: 40, marginBottom: 8 }}
+                    />
+                    <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                      Welcome to the Grid Trading Profit Estimator!
                     </Typography>
-                  </Box>
-                </motion.div>
-              )}
-            </AnimatePresence>
+                    <Typography
+                      variant="body2"
+                      sx={{ mt: 1, color: "text.secondary" }}
+                    >
+                      Enter your parameters or click "Optimize Values" for
+                      AI-powered suggestions. Then hit Calculate to see your
+                      projected profits, chart, and trading metrics.
+                    </Typography>
+                  </Paper>
+                )}
+              </Box>
+            </Grid>
           </Grid>
-        </Grid>
-      </Container>
-    </>
+        </Box>
+      </ErrorBoundary>
+    </ThemeProvider>
   );
 };
 

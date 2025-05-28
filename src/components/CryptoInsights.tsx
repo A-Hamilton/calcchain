@@ -1,22 +1,38 @@
-import React from 'react';
-import { Box, Typography, Paper } from '@mui/material';
+import React from "react";
+import { Paper, Typography, Box } from "@mui/material";
 
 interface CryptoInsightsProps {
   message: string;
 }
 
-// Lightbulb emoji with aria-label for accessibility
 const CryptoInsights: React.FC<CryptoInsightsProps> = React.memo(({ message }) => (
-  <Paper variant="outlined" sx={{ p: 2, alignItems: 'center', margin: 1, bgcolor: '#1C1D2B', display: 'flex' }}>
+  <Paper
+    variant="outlined"
+    sx={{
+      p: 1.5,
+      my: 0.5,
+      display: "flex",
+      alignItems: "center",
+      bgcolor: "background.paper",
+      borderColor: "primary.main",
+      borderRadius: 2,
+      boxShadow: "none",
+    }}
+  >
     <Box
-      component="span"
-      sx={{ fontSize: '1.25rem', color: 'primary.main', mr: 1 }}
+      sx={{
+        fontSize: "1.25rem",
+        color: "primary.main",
+        mr: 1.2,
+        display: "flex",
+        alignItems: "center",
+      }}
       aria-label="Insight"
       role="img"
     >
       💡
     </Box>
-    <Typography variant="body2">
+    <Typography variant="body2" color="text.primary">
       {message}
     </Typography>
   </Paper>

@@ -1,19 +1,21 @@
+// src/types.ts
+
 export type EntryType = "long" | "short" | "neutral";
 
+export type GridType = "arithmetic" | "geometric";
+
 export interface GridParameters {
-  symbol?: string;        // e.g. "BTCUSDT"
+  symbol: string;
   principal: number;
   lowerBound: number;
   upperBound: number;
   gridCount: number;
   leverage: number;
-  feePercent: number;
+  feePercent: number; // expressed as percent (e.g., 0.05 for 0.05%)
   durationDays: number;
-  atrPerMin?: number;     // override fetch/blend if desired
-  gridType?: "arithmetic" | "geometric";
+  atrPerMin?: number;
+  gridType?: GridType;
   entryType?: EntryType;
-
-  // Add these to support advanced config
   buyPrice?: number;
   sellPrice?: number;
 }
@@ -26,12 +28,21 @@ export interface GridResults {
   feePerRoundTrip: number;
   netProfitPerGridTransaction: number;
   estimatedDailyProfit: number;
-  totalEstimatedProfit: number;
   atrPerMin: number;
   durationDays: number;
 
-  // For extended results
+  // Additional summary metrics
   totalNetProfit: number;
   totalGridProfit: number;
   estimatedDailyGridProfit: number;
+
+  // Optional advanced outputs
+  entryMessage?: string;
+  principalReturnFromEntryExit?: number | null;
+  overallTotalValue?: number | null;
+}
+
+export interface Metric {
+  label: string;
+  value: string;
 }

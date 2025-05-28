@@ -1,498 +1,372 @@
-import React, {
-  useState,
-  useEffect,
-  ChangeEvent,
-  FormEvent,
-  useCallback,
-  useMemo,
-} from "react";
-import axios from "axios";
+import React, { useState } from "react";
 import {
   Card,
   CardContent,
   Typography,
   Grid,
   TextField,
-  InputAdornment,
   Button,
-  SxProps,
-  Theme,
+  Collapse,
   Snackbar,
   Alert,
-  Tooltip,
-  IconButton,
-  Collapse,
-  Box,
   MenuItem,
-  Divider,
+  IconButton,
+  Tooltip,
+  Box,
 } from "@mui/material";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import { calculateGridProfit } from "../utils/calculator";
-import { getAtrPerMin } from "../utils/atr";
+import TuneIcon from "@mui/icons-material/Tune";
+import { fetchCandles, getAtrPerMin } from "../utils/atr";
 import { computeOptimalGridParams } from "../utils/optimizer";
-import { GridParameters, EntryType } from "../types";
 
-type FieldKey =
-  | "symbol"
-  | "principal"
-  | "lowerBound"
-  | "upperBound"
-  | "gridCount"
-  | "leverage"
-  | "fee"
-  | "duration"
-  | "buyPrice"
-  | "sellPrice"
-  | "gridType"
-  | "entryType";
+type FormFields = {
+  symbol: string;
+  principal: string;
+  lowerBound: string;
+  upperBound: string;
+  gridCount: string;
+  leverage: string;
+  feePercent: string;
+  durationDays: string;
+  buyPrice: string;
+  sellPrice: string;
+  gridType: string;
+  entryType: string;
+};
 
-interface FieldConfig {
-  key: FieldKey;
+type FieldConfig = {
+  key: keyof FormFields;
   label: string;
-  type: "text" | "number" | "select";
+  type: "number" | "text" | "select";
+  help: string;
+  options?: string[];
   adornment?: string;
-  adornPos?: "start" | "end";
-  integerOnly?: boolean;
-  helpText?: string;
-  selectOptions?: { value: string; label: string }[];
+};
+
+export interface InputFormProps {
+  onCalculate: (params: any) => void;
+  symbolError?: string | null; // Receives error from App
 }
 
 const fieldConfigs: FieldConfig[] = [
   {
     key: "symbol",
-    label: "Crypto Symbol",
+    label: "Symbol",
     type: "text",
-    helpText: "Enter the trading symbol for the cryptocurrency (e.g., BTC, ETH, SOL).",
+    help: "E.g., BTCUSDT, ETHBTC, BNBUSDT, etc.",
   },
   {
     key: "principal",
     label: "Principal",
     type: "number",
+    help: "How much capital (USD or quote currency) you want to allocate.",
     adornment: "$",
-    adornPos: "start",
-    helpText: "The total capital you want to allocate to this grid trading strategy.",
   },
   {
     key: "lowerBound",
     label: "Lower Bound",
     type: "number",
-    adornment: "$",
-    adornPos: "start",
-    helpText: "Lowest price where your bot will place buy orders.",
+    help: "Minimum price for grid trading range.",
   },
   {
     key: "upperBound",
     label: "Upper Bound",
     type: "number",
-    adornment: "$",
-    adornPos: "start",
-    helpText: "Highest price where your bot will place sell orders.",
+    help: "Maximum price for grid trading range.",
   },
   {
     key: "gridCount",
     label: "Grid Count",
     type: "number",
-    integerOnly: true,
-    helpText: "How many grid levels between your lower and upper bounds. More grids = more frequent, smaller trades.",
+    help: "Number of grid intervals (more = finer grid, but higher fees).",
   },
   {
     key: "leverage",
     label: "Leverage",
     type: "number",
-    integerOnly: true,
-    adornment: "×",
-    adornPos: "end",
-    helpText: "Multiplier on your position size. Use with caution; increases both risk and reward.",
+    help: "Leverage multiplier (1 = no leverage).",
   },
   {
-    key: "fee",
-    label: "Fee (%)",
+    key: "feePercent",
+    label: "Fee %",
     type: "number",
-    helpText: "Trading fee percentage per transaction, typically set by your exchange.",
+    help: "Exchange trading fee per trade (e.g., 0.05 for 0.05%).",
   },
   {
-    key: "duration",
+    key: "durationDays",
     label: "Duration (Days)",
     type: "number",
-    integerOnly: true,
-    helpText: "Number of days you want to simulate or plan the grid for.",
+    help: "Simulation length in days.",
   },
 ];
 
 const advancedFieldConfigs: FieldConfig[] = [
   {
     key: "buyPrice",
-    label: "Buy Price",
+    label: "Buy Price (Override)",
     type: "number",
-    adornment: "$",
-    adornPos: "start",
-    helpText: "Optional: Override the price at which to trigger buys.",
+    help: "Override default first buy price (advanced).",
   },
   {
     key: "sellPrice",
-    label: "Sell Price",
+    label: "Sell Price (Override)",
     type: "number",
-    adornment: "$",
-    adornPos: "start",
-    helpText: "Optional: Override the price at which to trigger sells.",
+    help: "Override default first sell price (advanced).",
   },
   {
     key: "gridType",
     label: "Grid Type",
     type: "select",
-    selectOptions: [
-      { value: "arithmetic", label: "Arithmetic" },
-      { value: "geometric", label: "Geometric" },
-    ],
-    helpText: "Choose the grid calculation method.",
+    options: ["arithmetic", "geometric"],
+    help: "Arithmetic = even price steps; Geometric = even percentage steps. Geometric adapts to % moves.",
   },
   {
     key: "entryType",
     label: "Entry Type",
     type: "select",
-    selectOptions: [
-      { value: "long", label: "Long" },
-      { value: "short", label: "Short" },
-      { value: "neutral", label: "Neutral" },
-    ],
-    helpText: "Direction of grid trading: Long (buy low, sell high), Short (buy high, sell low), Neutral (mean reversion).",
+    options: ["long", "short", "neutral"],
+    help: "Long = buy low, sell high; Short = sell high, buy back lower; Neutral = both sides.",
   },
 ];
 
-const initialForm: Record<FieldKey, string> = {
-  symbol: "BTC",
+const initialForm: FormFields = {
+  symbol: "BTCUSDT",
   principal: "1000",
-  lowerBound: "0",
-  upperBound: "0",
-  gridCount: "0",
+  lowerBound: "",
+  upperBound: "",
+  gridCount: "",
   leverage: "1",
-  fee: "0.05",
-  duration: "365",
+  feePercent: "0.05",
+  durationDays: "365",
   buyPrice: "",
   sellPrice: "",
   gridType: "arithmetic",
   entryType: "long",
 };
 
-const whiteFieldSx: SxProps<Theme> = {
-  "& input[type=number]": { MozAppearance: "textfield" },
-  "& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button": {
-    WebkitAppearance: "none",
+const whiteFieldSx = {
+  "& input": { color: "#fff" },
+  "& label": { color: "#90caf9" },
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": { borderColor: "#0F1019" },
+    "&:hover fieldset": { borderColor: "#0F1019" },
+    "&.Mui-focused fieldset": { borderColor: "#2B66F6" },
   },
-  "& .MuiInputBase-input": { color: "#FFF" },
-  "& .MuiInputAdornment-root, & .MuiInputLabel-root": { color: "#FFF" },
-  "& .MuiOutlinedInput-notchedOutline": { borderColor: "#4B5563" },
-  "&:hover .MuiOutlinedInput-notchedOutline": { borderColor: "#9CA3AF" },
-  "& .Mui-focused .MuiOutlinedInput-notchedOutline": { borderColor: "#2B66F6" },
 };
 
-interface InputFormProps {
-  onCalculate: (params: GridParameters) => Promise<void>;
-}
-
-export default function InputForm({ onCalculate }: InputFormProps) {
-  const [form, setForm] = useState(initialForm);
-  const [errors, setErrors] = useState<Partial<Record<FieldKey, string>>>({});
-  const [showSnackbar, setShowSnackbar] = useState(false);
-  const [isFirstLoad, setIsFirstLoad] = useState(true);
+const InputForm: React.FC<InputFormProps> = ({ onCalculate, symbolError }) => {
+  const [form, setForm] = useState<FormFields>(initialForm);
+  const [errors, setErrors] = useState<Partial<Record<keyof FormFields, string>>>({});
   const [advancedOpen, setAdvancedOpen] = useState(false);
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const [localSymbolError, setLocalSymbolError] = useState<string | null>(null);
 
-  const handleChange = useCallback(
-    (key: FieldKey) => (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      setForm((f) => ({ ...f, [key]: e.target.value.trim() }));
-      setErrors((err) => ({ ...err, [key]: undefined }));
-    },
-    []
-  );
-
-  const validate = useCallback((): boolean => {
-    const newErr: Partial<Record<FieldKey, string>> = {};
-    [...fieldConfigs, ...advancedFieldConfigs].forEach(({ key, type, integerOnly }) => {
-      const val = form[key]?.trim();
-      if (
-        fieldConfigs.map(f => f.key).includes(key) &&
-        !val
-      ) {
-        newErr[key] = "Required";
-      } else if (type === "number" && val) {
-        const num = Number(val);
-        if (isNaN(num) || num <= 0) newErr[key] = "Must be > 0";
-        else if (integerOnly && num % 1 !== 0) newErr[key] = "Must be whole";
-      }
-      const advConfig = advancedFieldConfigs.find(f => f.key === key);
-      if (
-        advConfig &&
-        advConfig.type === 'number' &&
-        val
-      ) {
-        const num = Number(val);
-        if (isNaN(num) || num <= 0) newErr[key] = "Must be > 0";
-      }
-    });
-    setErrors(newErr);
-    return Object.keys(newErr).length === 0;
+  // Basic validation
+  const validate = () => {
+    const next: Partial<Record<keyof FormFields, string>> = {};
+    if (!form.symbol) next.symbol = "Required";
+    if (!form.principal || Number(form.principal) <= 0) next.principal = "Must be > 0";
+    if (!form.lowerBound || Number(form.lowerBound) <= 0) next.lowerBound = "Must be > 0";
+    if (!form.upperBound || Number(form.upperBound) <= 0) next.upperBound = "Must be > 0";
+    if (!form.gridCount || Number(form.gridCount) <= 0) next.gridCount = "Must be > 0";
+    if (!form.leverage || Number(form.leverage) < 1) next.leverage = "Must be ≥ 1";
+    if (!form.feePercent || Number(form.feePercent) < 0) next.feePercent = "Must be ≥ 0";
+    if (!form.durationDays || Number(form.durationDays) <= 0) next.durationDays = "Must be > 0";
+    if (form.lowerBound && form.upperBound && Number(form.lowerBound) >= Number(form.upperBound))
+      next.upperBound = "Must be > Lower Bound";
+    setErrors(next);
+    return Object.keys(next).length === 0;
+  };
+  
+  React.useEffect(() => {
+    validate();
   }, [form]);
 
-  const handleOptimize = useCallback(
-    async (showAlert = true) => {
-      try {
-        const pair = form.symbol.toUpperCase() + "USDT";
-        const priceRes = await axios.get(
-          `https://api.binance.com/api/v3/ticker/price?symbol=${pair}`
-        );
-        const price = parseFloat(priceRes.data.price);
-        const atr = await getAtrPerMin(pair, 200);
-        const ctx = {
-          symbol: pair,
-          principal: price,
-          atr,
-          feePercent: Number(form.fee) / 100,
-          buyPrice: form.buyPrice ? Number(form.buyPrice) : undefined,
-          sellPrice: form.sellPrice ? Number(form.sellPrice) : undefined,
-          gridType: form.gridType as "arithmetic" | "geometric",
-          entryType: form.entryType as EntryType,
-        };
-        const { lower, upper, count } = computeOptimalGridParams(ctx);
-
-        setForm((f) => ({
-          ...f,
-          lowerBound: form.buyPrice ? form.buyPrice : String(lower.toFixed(2)),
-          upperBound: form.sellPrice ? form.sellPrice : String(upper.toFixed(2)),
-          gridCount: String(count),
-          buyPrice: form.buyPrice || String(lower.toFixed(2)),
-          sellPrice: form.sellPrice || String(upper.toFixed(2)),
-        }));
-
-        setErrors((err) => ({
-          ...err,
-          lowerBound: undefined,
-          upperBound: undefined,
-          gridCount: undefined,
-        }));
-
-        if (showAlert) setShowSnackbar(true);
-      } catch (e) {
-        console.error(e);
-      }
-    },
-    [form.symbol, form.principal, form.fee, form.buyPrice, form.sellPrice, form.gridType, form.entryType]
-  );
-
-  useEffect(() => {
-    handleOptimize(false);
-    setIsFirstLoad(false);
-  }, []); // only run on mount
-
-  const handleOptimizeButton = useCallback(() => {
-    handleOptimize(true);
-  }, [handleOptimize]);
-
-  const handleSubmit = useCallback(
-    async (e: FormEvent) => {
-      e.preventDefault();
-      if (!validate()) return;
-
-      const params: GridParameters = {
-        symbol: form.symbol.toUpperCase() + "USDT",
-        principal: Number(form.principal),
-        lowerBound: Number(form.lowerBound),
-        upperBound: Number(form.upperBound),
-        gridCount: Number(form.gridCount),
-        leverage: Number(form.leverage),
-        feePercent: Number(form.fee) / 100,
-        durationDays: Number(form.duration),
-        buyPrice: form.buyPrice ? Number(form.buyPrice) : undefined,
-        sellPrice: form.sellPrice ? Number(form.sellPrice) : undefined,
-        gridType: form.gridType as "arithmetic" | "geometric",
-        entryType: form.entryType as EntryType,
-      };
-
-      await calculateGridProfit(params);
-      onCalculate(params);
-    },
-    [form, onCalculate, validate]
-  );
-
-  const isValid = useMemo(() => validate(), [form, validate]);
-
-  const renderField = (cfg: FieldConfig) => {
-    if (cfg.type === "select") {
-      return (
-        <TextField
-          key={cfg.key}
-          select
-          label={
-            <span style={{ display: "flex", alignItems: "center" }}>
-              {cfg.label}
-              {cfg.helpText && (
-                <Tooltip title={cfg.helpText} arrow>
-                  <IconButton
-                    size="small"
-                    tabIndex={-1}
-                    sx={{ ml: 0.5, color: "#9CA3AF", p: 0 }}
-                    aria-label={`Help for ${cfg.label}`}
-                  >
-                    <InfoOutlinedIcon fontSize="inherit" />
-                  </IconButton>
-                </Tooltip>
-              )}
-            </span>
+  // Render each field; handle error for the symbol input (either from App or local optimizer)
+  const renderField = (cfg: FieldConfig) => (
+    <Grid item xs={12} sm={6} key={cfg.key} sx={{ position: "relative" }}>
+      <TextField
+        label={cfg.label}
+        name={cfg.key}
+        value={form[cfg.key]}
+        onChange={e => {
+          setForm(f => ({
+            ...f,
+            [cfg.key]: e.target.value,
+          }));
+          if (cfg.key === "symbol") {
+            setLocalSymbolError(null);
           }
-          value={form[cfg.key]}
-          onChange={handleChange(cfg.key)}
-          required={false}
-          InputLabelProps={{ required: false }}
-          error={!!errors[cfg.key]}
-          helperText={errors[cfg.key]}
-          fullWidth
-          sx={whiteFieldSx}
-        >
-          {cfg.selectOptions?.map(opt => (
-            <MenuItem key={opt.value} value={opt.value}>
-              {opt.label}
+        }}
+        type={cfg.type === "number" ? "number" : "text"}
+        select={cfg.type === "select"}
+        inputProps={{
+          inputMode: cfg.type === "number" ? "decimal" : undefined,
+          min: 0,
+          step: cfg.type === "number" ? "any" : undefined,
+          "aria-label": cfg.label,
+        }}
+        sx={whiteFieldSx}
+        variant="outlined"
+        fullWidth
+        margin="dense"
+        helperText={
+          cfg.key === "symbol"
+            ? errors.symbol || localSymbolError || symbolError || cfg.help
+            : errors[cfg.key] || cfg.help
+        }
+        error={
+          cfg.key === "symbol"
+            ? Boolean(errors.symbol) || Boolean(localSymbolError) || Boolean(symbolError)
+            : Boolean(errors[cfg.key])
+        }
+        InputProps={cfg.adornment ? { startAdornment: <span>{cfg.adornment}</span> } : undefined}
+        SelectProps={cfg.options ? { native: false } : undefined}
+        InputLabelProps={{}}
+      >
+        {cfg.options &&
+          cfg.options.map(opt => (
+            <MenuItem key={opt} value={opt}>
+              {opt[0].toUpperCase() + opt.slice(1)}
             </MenuItem>
           ))}
-        </TextField>
-      );
-    }
-    return (
-      <TextField
-        key={cfg.key}
-        label={
-          <span style={{ display: "flex", alignItems: "center" }}>
-            {cfg.label}
-            {cfg.helpText && (
-              <Tooltip title={cfg.helpText} arrow>
-                <IconButton
-                  size="small"
-                  tabIndex={-1}
-                  sx={{ ml: 0.5, color: "#9CA3AF", p: 0 }}
-                  aria-label={`Help for ${cfg.label}`}
-                >
-                  <InfoOutlinedIcon fontSize="inherit" />
-                </IconButton>
-              </Tooltip>
-            )}
-          </span>
-        }
-        type={cfg.type}
-        value={form[cfg.key]}
-        onChange={handleChange(cfg.key)}
-        required={false}
-        InputLabelProps={{ required: false }}
-        error={!!errors[cfg.key]}
-        helperText={errors[cfg.key]}
-        fullWidth
-        InputProps={
-          cfg.adornment
-            ? {
-                [`${cfg.adornPos}Adornment`]: (
-                  <InputAdornment position={cfg.adornPos!}>
-                    {cfg.adornment}
-                  </InputAdornment>
-                ),
-              }
-            : undefined
-        }
-        inputProps={
-          cfg.type === "number"
-            ? {
-                min: 1,
-                step: cfg.integerOnly ? 1 : "any",
-              }
-            : undefined
-        }
-        sx={whiteFieldSx}
-      />
+      </TextField>
+      <Tooltip title={cfg.help} placement="right">
+        <IconButton size="small" sx={{ position: "absolute", right: 8, top: 8 }}>
+          <InfoOutlinedIcon fontSize="small" />
+        </IconButton>
+      </Tooltip>
+    </Grid>
+  );
+
+const handleOptimize = async () => {
+  setLocalSymbolError(null);
+  try {
+    const symbol = form.symbol.trim() || "BTCUSDT";
+    const candles = await fetchCandles(symbol, "1d", 5);
+    const highs = candles.map(c => c.high);
+    const lows = candles.map(c => c.low);
+    const lowerBound = Math.min(...lows);
+    const upperBound = Math.max(...highs);
+    const principal = Number(form.principal) || 1000;
+    const feePercent = Number(form.feePercent) || 0.05;
+
+    // Fetch ATR and call optimizer for gridCount
+    const atr = await getAtrPerMin(symbol);
+    const gridType = (form.gridType === "arithmetic" || form.gridType === "geometric")
+  ? form.gridType as "arithmetic" | "geometric"
+  : "arithmetic";
+
+    // Use your optimizer
+    const { count } = computeOptimalGridParams({
+      symbol,
+      principal,
+      atr,
+      feePercent,
+      gridType,
+    });
+
+    setForm(f => ({
+      ...f,
+      lowerBound: lowerBound.toString(),
+      upperBound: upperBound.toString(),
+      gridCount: count.toString(),
+    }));
+    
+    setShowSnackbar(true);
+  } catch (err: any) {
+    setLocalSymbolError(
+      "Failed to fetch data for symbol. Please check spelling, e.g. BTCUSDT or ETHBTC."
     );
+    setShowSnackbar(false);
+  }
+};
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!validate()) return;
+    setLocalSymbolError(null);
+    const params = {
+      symbol: form.symbol.trim(),
+      principal: Number(form.principal),
+      lowerBound: Number(form.lowerBound),
+      upperBound: Number(form.upperBound),
+      gridCount: Number(form.gridCount),
+      leverage: Number(form.leverage),
+      feePercent: Number(form.feePercent),
+      durationDays: Number(form.durationDays),
+      buyPrice: form.buyPrice ? Number(form.buyPrice) : undefined,
+      sellPrice: form.sellPrice ? Number(form.sellPrice) : undefined,
+      gridType: form.gridType as "arithmetic" | "geometric",
+      entryType: form.entryType as "long" | "short" | "neutral",
+    };
+    onCalculate(params);
   };
 
+  const isValid = Object.keys(errors).length === 0;
+
   return (
-    <Card sx={{ bgcolor: "background.paper" }}>
+    <Card sx={{ bgcolor: "background.paper", p: 2 }}>
       <CardContent>
-        <Typography variant="h6" sx={{ color: "#FFF", mb: 1 }}>
+        <Typography variant="h6" color="primary" sx={{ mb: 2 }}>
           Grid Parameters
         </Typography>
-        <form onSubmit={handleSubmit} noValidate>
+        <Box sx={{ mb: 2 }}>
+          <Alert icon={<TuneIcon color="primary" />} severity="info">
+            Not sure what values to use? Click <strong>Optimize Values</strong> to use real-time data and AI to fill in optimal grid settings!
+          </Alert>
+        </Box>
+        <form onSubmit={handleSubmit} autoComplete="off">
           <Grid container spacing={2}>
-            {/* Main Fields */}
-            {fieldConfigs.map((cfg) => (
-              <Grid item xs={6} key={cfg.key}>
-                {renderField(cfg)}
-              </Grid>
-            ))}
-
-            {/* Buttons */}
-            <Grid item xs={6}>
-              <Button variant="outlined" fullWidth onClick={handleOptimizeButton}>
-                Optimize Values
-              </Button>
-            </Grid>
-            <Grid item xs={6}>
-              <Button
-                type="submit"
-                variant="contained"
-                fullWidth
-                disabled={!isValid}
-              >
-                Calculate
-              </Button>
-            </Grid>
-
-            {/* Advanced Settings Toggle */}
-            <Grid item xs={12}>
-              <Box display="flex" alignItems="center" sx={{ mt: 2 }}>
-                <Button
-                  variant="text"
-                  startIcon={advancedOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                  onClick={() => setAdvancedOpen(o => !o)}
-                  sx={{ color: "#FFF", fontWeight: 600, textTransform: "none" }}
-                >
-                  Advanced Settings
-                </Button>
-                <Divider sx={{ flexGrow: 1, ml: 2, borderColor: "#FFF" }} />
-              </Box>
-              <Collapse in={advancedOpen} unmountOnExit>
-                <Grid container spacing={2} sx={{ mt: 1, mb: 1 }}>
-                  {advancedFieldConfigs.map(cfg => (
-                    <Grid item xs={6} key={cfg.key}>
-                      {renderField(cfg)}
-                    </Grid>
-                  ))}
-                </Grid>
-              </Collapse>
-            </Grid>
+            {fieldConfigs.map(renderField)}
           </Grid>
+          <Box sx={{ mt: 2, display: "flex", gap: 2 }}>
+            <Button
+              variant="outlined"
+              onClick={handleOptimize}
+              sx={{ minHeight: 48, fontSize: { xs: 16, md: 18 } }}
+              type="button"
+            >
+              Optimize Values
+            </Button>
+            <Button
+              type="submit"
+              variant="contained"
+              sx={{ minHeight: 48, fontSize: { xs: 16, md: 18 } }}
+              disabled={!isValid}
+            >
+              Calculate
+            </Button>
+          </Box>
+          <Box sx={{ mt: 2 }}>
+            <Button
+              onClick={() => setAdvancedOpen(x => !x)}
+              color="primary"
+              sx={{ textTransform: "none" }}
+              endIcon={<TuneIcon />}
+              type="button"
+            >
+              {advancedOpen ? "Hide Advanced Settings" : "Show Advanced Settings"}
+            </Button>
+            <Collapse in={advancedOpen}>
+              <Grid container spacing={2} sx={{ mt: 1 }}>
+                {advancedFieldConfigs.map(renderField)}
+              </Grid>
+            </Collapse>
+          </Box>
         </form>
-      </CardContent>
-      <Snackbar
-        open={showSnackbar}
-        autoHideDuration={3000}
-        onClose={() => setShowSnackbar(false)}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-      >
-        <Alert
+        <Snackbar
+          open={showSnackbar}
+          autoHideDuration={2500}
           onClose={() => setShowSnackbar(false)}
-          icon={<InfoOutlinedIcon sx={{ color: "#FFF" }}/>}
-          severity="success"
-          variant="filled"
-          sx={{
-            width: "100%",
-            bgcolor: "#2B66F6",
-            color: "#FFF",
-            "& .MuiAlert-icon": {
-              color: "#FFF",
-            },
-            border: "2px solid #1641A9",
-            fontWeight: 500,
-            letterSpacing: "0.02em",
-          }}
         >
-          Optimized values have been set!
-        </Alert>
-      </Snackbar>
+          <Alert severity="success" sx={{ width: "100%" }}>
+            Optimized values have been set!
+          </Alert>
+        </Snackbar>
+      </CardContent>
     </Card>
   );
-}
+};
+
+export default React.memo(InputForm);
