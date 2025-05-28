@@ -36,17 +36,17 @@ const CONTENT_MAX_WIDTH = 1200;
 // Memoized Crypto Insights List
 const TradingTips = React.memo(() => (
   <>
-    <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>
+    <Typography variant="h6" component="h2" sx={{ fontWeight: 600, mb: 1 }}>
       Why Use Grid Trading?
     </Typography>
     <CryptoInsights message="Generates consistent profit in volatile, sideways markets." />
     <CryptoInsights message="Removes emotional decision-making by automating trades." />
     <CryptoInsights message="Works best for assets with predictable price swings." />
-    <Typography variant="h6" sx={{ fontWeight: 600, mt: 2, mb: 1 }}>
+    <Typography variant="h6" component="h2" sx={{ fontWeight: 600, mt: 2, mb: 1 }}>
       What is Grid Trading?
     </Typography>
     <CryptoInsights message="Grid trading places buy and sell orders at fixed price intervals to profit from market volatility." />
-    <Typography variant="h6" sx={{ fontWeight: 600, mt: 2, mb: 1 }}>
+    <Typography variant="h6" component="h2" sx={{ fontWeight: 600, mt: 2, mb: 1 }}>
       What are the risks?
     </Typography>
     <CryptoInsights message="If the price breaks out of your set range, it can lead to losses." />
@@ -273,6 +273,7 @@ const App: React.FC = () => {
         >
           <Typography
             variant="h4"
+            component="h1"
             sx={{ fontWeight: 600, mb: 2, color: "#fff" }}
           >
             Grid Trading Profit Estimator
@@ -283,7 +284,7 @@ const App: React.FC = () => {
             sx={{ p: 2, mb: 3, bgcolor: "primary.dark", color: "#fff" }}
             elevation={0}
           >
-            <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 1 }}>
+            <Typography variant="subtitle1" component="h2" sx={{ fontWeight: 600, mb: 1 }}>
               What is Grid Trading?{" "}
               <span style={{ fontWeight: 400 }}>
                 Grid trading automatically places buy and sell orders at preset
@@ -364,11 +365,12 @@ const App: React.FC = () => {
                       alt="Get Started"
                       style={{ height: 40, marginBottom: 8 }}
                     />
-                    <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                    <Typography variant="h6" component="p" sx={{ fontWeight: 600 }}>
                       Welcome to the Grid Trading Profit Estimator!
                     </Typography>
                     <Typography
                       variant="body2"
+                      component="p"
                       sx={{ mt: 1, color: "text.secondary" }}
                     >
                       Enter your parameters or click "Optimize Values" for AI-powered suggestions. Then hit Calculate to see your projected profits, chart, and trading metrics.
