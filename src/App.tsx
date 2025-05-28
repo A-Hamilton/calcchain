@@ -18,6 +18,7 @@ import { GridResults, GridParameters, Metric } from "./types";
 import {calculateGridProfit} from "./utils/calculator";
 
 
+
 const App: React.FC = () => {
   const [results, setResults] = useState<GridResults | null>(null);
   const [chartData, setChartData] = useState<{ day: number; profit: number }[]>(
