@@ -7,7 +7,19 @@ import {
   Grid,
   Paper,
   CircularProgress,
+  AppBar,
+  Toolbar,
+  IconButton,
+  Menu,
+  MenuItem,
+  Divider,
+  ListItemIcon,
+  Container
 } from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import TimelineIcon from "@mui/icons-material/Timeline";
+import ScheduleIcon from "@mui/icons-material/Schedule";
+import PieChartIcon from "@mui/icons-material/PieChart";
 import InputForm from "./components/InputForm";
 import ResultsDisplay from "./components/ResultsDisplay";
 import CryptoInsights from "./components/CryptoInsights";
@@ -15,9 +27,11 @@ import ErrorBoundary from "./ErrorBoundary";
 import theme from "./theme";
 import logo from "./assets/calcchainlogo.png";
 import { GridResults, GridParameters, Metric } from "./types";
-import {calculateGridProfit} from "./utils/calculator";
+import { calculateGridProfit } from "./utils/calculator";
 
-
+// Set padding and width values for both nav and main content
+const NAV_HORIZONTAL_PADDING = { xs: 1, md: 4 };
+const CONTENT_MAX_WIDTH = 1200;
 
 const App: React.FC = () => {
   const [results, setResults] = useState<GridResults | null>(null);
@@ -26,6 +40,15 @@ const App: React.FC = () => {
   );
   const [isLoading, setIsLoading] = useState(false);
   const [symbolError, setSymbolError] = useState<string | null>(null);
+
+  // Dropdown menu state
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
 
   const handleCalculate = useCallback(
     async (params: GridParameters) => {
@@ -43,7 +66,6 @@ const App: React.FC = () => {
         }
         setChartData(chartDataArr);
       } catch (err: any) {
-        // Binance invalid symbol errors typically return as a string error message
         const errMsg =
           err?.response?.data?.msg ||
           err?.message ||
@@ -74,28 +96,113 @@ const App: React.FC = () => {
       <CssBaseline />
       <ErrorBoundary>
         {/* NAVBAR / HEADER */}
-        <Box
-          component="header"
+        <AppBar
+          position="static"
+          color="transparent"
+          elevation={4}
           sx={{
-            display: "flex",
-            alignItems: "center",
-            px: 4,
-            py: 2,
             bgcolor: "background.paper",
-            boxShadow: 1,
-            minHeight: 60,
+            boxShadow: 5,
+            py: 1,
+            backdropFilter: "blur(8px)",
           }}
         >
-          <img
-            src={logo}
-            alt="CalcChain"
-            style={{ height: 36, marginRight: 16 }}
-          />
-          {/* Future: Navigation/tool links can be added here */}
-        </Box>
+          {/* Alignment wrapper - same as Container */}
+          <Box
+            sx={{
+              maxWidth: CONTENT_MAX_WIDTH,
+              mx: "auto",
+              width: "100%",
+              px: NAV_HORIZONTAL_PADDING,
+            }}
+          >
+            <Toolbar
+              disableGutters
+              sx={{
+                minHeight: 60,
+                width: "100%",
+                display: "flex",
+                justifyContent: "space-between",
+                px: 0,
+              }}
+            >
+              {/* Logo */}
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <a href="https://calcchain.com">
+                  <img
+                    src={logo}
+                    alt="CalcChain"
+                    style={{ height: 36 }}
+                  />
+                </a>
+              </Box>
+              {/* Hamburger Dropdown */}
+              <Box>
+                <IconButton
+                  edge="end"
+                  color="inherit"
+                  aria-label="menu"
+                  onClick={handleMenuOpen}
+                  size="large"
+                  sx={{
+                    bgcolor: "primary.dark",
+                    '&:hover': { bgcolor: "primary.main", color: "#fff" },
+                    borderRadius: 2,
+                  }}
+                >
+                  <MenuIcon />
+                </IconButton>
+                <Menu
+                  anchorEl={anchorEl}
+                  open={Boolean(anchorEl)}
+                  onClose={handleMenuClose}
+                  anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                  transformOrigin={{ vertical: "top", horizontal: "right" }}
+                  elevation={12}
+                  sx={{
+                    "& .MuiPaper-root": {
+                      borderRadius: 3,
+                      minWidth: 240,
+                      bgcolor: "background.paper",
+                    },
+                  }}
+                >
+                  <MenuItem onClick={handleMenuClose} selected>
+                    <ListItemIcon>
+                      <TimelineIcon fontSize="small" color="primary" />
+                    </ListItemIcon>
+                    Grid Trading Profit Estimator
+                  </MenuItem>
+                  <Divider />
+                  <MenuItem onClick={handleMenuClose} disabled>
+                    <ListItemIcon>
+                      <ScheduleIcon fontSize="small" />
+                    </ListItemIcon>
+                    DCA Simulator (Coming Soon)
+                  </MenuItem>
+                  <MenuItem onClick={handleMenuClose} disabled>
+                    <ListItemIcon>
+                      <PieChartIcon fontSize="small" />
+                    </ListItemIcon>
+                    Portfolio Tracker (Coming Soon)
+                  </MenuItem>
+                </Menu>
+              </Box>
+            </Toolbar>
+          </Box>
+        </AppBar>
 
         {/* MAIN PAGE CONTENT */}
-        <Box sx={{ px: { xs: 1, md: 4 }, pt: 3, pb: 2 }}>
+        <Container
+          maxWidth={false}
+          sx={{
+            maxWidth: CONTENT_MAX_WIDTH,
+            mx: "auto",
+            px: NAV_HORIZONTAL_PADDING,
+            pt: 3,
+            pb: 2,
+          }}
+        >
           <Typography
             variant="h4"
             sx={{ fontWeight: 600, mb: 2, color: "#fff" }}
@@ -165,32 +272,47 @@ const App: React.FC = () => {
                 {results ? (
                   <Box>
                     <ResultsDisplay
-  title="Estimated Results"
-  metrics={
-    [
-      results.overallTotalValue !== undefined && results.overallTotalValue !== null
-        ? {
-            label: "Total Value (After All Grid & Buy/Sell)",
-            value: `$${results.overallTotalValue.toLocaleString(undefined, { maximumFractionDigits: 2 })}`,
-          }
-        : null,
-      results.principalReturnFromEntryExit !== undefined && results.principalReturnFromEntryExit !== null
-        ? {
-            label: "Net Principal Change (Buy at X, Sell at Y)",
-            value: `$${results.principalReturnFromEntryExit.toLocaleString(undefined, { maximumFractionDigits: 2 })}`,
-          }
-        : null,
-      {
-        label: "Estimated Daily Profit",
-        value: `$${results.estimatedDailyProfit?.toLocaleString(undefined, { maximumFractionDigits: 2 })}`,
-      },
-      {
-        label: "Trades per Day",
-        value: results.estimatedTradesPerDay?.toLocaleString(undefined, { maximumFractionDigits: 2 }),
-      },
-      ].filter(Boolean) as Metric[]
-  }
-/>
+                      title="Estimated Results"
+                      metrics={
+                        [
+                          results.overallTotalValue !== undefined &&
+                          results.overallTotalValue !== null
+                            ? {
+                                label: "Total Value (After All Grid & Buy/Sell)",
+                                value: `$${results.overallTotalValue.toLocaleString(
+                                  undefined,
+                                  { maximumFractionDigits: 2 }
+                                )}`,
+                              }
+                            : null,
+                          results.principalReturnFromEntryExit !== undefined &&
+                          results.principalReturnFromEntryExit !== null
+                            ? {
+                                label:
+                                  "Net Principal Change (Buy at X, Sell at Y)",
+                                value: `$${results.principalReturnFromEntryExit.toLocaleString(
+                                  undefined,
+                                  { maximumFractionDigits: 2 }
+                                )}`,
+                              }
+                            : null,
+                          {
+                            label: "Estimated Daily Profit",
+                            value: `$${results.estimatedDailyProfit?.toLocaleString(
+                              undefined,
+                              { maximumFractionDigits: 2 }
+                            )}`,
+                          },
+                          {
+                            label: "Trades per Day",
+                            value: results.estimatedTradesPerDay?.toLocaleString(
+                              undefined,
+                              { maximumFractionDigits: 2 }
+                            ),
+                          },
+                        ].filter(Boolean) as Metric[]
+                      }
+                    />
                     <Box sx={{ mt: 2 }}>
                       <ResultsDisplay
                         title="Profit Breakdown"
@@ -302,16 +424,14 @@ const App: React.FC = () => {
                       variant="body2"
                       sx={{ mt: 1, color: "text.secondary" }}
                     >
-                      Enter your parameters or click "Optimize Values" for
-                      AI-powered suggestions. Then hit Calculate to see your
-                      projected profits, chart, and trading metrics.
+                      Enter your parameters or click "Optimize Values" for AI-powered suggestions. Then hit Calculate to see your projected profits, chart, and trading metrics.
                     </Typography>
                   </Paper>
                 )}
               </Box>
             </Grid>
           </Grid>
-        </Box>
+        </Container>
       </ErrorBoundary>
     </ThemeProvider>
   );
