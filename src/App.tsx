@@ -232,10 +232,10 @@ const App: React.FC = () => {
                           },
                           {
                             label: "Grid Spacing",
-                            value: results.gridSpacing?.toLocaleString(
+                            value: `$${results.gridSpacing?.toLocaleString(
                               undefined,
                               { maximumFractionDigits: 6 }
-                            ),
+                            )}`,
                           },
                           {
                             label: "Net Profit/Tx",
