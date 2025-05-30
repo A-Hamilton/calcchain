@@ -1,24 +1,9 @@
-import React, { useState, useCallback, useMemo } from "react";
+import React, { useState, useCallback, useMemo, Suspense, lazy } from "react";
 import { ThemeProvider, useTheme } from "@mui/material/styles";
 import {
-  CssBaseline,
-  Box,
-  Typography,
-  Grid,
-  Paper,
-  CircularProgress,
-  AppBar,
-  Toolbar,
-  IconButton,
-  Menu,
-  MenuItem,
-  Divider,
-  ListItemIcon,
-  Container,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  Alert as MuiAlert, // Renamed to avoid conflict if Alert is used elsewhere
+  CssBaseline, Box, Typography, Grid, Paper, CircularProgress, AppBar, Toolbar, IconButton,
+  Menu, MenuItem, Divider, ListItemIcon, Container, Accordion, AccordionSummary, AccordionDetails,
+  Alert as MuiAlert, Skeleton,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -32,39 +17,36 @@ import ShowChartOutlinedIcon from '@mui/icons-material/ShowChartOutlined';
 import AccountBalanceWalletOutlinedIcon from '@mui/icons-material/AccountBalanceWalletOutlined';
 import FunctionsOutlinedIcon from '@mui/icons-material/FunctionsOutlined';
 import TuneOutlinedIcon from '@mui/icons-material/TuneOutlined';
-import { motion, AnimatePresence } from "framer-motion";
+
+// Import Framer Motion components for LazyMotion
+import { AnimatePresence, LazyMotion, domAnimation, m } from "framer-motion";
 
 import InputForm from "./components/InputForm";
-import ResultsDisplay from "./components/ResultsDisplay";
-import CryptoInsights from "./components/CryptoInsights";
+// Lazy load components
+const ResultsDisplay = lazy(() => import("./components/ResultsDisplay"));
+const CryptoInsights = lazy(() => import("./components/CryptoInsights"));
+
 import ErrorBoundary from "./ErrorBoundary";
-import appTheme from "./theme"; // Assuming appTheme is your default export from theme.ts
+import appTheme from "./theme";
 import { GridResults, GridParameters, Metric, GridType as GridTypeEnum } from "./types";
 import { calculateGridProfit } from "./utils/calculator";
-import logo from './assets/calcchainlogo.png'; // Adjust the path as necessary
 
 const NAV_HORIZONTAL_PADDING = { xs: 1, md: 4 };
 const CONTENT_MAX_WIDTH = 1200;
 
-// Animation variants for sections
 const sectionVariants = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
 };
 
-// Animation variants for results container (staggering children)
 const resultsContainerVariants = {
-  hidden: { opacity: 1 }, // Container itself is visible to allow children to animate
+  hidden: { opacity: 1 },
   visible: {
     opacity: 1,
-    transition: {
-      staggerChildren: 0.12,
-      delayChildren: 0.1, // Delay before the first child (ResultsDisplay card) starts
-    },
+    transition: { staggerChildren: 0.12, delayChildren: 0.1, },
   },
 };
 
-// Reusable InfoSection component for accordions
 interface InfoSectionProps {
   title: string;
   icon?: React.ReactNode;
@@ -72,43 +54,51 @@ interface InfoSectionProps {
   defaultExpanded?: boolean;
 }
 
+// InfoSection now uses m.div as it's rendered within LazyMotion context in App
 const InfoSection: React.FC<InfoSectionProps> = ({ title, icon, children, defaultExpanded }) => {
-  const theme = useTheme(); // Access theme for consistent styling
+  const theme = useTheme();
   return (
-    <motion.div initial="hidden" animate="visible" variants={sectionVariants} >
+    <m.div initial="hidden" animate="visible" variants={sectionVariants} >
       <Accordion
         defaultExpanded={defaultExpanded}
-        TransitionProps={{ unmountOnExit: true }} // For smoother collapse animation
+        TransitionProps={{ unmountOnExit: true }}
         sx={{
-          bgcolor: 'background.paper',
-          border: `1px solid ${theme.palette.divider}`,
-          boxShadow: theme.shadows[1], // Subtle shadow for accordions
-          '&:before': { display: 'none' }, // Remove default top border from Accordion
-          mb: 1.5,
-          borderRadius: 2, // Consistent border radius
-          overflow: 'hidden', // Ensure content respects border radius
+          bgcolor: 'background.paper', border: `1px solid ${theme.palette.divider}`,
+          boxShadow: theme.shadows[1], '&:before': { display: 'none' },
+          mb: 1.5, borderRadius: 2, overflow: 'hidden',
         }}
       >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon sx={{color: 'text.secondary'}} />}
-          sx={{
-            '& .MuiAccordionSummary-content': { alignItems: 'center' },
-            '&:hover': { bgcolor: theme.palette.action.hover }
-          }}
+          sx={{ '& .MuiAccordionSummary-content': { alignItems: 'center' }, '&:hover': { bgcolor: theme.palette.action.hover } }}
         >
           {icon && <Box sx={{ mr: 1.5, display: 'flex', alignItems: 'center', color: 'primary.main' }}>{React.cloneElement(icon as React.ReactElement, { fontSize: "small" })}</Box>}
           <Typography variant="h6" component="h3" sx={{ fontWeight: 500, fontSize: '1.05rem' }}>{title}</Typography>
         </AccordionSummary>
         <AccordionDetails sx={{pt:0, pb:1.5, px:2}}>
-          {/* Animate content inside accordion details */}
-          <motion.div initial={{opacity:0}} animate={{opacity:1}} transition={{duration:0.3, delay: 0.1}}>
+          <m.div initial={{opacity:0}} animate={{opacity:1}} transition={{duration:0.3, delay: 0.1}}>
               {children}
-          </motion.div>
+          </m.div>
         </AccordionDetails>
       </Accordion>
-    </motion.div>
+    </m.div>
   );
 };
+
+const LazyLoadingFallback: React.FC<{ height?: number | string, message?: string }> = ({ height = 200, message = "Loading..." }) => (
+  <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height, width: '100%', my: 2, p:2, textAlign: 'center' }}>
+    <CircularProgress sx={{mb:1}} />
+    <Typography variant="caption" color="text.secondary">{message}</Typography>
+  </Box>
+);
+
+const ResultsSectionSkeleton: React.FC = () => (
+  <Box>
+    <Skeleton variant="rectangular" width="100%" height={150} sx={{ mb: 2, borderRadius: 2 }} />
+    <Skeleton variant="rectangular" width="100%" height={200} sx={{ mb: 2, borderRadius: 2 }} />
+    <Skeleton variant="rectangular" width="100%" height={180} sx={{ mb: 2, borderRadius: 2 }} />
+  </Box>
+);
 
 
 const App: React.FC = () => {
@@ -120,113 +110,55 @@ const App: React.FC = () => {
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
   const handleMenuClose = () => setAnchorEl(null);
 
-  // Callback to clear calculation error, memoized as it's passed to InputForm
   const clearCalculationErrorFromApp = useCallback(() => setCalculationError(null), []);
 
-  // Callback to handle calculation, memoized
   const handleCalculate = useCallback(
     async (params: GridParameters) => {
-      setIsLoading(true);
-      setCalculationError(null);
-      setResults(null); // Clear previous results immediately for better UX
+      setIsLoading(true); setCalculationError(null); setResults(null);
       try {
-        // Optional: Add a small artificial delay here if API calls are too fast to see animations
-        // await new Promise(resolve => setTimeout(resolve, 700));
-        const res = await calculateGridProfit(params);
-        setResults(res);
+        const res = await calculateGridProfit(params); setResults(res);
       } catch (err: any) {
         let friendlyMessage = "Calculation failed. Please check parameters and try again.";
         const errorMessage = err?.message?.toLowerCase() || "";
-
-        // Provide more specific error messages based on error content
-        if (errorMessage.includes("symbol")) { // Covers "invalid symbol", "symbol not found" etc.
+        if (errorMessage.includes("symbol")) {
           friendlyMessage = `No market data for symbol '${params.symbol.trim()}'. It might be delisted. Check 'https://www.binance.com/en/trade' for available symbols.`;
-        } else if (err?.message) { // Use the specific error if available and not caught above
-            friendlyMessage = `Calculation error: ${err.message}`;
-        }
+        } else if (err?.message) { friendlyMessage = `Calculation error: ${err.message}`; }
         setCalculationError(friendlyMessage);
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    [] // No dependencies, as setters from useState are stable
-  );
+      } finally { setIsLoading(false); }
+    },[]);
 
-  // Memoized calculation of metrics to display, depends on 'results'
   const metrics = useMemo(() => {
     if (!results) return { primary: [], estimated: [], breakdown: [], more: [] };
-
-    // Determine the primary metric based on overallTotalValue
     const primaryMetric: Metric | null = results.overallTotalValue !== undefined && results.overallTotalValue !== null
       ? {
           label: "Total Estimated Value (Principal + Grid P/L + Buy/Sell P/L)",
           value: `$${results.overallTotalValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
           isPrimary: true,
-        }
-      : null;
-
-    // Structure estimated profit metrics
+        } : null;
     const estimated: Metric[] = [
       ...(results.principalReturnFromEntryExit !== undefined && results.principalReturnFromEntryExit !== null
-        ? [{
-            label: "Net P/L from Buy/Sell (Hypothetical)",
-            value: `$${results.principalReturnFromEntryExit.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
-          }]
-        : []),
-      {
-        label: "Estimated Daily Net Profit (from Grids)",
-        value: `$${results.estimatedDailyProfit?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
-      },
-      {
-        label: "Est. Trades per Day (Round Trips)",
-        value: results.estimatedTradesPerDay?.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 2 }),
-      },
-    ].filter(Boolean) as Metric[]; // Filter out null/undefined entries
-
-    // Structure grid profit breakdown metrics
+        ? [{ label: "Net P/L from Buy/Sell (Hypothetical)", value: `$${results.principalReturnFromEntryExit.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, }] : []),
+      { label: "Estimated Daily Net Profit (from Grids)", value: `$${results.estimatedDailyProfit?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, },
+      { label: "Est. Trades per Day (Round Trips)", value: results.estimatedTradesPerDay?.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 2 }), },
+    ].filter(Boolean) as Metric[];
     const breakdown: Metric[] = [
-      {
-        label: "Total Net Profit (from Grids)",
-        value: `$${results.totalNetProfit?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
-      },
-      {
-        label: "Total Grid Profit (Gross, before fees)",
-        value: `$${results.totalGridProfit?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
-      },
-      {
-        label: "Est. Daily Grid Profit (Gross, before fees)",
-        value: `$${results.estimatedDailyGridProfit?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
-      },
+      { label: "Total Net Profit (from Grids)", value: `$${results.totalNetProfit?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, },
+      { label: "Total Grid Profit (Gross, before fees)", value: `$${results.totalGridProfit?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, },
+      { label: "Est. Daily Grid Profit (Gross, before fees)", value: `$${results.estimatedDailyGridProfit?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, },
     ];
-
-    // Determine grid step label and value based on grid type
-    let gridStepLabel = "Grid Step";
-    let gridStepValueDisplay = "";
+    let gridStepLabel = "Grid Step"; let gridStepValueDisplay = "";
     if (results.gridType === GridTypeEnum.Geometric) {
-      gridStepLabel = "Grid Step (Ratio)";
-      const ratio = results.gridSpacing;
-      const percentage = (ratio - 1) * 100;
+      gridStepLabel = "Grid Step (Ratio)"; const ratio = results.gridSpacing; const percentage = (ratio - 1) * 100;
       gridStepValueDisplay = `${ratio?.toFixed(5)} (${percentage.toFixed(2)}%)`;
-    } else { // Arithmetic
+    } else {
       gridStepLabel = "Grid Step (Value)";
       gridStepValueDisplay = `$${results.gridSpacing?.toLocaleString(undefined, { minimumFractionDigits: Math.min(2, (results.gridSpacing < 1 ? 6 : 2)), maximumFractionDigits: 6 })}`;
     }
-
-    // Structure additional grid metrics
     const more: Metric[] = [
-      {
-        label: "Investment per Grid Line",
-        value: `$${results.investmentPerGrid?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
-      },
+      { label: "Investment per Grid Line", value: `$${results.investmentPerGrid?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, },
       { label: gridStepLabel, value: gridStepValueDisplay, },
-      {
-        label: "Net Profit per Grid Tx (Round Trip)",
-        value: `$${results.netProfitPerGridTransaction?.toLocaleString(undefined, { minimumFractionDigits: 4, maximumFractionDigits: 4 })}`,
-      },
-      {
-        label: "Average ATR per Minute",
-        value: results.atrPerMin?.toLocaleString(undefined, { minimumFractionDigits: 6, maximumFractionDigits: 8 }),
-      },
+      { label: "Net Profit per Grid Tx (Round Trip)", value: `$${results.netProfitPerGridTransaction?.toLocaleString(undefined, { minimumFractionDigits: 4, maximumFractionDigits: 4 })}`, },
+      { label: "Average ATR per Minute", value: results.atrPerMin?.toLocaleString(undefined, { minimumFractionDigits: 6, maximumFractionDigits: 8 }), },
     ];
     return { primary: primaryMetric ? [primaryMetric] : [], estimated, breakdown, more };
   }, [results]);
@@ -235,181 +167,142 @@ const App: React.FC = () => {
     <ThemeProvider theme={appTheme}>
       <CssBaseline />
       <ErrorBoundary>
-        {/* Application Bar */}
-        <AppBar position="static" color="transparent" elevation={0} sx={{ bgcolor: "background.paper", boxShadow: 3, py: 0.5, borderBottom: `1px solid ${appTheme.palette.divider}`}}>
-          <Box sx={{ maxWidth: CONTENT_MAX_WIDTH, mx: "auto", width: "100%", px: NAV_HORIZONTAL_PADDING }}>
-            <Toolbar disableGutters sx={{ minHeight: 56, width: "100%", display: "flex", justifyContent: "space-between", px: 0 }}>
-              <Box sx={{ display: "flex", alignItems: "center" }}>
-                <a href="https://calcchain.com" aria-label="CalcChain Home">
-                  <motion.img
-                    src={logo} // Ensure this path is correct relative to your public folder or assets setup
-                    alt="CalcChain Logo"
-                    style={{ height: 32, display: 'block' }}
-                    initial={{ opacity: 0, scale: 0.5 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.5, ease: "circOut" }}
-                  />
-                </a>
-              </Box>
-              <Box>
-                <IconButton edge="end" color="inherit" aria-label="menu" onClick={handleMenuOpen} size="medium" sx={{ bgcolor: "primary.dark", '&:hover': { bgcolor: "primary.main", color: "#fff" }, borderRadius: 2, p: 0.75 }}>
-                  <MenuIcon fontSize="small" />
-                </IconButton>
-                <Menu
-                    anchorEl={anchorEl}
-                    open={Boolean(anchorEl)}
-                    onClose={handleMenuClose}
-                    anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-                    transformOrigin={{ vertical: "top", horizontal: "right" }}
-                    // Menu styling is now handled by theme overrides in theme.ts
-                >
-                  <MenuItem onClick={handleMenuClose} selected sx={{fontSize: '0.9rem'}}> <ListItemIcon><TimelineOutlinedIcon fontSize="small" color="primary" /></ListItemIcon> Grid Trading Profit Estimator </MenuItem>
-                  <Divider />
-                  <MenuItem onClick={handleMenuClose} disabled sx={{fontSize: '0.9rem'}}> <ListItemIcon><ScheduleOutlinedIcon fontSize="small" /></ListItemIcon> DCA Simulator (Coming Soon) </MenuItem>
-                  <MenuItem onClick={handleMenuClose} disabled sx={{fontSize: '0.9rem'}}> <ListItemIcon><PieChartOutlineOutlinedIcon fontSize="small" /></ListItemIcon> Portfolio Tracker (Coming Soon) </MenuItem>
-                </Menu>
-              </Box>
-            </Toolbar>
-          </Box>
-        </AppBar>
+        <LazyMotion features={domAnimation} strict>
+          <AppBar position="static" color="transparent" elevation={0} sx={{ bgcolor: "background.paper", boxShadow: 3, py: 0.5, borderBottom: `1px solid ${appTheme.palette.divider}`}}>
+            <Box sx={{ maxWidth: CONTENT_MAX_WIDTH, mx: "auto", width: "100%", px: NAV_HORIZONTAL_PADDING }}>
+              <Toolbar disableGutters sx={{ minHeight: 56, width: "100%", display: "flex", justifyContent: "space-between", px: 0 }}>
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                  <a href="https://calcchain.com" aria-label="CalcChain Home">
+                    <m.img
+                      src="/src/assets/calcchainlogo.png"
+                      alt="CalcChain Logo"
+                      width="128"  // Placeholder: MUST be image's natural width
+                      height="32"   // Placeholder: MUST be image's natural height
+                      style={{ display: 'block', height: '32px', width: 'auto' }}
+                      initial={{ opacity: 0, scale: 0.5 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.5, ease: "circOut" }}
+                    />
+                  </a>
+                </Box>
+                <Box>
+                  <IconButton edge="end" color="inherit" aria-label="menu" onClick={handleMenuOpen} size="medium" sx={{ bgcolor: "primary.dark", '&:hover': { bgcolor: "primary.main", color: "#fff" }, borderRadius: 2, p: 0.75 }}>
+                    <MenuIcon fontSize="small" />
+                  </IconButton>
+                  <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose} anchorOrigin={{ vertical: "bottom", horizontal: "right" }} transformOrigin={{ vertical: "top", horizontal: "right" }} >
+                    <MenuItem onClick={handleMenuClose} selected sx={{fontSize: '0.9rem'}}> <ListItemIcon><TimelineOutlinedIcon fontSize="small" color="primary" /></ListItemIcon> Grid Trading Profit Estimator </MenuItem>
+                    <Divider />
+                    <MenuItem onClick={handleMenuClose} disabled sx={{fontSize: '0.9rem'}}> <ListItemIcon><ScheduleOutlinedIcon fontSize="small" /></ListItemIcon> DCA Simulator (Coming Soon) </MenuItem>
+                    <MenuItem onClick={handleMenuClose} disabled sx={{fontSize: '0.9rem'}}> <ListItemIcon><PieChartOutlineOutlinedIcon fontSize="small" /></ListItemIcon> Portfolio Tracker (Coming Soon) </MenuItem>
+                  </Menu>
+                </Box>
+              </Toolbar>
+            </Box>
+          </AppBar>
 
-        {/* Main Content Area */}
-        <Container maxWidth={false} sx={{ maxWidth: CONTENT_MAX_WIDTH, mx: "auto", px: NAV_HORIZONTAL_PADDING, pt: {xs: 2, md: 3}, pb: 4 }}>
-          {/* Page Title */}
-          <motion.div initial="hidden" animate="visible" variants={sectionVariants}>
-            <Typography variant="h4" component="h1" sx={{ fontWeight: 700, mb: 2, color: "#fff", textAlign: {xs: 'center', sm: 'left'} }}>
-              Grid Trading Profit Estimator
-            </Typography>
-          </motion.div>
-
-          {/* Informational Paper about Grid Trading */}
-          <motion.div initial="hidden" animate="visible" variants={sectionVariants} transition={{delay: 0.1}}>
-            <Paper sx={{ p: 2, mb: 3, bgcolor: "primary.dark", color: "#fff", borderRadius: 2 }} elevation={0}>
-              <Typography variant="subtitle1" component="h2" sx={{ fontWeight: 500, mb: 0.5 }}> What is Grid Trading? </Typography>
-              <Typography variant="body2"> Grid trading automatically places buy and sell orders at preset intervals within a price range to profit from volatility.{" "}
-                <a href="https://b2broker.com/news/understanding-grid-trading-purpose-pros-cons/" target="_blank" rel="noopener noreferrer" style={{ color: appTheme.palette.primary.light, textDecoration: "underline" }}> Learn more. </a>
+          <Container maxWidth={false} sx={{ maxWidth: CONTENT_MAX_WIDTH, mx: "auto", px: NAV_HORIZONTAL_PADDING, pt: {xs: 2, md: 3}, pb: 4 }}>
+            <m.div initial="hidden" animate="visible" variants={sectionVariants}>
+              <Typography variant="h4" component="h1" sx={{ fontWeight: 700, mb: 2, color: "#fff", textAlign: {xs: 'center', sm: 'left'} }}>
+                Grid Trading Profit Estimator
               </Typography>
-            </Paper>
-          </motion.div>
+            </m.div>
 
-          {/* Main Grid Layout: Input Form and Results Display */}
-          <Grid container spacing={{xs: 2, md: 3}}>
-            {/* Input Form Section */}
-            <Grid item xs={12} md={5}>
-              <motion.div initial="hidden" animate="visible" variants={sectionVariants} transition={{delay: 0.2}}>
-                <InputForm onCalculate={handleCalculate} calculationErrorFromApp={calculationError} onClearCalculationErrorFromApp={clearCalculationErrorFromApp} />
-              </motion.div>
-            </Grid>
+            <m.div initial="hidden" animate="visible" variants={sectionVariants} transition={{delay: 0.1}}>
+              <Paper sx={{ p: 2, mb: 3, bgcolor: "primary.dark", color: "#fff", borderRadius: 2 }} elevation={0}>
+                <Typography variant="subtitle1" component="h2" sx={{ fontWeight: 500, mb: 0.5 }}> What is Grid Trading? </Typography>
+                <Typography variant="body2"> Grid trading automatically places buy and sell orders at preset intervals within a price range to profit from volatility.{" "}
+                  <a href="https://b2broker.com/news/understanding-grid-trading-purpose-pros-cons/" target="_blank" rel="noopener noreferrer" style={{ color: appTheme.palette.primary.light, textDecoration: "underline" }}> Learn more. </a>
+                </Typography>
+              </Paper>
+            </m.div>
 
-            {/* Results Display Section */}
-            <Grid item xs={12} md={7}>
-              <Box sx={{ height: "100%", display: "flex", flexDirection: "column", position: "relative" }}>
-                {/* Global Loader for results area */}
-                <AnimatePresence>
-                  {isLoading && !results && (
-                    <motion.div
-                      key="global-loader"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.2 }}
-                      style={{ position: "absolute", inset: 0, zIndex: 10, backgroundColor: "rgba(16, 19, 29, 0.85)", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: appTheme.shape.borderRadius*2 }}
-                    >
-                      <CircularProgress color="primary" />
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-
-                {/* Calculation Error Alert */}
-                <AnimatePresence>
-                  {calculationError && !isLoading && (
-                    <motion.div
-                      key="calc-error-alert"
-                      initial={{ opacity: 0, y: -20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -20, transition:{duration: 0.2} }}
-                      transition={{ duration: 0.3, ease: "backOut" }}
-                    >
-                      {/* Added role="alert" for accessibility */}
-                      <MuiAlert severity="error" sx={{ mb: 2, width: '100%' }} onClose={clearCalculationErrorFromApp} role="alert">
-                        {calculationError}
-                      </MuiAlert>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-
-                {/* Conditional Rendering of Results or Placeholder */}
-                <AnimatePresence mode="wait">
-                  {results ? (
-                    <motion.div
-                      key="results-content"
-                      initial="hidden"
-                      animate="visible"
-                      exit={{opacity: 0, y: -10, transition: {duration: 0.2}}}
-                      variants={resultsContainerVariants}
-                    >
-                      <Box>
-                        {/* Display Key Result */}
-                        {metrics.primary.length > 0 && <ResultsDisplay title="Key Result" metrics={metrics.primary} titleIcon={<AccountBalanceWalletOutlinedIcon />} isLoading={isLoading} delay={0} />}
-                        {/* Display Profit Estimates */}
-                        <ResultsDisplay title="Profit Estimates" metrics={metrics.estimated} titleIcon={<ShowChartOutlinedIcon />} delay={0.05} />
-                        {/* Display Grid Profit Breakdown */}
-                        <Box sx={{ mt: 2 }}><ResultsDisplay title="Grid Profit Breakdown" metrics={metrics.breakdown} titleIcon={<FunctionsOutlinedIcon />} delay={0.1} /></Box>
-                        {/* Display Additional Grid Metrics */}
-                        <Box sx={{ mt: 2 }}><ResultsDisplay title="Additional Grid Metrics" metrics={metrics.more} titleIcon={<TuneOutlinedIcon />} delay={0.15} /></Box>
-
-                        {/* Informational Accordions */}
-                        <motion.div initial="hidden" animate="visible" variants={{visible: {transition: {staggerChildren: 0.1, delayChildren: 0.4}}}}>
-                          <Box sx={{mt: 3}}>
-                              <InfoSection title="Why Use Grid Trading?" icon={<HelpOutlineIcon />} defaultExpanded>
-                                  <CryptoInsights message="Generates consistent profit in volatile, sideways markets." />
-                                  <CryptoInsights message="Removes emotional decision-making by automating trades." />
-                                  <CryptoInsights message="Works best for assets with predictable price swings." />
-                              </InfoSection>
-                              <InfoSection title="What is Grid Trading?" icon={<InfoOutlinedIcon />}>
-                                  <CryptoInsights message="Grid trading places buy and sell orders at fixed price intervals to profit from market volatility." />
-                              </InfoSection>
-                              <InfoSection title="What are the risks?" icon={<WarningAmberOutlinedIcon />}>
-                                  <CryptoInsights message="If the price breaks out of your set range, it can lead to losses." />
-                                  <CryptoInsights message="Grid trading is not suitable for all market conditions—trending markets can reduce profit." />
-                                  <CryptoInsights message="Always start with small amounts and manage risk carefully." />
-                              </InfoSection>
+            <Grid container spacing={{xs: 2, md: 3}}>
+              <Grid item xs={12} md={5}>
+                <m.div initial="hidden" animate="visible" variants={sectionVariants} transition={{delay: 0.2}}>
+                  {/* InputForm is NOT a motion component itself, but it's rendered within an m.div.
+                      This means any motion components *inside* InputForm must use the `m` prefix.
+                  */}
+                  <InputForm onCalculate={handleCalculate} calculationErrorFromApp={calculationError} onClearCalculationErrorFromApp={clearCalculationErrorFromApp} />
+                </m.div>
+              </Grid>
+              <Grid item xs={12} md={7}>
+                <Box sx={{ height: "100%", display: "flex", flexDirection: "column", position: "relative" }}>
+                  <AnimatePresence>
+                    {isLoading && !results && (
+                      <m.div
+                        key="global-loader" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}
+                        style={{ position: "absolute", inset: 0, zIndex: 10, backgroundColor: "rgba(16, 19, 29, 0.85)", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: appTheme.shape.borderRadius*2 }}
+                      ><CircularProgress color="primary" /></m.div>
+                    )}
+                  </AnimatePresence>
+                  <AnimatePresence>
+                    {calculationError && !isLoading && (
+                      <m.div
+                        key="calc-error-alert" initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20, transition:{duration: 0.2} }} transition={{ duration: 0.3, ease: "backOut" }}
+                      ><MuiAlert severity="error" sx={{ mb: 2, width: '100%' }} onClose={clearCalculationErrorFromApp} role="alert">{calculationError}</MuiAlert></m.div>
+                    )}
+                  </AnimatePresence>
+                  <AnimatePresence mode="wait">
+                    {results ? (
+                      <m.div key="results-content" initial="hidden" animate="visible" exit={{opacity: 0, y: -10, transition: {duration: 0.2}}} variants={resultsContainerVariants} >
+                        {/* ResultsDisplay and its children (InfoSection, CryptoInsights) are lazy loaded */}
+                        {/* Suspense fallback will be shown while they load */}
+                        <Suspense fallback={<ResultsSectionSkeleton />}>
+                          <Box>
+                            {metrics.primary.length > 0 && <ResultsDisplay title="Key Result" metrics={metrics.primary} titleIcon={<AccountBalanceWalletOutlinedIcon />} isLoading={isLoading} delay={0} />}
+                            <ResultsDisplay title="Profit Estimates" metrics={metrics.estimated} titleIcon={<ShowChartOutlinedIcon />} delay={0.05} />
+                            <Box sx={{ mt: 2 }}><ResultsDisplay title="Grid Profit Breakdown" metrics={metrics.breakdown} titleIcon={<FunctionsOutlinedIcon />} delay={0.1} /></Box>
+                            <Box sx={{ mt: 2 }}><ResultsDisplay title="Additional Grid Metrics" metrics={metrics.more} titleIcon={<TuneOutlinedIcon />} delay={0.15} /></Box>
+                            
+                            {/* This m.div is inside the results-content m.div, so it's fine */}
+                            <m.div initial="hidden" animate="visible" variants={{visible: {transition: {staggerChildren: 0.1, delayChildren: 0.4}}}}>
+                              <Box sx={{mt: 3}}>
+                                  <InfoSection title="Why Use Grid Trading?" icon={<HelpOutlineIcon />} defaultExpanded>
+                                      <Suspense fallback={<LazyLoadingFallback height={30} message="Loading insight..."/>}><CryptoInsights message="Generates consistent profit in volatile, sideways markets." /></Suspense>
+                                      <Suspense fallback={<LazyLoadingFallback height={30} message="Loading insight..."/>}><CryptoInsights message="Removes emotional decision-making by automating trades." /></Suspense>
+                                      <Suspense fallback={<LazyLoadingFallback height={30} message="Loading insight..."/>}><CryptoInsights message="Works best for assets with predictable price swings." /></Suspense>
+                                  </InfoSection>
+                                  <InfoSection title="Grid Trading Insights" icon={<InfoOutlinedIcon />}>
+                                      <Suspense fallback={<LazyLoadingFallback height={30} message="Loading insight..."/>}><CryptoInsights message="Grid trading places buy and sell orders at fixed price intervals to profit from market volatility." /></Suspense>
+                                  </InfoSection>
+                                  <InfoSection title="Potential Risks" icon={<WarningAmberOutlinedIcon />}>
+                                      <Suspense fallback={<LazyLoadingFallback height={30} message="Loading insight..."/>}><CryptoInsights message="If the price breaks out of your set range, it can lead to losses." /></Suspense>
+                                      <Suspense fallback={<LazyLoadingFallback height={30} message="Loading insight..."/>}><CryptoInsights message="Not suitable for all market conditions—strong trending markets can reduce effectiveness." /></Suspense>
+                                      <Suspense fallback={<LazyLoadingFallback height={30} message="Loading insight..."/>}><CryptoInsights message="Always start with small amounts and manage risk carefully." /></Suspense>
+                                  </InfoSection>
+                              </Box>
+                            </m.div>
                           </Box>
-                        </motion.div>
-                      </Box>
-                    </motion.div>
-                  ) : (
-                    // Placeholder content when no results, not loading, and no error
-                    !isLoading && !calculationError && (
-                      <motion.div
-                        key="placeholder-content"
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.95 }}
-                        transition={{ duration: 0.3 }}
-                      >
-                        <Paper sx={{ p: {xs:2, md:4}, textAlign: "center", bgcolor: "background.paper", color: "text.primary", display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 300, borderRadius: 2 }}>
-                          <motion.img
-                            src="https://cdn-icons-png.flaticon.com/512/1995/1995526.png" // Placeholder icon
-                            alt="Get Started Icon"
-                            style={{ height: 48, marginBottom: 16, filter: 'grayscale(30%) opacity(0.8)' }}
-                            initial={{ scale: 0.5, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            transition={{ delay: 0.1, duration: 0.4, type: "spring", stiffness: 150 }}
-                          />
-                          <Typography variant="h6" component="p" sx={{ fontWeight: 600, mb:1 }}> Welcome to the Grid Trading Profit Estimator! </Typography>
-                          <Typography variant="body2" component="p" sx={{ color: "text.secondary", maxWidth: 450, lineHeight: 1.6 }}>
-                            Enter your parameters or click "Optimize Values" for data-driven suggestions. Then hit Calculate to see your projected profits and trading metrics.
-                          </Typography>
-                        </Paper>
-                      </motion.div>
-                    )
-                  )}
-                </AnimatePresence>
-              </Box>
+                        </Suspense>
+                      </m.div>
+                    ) : (
+                      !isLoading && !calculationError && (
+                        <m.div key="placeholder-content" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} transition={{ duration: 0.3 }} >
+                          <Paper sx={{ p: {xs:2, md:4}, textAlign: "center", bgcolor: "background.paper", color: "text.primary", display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 300, borderRadius: 2 }}>
+                            <m.img
+                              src="https://cdn-icons-png.flaticon.com/512/1995/1995526.png"
+                              alt="Get Started Icon"
+                              width="48"
+                              height="48"
+                              style={{ marginBottom: 16, filter: 'grayscale(30%) opacity(0.8)' }}
+                              initial={{ scale: 0.5, opacity: 0 }}
+                              animate={{ scale: 1, opacity: 1 }}
+                              transition={{ delay: 0.1, duration: 0.4, type: "spring", stiffness: 150 }}
+                            />
+                            <Typography variant="h6" component="p" sx={{ fontWeight: 600, mb:1 }}> Welcome to the Grid Trading Profit Estimator! </Typography>
+                            <Typography variant="body2" component="p" sx={{ color: "text.secondary", maxWidth: 450, lineHeight: 1.6 }}>
+                              Enter your parameters or click "Optimize Values" for data-driven suggestions. Then hit Calculate to see your projected profits and trading metrics.
+                            </Typography>
+                          </Paper>
+                        </m.div>
+                      )
+                    )}
+                  </AnimatePresence>
+                </Box>
+              </Grid>
             </Grid>
-          </Grid>
-        </Container>
+          </Container>
+        </LazyMotion>
       </ErrorBoundary>
     </ThemeProvider>
   );

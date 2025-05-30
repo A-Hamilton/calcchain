@@ -6,24 +6,22 @@
     <meta name="description" content="Use CalcChain's crypto grid calculator to estimate trading profits with live volatility data and optimized parameters. Instantly evaluate your grid trading strategy." />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Open Graph / Social Sharing -->
+    <link rel="preconnect" href="https://cdn-icons-png.flaticon.com">
+
     <meta property="og:title" content="Crypto Grid Calculator – Estimate Trading Profits" />
     <meta property="og:description" content="Estimate your crypto grid trading profits using CalcChain's live volatility data and optimized parameters." />
-    <meta property="og:image" content="/assets/calcchainlogo.png" />
+    <meta property="og:image" content="/src/assets/calcchainlogo.png" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://calcchain.com/" />
 
-    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Crypto Grid Calculator – Estimate Trading Profits" />
     <meta name="twitter:description" content="Estimate your crypto grid trading profits using CalcChain's live volatility data and optimized parameters." />
-    <meta name="twitter:image" content="/assets/calcchainlogo.png" />
+    <meta name="twitter:image" content="/src/assets/calcchainlogo.png" />
 
-    <!-- Canonical URL -->
     <link rel="canonical" href="https://calcchain.com/" />
     <link rel="icon" type="image/png" href="/src/assets/chainlogo.png" />
 
-    <!-- JSON-LD Structured Data -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -35,16 +33,62 @@
     }
     </script>
 
+    <style>
+      /* Minimal CSS Reset and Initial Styling */
+      html, body {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        height: 100%; /* Keep this if your app relies on 100% height for body/html */
+        width: 100%;
+      }
+      body {
+        background-color: #0A0C12; /* Your app's default background color */
+        color: #E2E8F0; /* Your app's default text color */
+        font-family: Arial, sans-serif; /* Basic fallback font */
+        /* Centering for fallback content is now handled by .fallback-container within #root */
+      }
+      /* Styling for the root element */
+      #root {
+        height: 100%;
+        width: 100%;
+        /* display: flex; align-items: center; justify-content: center; */ /* REMOVED these to avoid conflict with app layout */
+      }
+      /* Fallback content styling - this will be replaced by React */
+      .fallback-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 20px;
+        height: 100vh; /* Make fallback take full viewport height initially */
+      }
+      .fallback-logo {
+        width: 100px; /* Adjust as needed */
+        height: auto;
+        margin-bottom: 20px;
+      }
+      .fallback-title {
+        font-size: 1.5em;
+        margin-bottom: 10px;
+        color: #E2E8F0;
+      }
+      .fallback-message {
+        font-size: 1em;
+        color: #94A3B8;
+      }
+    </style>
+
   </head>
   <body>
-    <script type="module" src="/src/index.tsx"></script>
     <div id="root">
-      <h1>Crypto Grid Calculator</h1>
+      <div class="fallback-container">
+        <img src="/src/assets/chainlogo.png" alt="CalcChain Logo" class="fallback-logo" />
+        <h1 class="fallback-title">Loading CalcChain...</h1>
+        <p class="fallback-message">Please wait while the Crypto Grid Calculator loads.<br/>Ensure JavaScript is enabled in your browser.</p>
+      </div>
     </div>
+    <script type="module" src="/src/index.tsx"></script>
   </body>
-  <style>
-  #root h1 {
-    color: #fff !important;
-  }
-</style>
 </html>

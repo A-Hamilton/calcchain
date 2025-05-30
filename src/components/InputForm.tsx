@@ -1,33 +1,17 @@
 import React, { useState, useEffect, useCallback } from "react";
 import {
-  Card,
-  CardContent,
-  Typography,
-  Grid,
-  TextField,
-  Button,
-  Collapse,
-  Snackbar,
-  Alert,
-  MenuItem,
-  IconButton,
-  Tooltip,
-  Box,
-  CircularProgress,
-  Divider, 
-  AlertColor,
-  alpha, 
-  useTheme 
+  Card, CardContent, Typography, Grid, TextField, Button, Collapse, Snackbar, Alert,
+  MenuItem, IconButton, Tooltip, Box, CircularProgress, Divider, AlertColor, alpha, useTheme
 } from "@mui/material";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import TuneIcon from "@mui/icons-material/Tune";
-import RestartAltIcon from '@mui/icons-material/RestartAlt'; 
-import { motion, AnimatePresence } from "framer-motion"; 
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
+// Import 'm' and 'AnimatePresence' from framer-motion for use within LazyMotion context
+import { m, AnimatePresence } from "framer-motion"; // Ensure 'm' is imported
 import { fetchCandles, getAtrPerMin, Candle } from "../utils/atr";
 import { computeOptimalGridParams } from "../utils/optimizer";
-import { GridParameters, GridType, EntryType } from "../types"; 
-import { DEFAULT_ATR_PERIOD } from "../constants"; 
-// import appTheme from "../theme"; // appTheme might not be needed if useTheme is used consistently
+import { GridParameters, GridType, EntryType } from "../types";
+import { DEFAULT_ATR_PERIOD } from "../constants";
 
 type FormFields = {
   symbol: string;
@@ -38,10 +22,10 @@ type FormFields = {
   leverage: string;
   feePercent: string;
   durationDays: string;
-  buyPrice: string; 
-  sellPrice: string; 
-  gridType: GridType; 
-  entryType: EntryType; 
+  buyPrice: string;
+  sellPrice: string;
+  gridType: GridType;
+  entryType: EntryType;
 };
 
 type FieldConfig = {
@@ -49,15 +33,15 @@ type FieldConfig = {
   label: string;
   type: "number" | "text" | "select";
   help: string;
-  options?: GridType[] | EntryType[]; 
+  options?: GridType[] | EntryType[];
   adornment?: string;
-  group?: string; 
+  group?: string;
 };
 
 export interface InputFormProps {
   onCalculate: (params: GridParameters) => void;
-  calculationErrorFromApp?: string | null; 
-  onClearCalculationErrorFromApp?: () => void; 
+  calculationErrorFromApp?: string | null;
+  onClearCalculationErrorFromApp?: () => void;
 }
 
 const fieldConfigs: FieldConfig[] = [
@@ -81,60 +65,43 @@ const advancedFieldConfigs: FieldConfig[] = [
 const initialForm: FormFields = {
   symbol: "BTCUSDT", principal: "1000", lowerBound: "", upperBound: "",
   gridCount: "20", leverage: "1", feePercent: "0.05", durationDays: "30",
-  buyPrice: "", sellPrice: "", 
-  gridType: GridType.Arithmetic, 
-  entryType: EntryType.Long, 
+  buyPrice: "", sellPrice: "",
+  gridType: GridType.Arithmetic,
+  entryType: EntryType.Long,
 };
 
 const textFieldSx = {
-  "& .MuiInputLabel-root": { color: "text.secondary" }, 
+  "& .MuiInputLabel-root": { color: "text.secondary" },
   "& .MuiInputLabel-root.Mui-focused": { color: "primary.main" },
-  "& .MuiOutlinedInput-root": { 
-    "& input": { color: "text.primary" }, 
-    "& .MuiSelect-select": { 
-      textAlign: 'left', 
-      color: "text.primary", 
-      paddingRight: '52px', 
-      overflow: 'hidden',
-      textOverflow: 'ellipsis',
-      whiteSpace: 'nowrap',
-    }, 
-    "& .MuiInputAdornment-root.MuiInputAdornment-positionEnd": {
-        marginRight: '8px' 
+  "& .MuiOutlinedInput-root": {
+    "& input": { color: "text.primary" },
+    "& .MuiSelect-select": {
+      textAlign: 'left', color: "text.primary", paddingRight: '52px',
+      overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
     },
-    "& fieldset": { borderColor: "rgba(255, 255, 255, 0.23)" }, 
+    "& .MuiInputAdornment-root.MuiInputAdornment-positionEnd": { marginRight: '8px' },
+    "& fieldset": { borderColor: "rgba(255, 255, 255, 0.23)" },
     "&:hover fieldset": { borderColor: "primary.light" },
-    "&.Mui-focused fieldset": { borderColor: "primary.main", borderWidth: '1px' }, 
+    "&.Mui-focused fieldset": { borderColor: "primary.main", borderWidth: '1px' },
   },
-  "& .MuiFormHelperText-root": { 
-    fontSize: '0.7rem',
-    marginLeft: '14px', 
-    marginRight: '14px',
-    minHeight: '1.2em', 
-    lineHeight: '1.2em', 
-    whiteSpace: 'normal', 
+  "& .MuiFormHelperText-root": {
+    fontSize: '0.7rem', marginLeft: '14px', marginRight: '14px',
+    minHeight: '1.2em', lineHeight: '1.2em', whiteSpace: 'normal',
   }
 };
 
 const formItemVariants = {
   hidden: { opacity: 0, y: 15 },
-  visible: (i:number) => ({ 
-    opacity: 1,
-    y: 0,
-    transition: {
-      delay: i * 0.05, 
-      duration: 0.4,
-      ease: "easeOut",
-    },
+  visible: (i:number) => ({
+    opacity: 1, y: 0,
+    transition: { delay: i * 0.05, duration: 0.4, ease: "easeOut", },
   }),
 };
 
-const InputForm: React.FC<InputFormProps> = ({ 
-  onCalculate, 
-  calculationErrorFromApp, 
-  onClearCalculationErrorFromApp 
+const InputForm: React.FC<InputFormProps> = ({
+  onCalculate, calculationErrorFromApp, onClearCalculationErrorFromApp
 }) => {
-  const theme = useTheme(); 
+  const theme = useTheme();
   const [form, setForm] = useState<FormFields>(initialForm);
   const [errors, setErrors] = useState<Partial<Record<keyof FormFields, string>>>({});
   const [advancedOpen, setAdvancedOpen] = useState(false);
@@ -163,30 +130,31 @@ const InputForm: React.FC<InputFormProps> = ({
     setErrors(nextErrors);
     return Object.keys(nextErrors).length === 0;
   }, [form]);
-  
+
   useEffect(() => { validate(); }, [form, validate]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | {name?: string; value: unknown}>) => {
     const name = e.target.name as keyof FormFields;
-    const value = e.target.value as string; 
-    setForm(f => ({ 
-        ...f, 
-        [name]: name === 'gridType' ? value as GridType : 
-                name === 'entryType' ? value as EntryType : 
-                value 
+    const value = e.target.value as string;
+    setForm(f => ({
+        ...f,
+        [name]: name === 'gridType' ? value as GridType :
+                name === 'entryType' ? value as EntryType :
+                value
     }));
-    if (name === "symbol") setLocalSymbolFetchError(null); 
+    if (name === "symbol") setLocalSymbolFetchError(null);
     if (calculationErrorFromApp && onClearCalculationErrorFromApp) onClearCalculationErrorFromApp();
   };
 
   const renderSelectValue = (selectedValue: unknown) => {
-    if (typeof selectedValue !== 'string') return ''; 
+    if (typeof selectedValue !== 'string') return '';
     return <Typography component="span" noWrap sx={{ textAlign: 'left', color: "text.primary", width: '100%', display: 'block' }}>{selectedValue.charAt(0).toUpperCase() + selectedValue.slice(1)}</Typography>;
   };
 
-  const renderField = (cfg: FieldConfig, index: number) => ( 
+  const renderField = (cfg: FieldConfig, index: number) => (
     <Grid item xs={12} sm={6} key={cfg.key} >
-      <motion.div custom={index} variants={formItemVariants} initial="hidden" animate="visible"> 
+      {/* Changed motion.div to m.div */}
+      <m.div custom={index} variants={formItemVariants} initial="hidden" animate="visible">
         <TextField label={cfg.label} name={cfg.key} value={form[cfg.key]} onChange={handleChange} type={cfg.type === "number" ? "number" : "text"} select={cfg.type === "select"}
           inputProps={{ inputMode: cfg.type === "number" ? "decimal" : undefined, min: (cfg.key === 'feePercent' || cfg.key === 'buyPrice' || cfg.key === 'sellPrice') ? 0 : 1, step: (cfg.key === 'gridCount' || cfg.key === 'durationDays' || cfg.key === 'leverage') ? "1" : "any", "aria-label": cfg.label }}
           SelectProps={ cfg.options ? { native: false, MenuProps: { PaperProps: { sx: { maxHeight: 200, '& .MuiMenuItem-root': {textAlign: 'left'} } } }, renderValue: cfg.type === "select" ? renderSelectValue : undefined, IconComponent: () => null } : undefined }
@@ -199,7 +167,7 @@ const InputForm: React.FC<InputFormProps> = ({
         >
           {cfg.options && (cfg.options as Array<GridType | EntryType>).map(opt => (<MenuItem key={opt} value={opt} sx={{fontSize: '0.9rem', textAlign: 'left'}}>{opt.charAt(0).toUpperCase() + opt.slice(1)}</MenuItem>))}
         </TextField>
-      </motion.div>
+      </m.div>
     </Grid>
   );
 
@@ -212,27 +180,26 @@ const InputForm: React.FC<InputFormProps> = ({
 
 
 const handleOptimize = async () => {
-  if (calculationErrorFromApp && onClearCalculationErrorFromApp) onClearCalculationErrorFromApp(); 
-  setLocalSymbolFetchError(null); 
+  if (calculationErrorFromApp && onClearCalculationErrorFromApp) onClearCalculationErrorFromApp();
+  setLocalSymbolFetchError(null);
   setIsOptimizing(true);
   try {
     const symbol = form.symbol.trim();
     if (!symbol) {
       setLocalSymbolFetchError("Symbol is required for optimization.");
       setSnackbar({open: true, message: "Symbol is required for optimization.", severity: "error"});
-      setIsOptimizing(false);
-      return;
+      setIsOptimizing(false); return;
     }
-    
-    const candles: Candle[] = await fetchCandles(symbol, "1d", DEFAULT_ATR_PERIOD + 1); 
-    if (!candles || candles.length === 0) { 
+
+    const candles: Candle[] = await fetchCandles(symbol, "1d", DEFAULT_ATR_PERIOD + 1);
+    if (!candles || candles.length === 0) {
         throw new Error(`No candle data returned for symbol ${symbol}. It might be an invalid symbol.`);
     }
-    const currentPrice = candles[candles.length - 1].close; 
+    const currentPrice = candles[candles.length - 1].close;
     const investmentAmount = Number(form.principal) || 1000;
     const feePercentValue = Number(form.feePercent) || 0.05;
     const atr = await getAtrPerMin(symbol, DEFAULT_ATR_PERIOD);
-    const gridTypeOpt = form.gridType; 
+    const gridTypeOpt = form.gridType;
     const userBuyPrice = form.buyPrice && !isNaN(Number(form.buyPrice)) ? Number(form.buyPrice) : undefined;
     const userSellPrice = form.sellPrice && !isNaN(Number(form.sellPrice)) ? Number(form.sellPrice) : undefined;
     const optimalParams = computeOptimalGridParams({ symbol, currentPrice, principal: investmentAmount, atr, feePercent: feePercentValue, gridType: gridTypeOpt, buyPrice: userBuyPrice, sellPrice: userSellPrice });
@@ -244,104 +211,76 @@ const handleOptimize = async () => {
     if (err instanceof Error) {
       if (err.message.toLowerCase().includes("symbol")) {
             specificMessage = `No market data for symbol '${form.symbol.trim()}'. It might be delisted. Check 'https://www.binance.com/en/trade' for available symbols.`;
-        } else {
-            specificMessage = err.message; 
-        }
+        } else { specificMessage = err.message; }
     }
-    setLocalSymbolFetchError(specificMessage); 
+    setLocalSymbolFetchError(specificMessage);
     setSnackbar({open: true, message: specificMessage, severity: "error"});
   } finally { setIsOptimizing(false); }
 };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (calculationErrorFromApp && onClearCalculationErrorFromApp) onClearCalculationErrorFromApp(); 
-    setLocalSymbolFetchError(null); 
+    if (calculationErrorFromApp && onClearCalculationErrorFromApp) onClearCalculationErrorFromApp();
+    setLocalSymbolFetchError(null);
     if (!validate()) { setSnackbar({open: true, message: "Please correct the errors in the form before calculating.", severity: "error"}); return; }
     const params: GridParameters = {
       symbol: form.symbol.trim(), principal: Number(form.principal), lowerBound: Number(form.lowerBound), upperBound: Number(form.upperBound),
       gridCount: Number(form.gridCount), leverage: Number(form.leverage), feePercent: Number(form.feePercent), durationDays: Number(form.durationDays),
       buyPrice: form.buyPrice && !isNaN(Number(form.buyPrice)) ? Number(form.buyPrice) : undefined,
       sellPrice: form.sellPrice && !isNaN(Number(form.sellPrice)) ? Number(form.sellPrice) : undefined,
-      gridType: form.gridType, 
-      entryType: form.entryType,
-      atrPeriod: DEFAULT_ATR_PERIOD, 
+      gridType: form.gridType, entryType: form.entryType, atrPeriod: DEFAULT_ATR_PERIOD,
     };
     onCalculate(params);
   };
 
   const handleResetForm = () => {
-    setForm(initialForm);
-    setErrors({});
-    setLocalSymbolFetchError(null);
-    if (calculationErrorFromApp && onClearCalculationErrorFromApp) {
-      onClearCalculationErrorFromApp();
-    }
+    setForm(initialForm); setErrors({}); setLocalSymbolFetchError(null);
+    if (calculationErrorFromApp && onClearCalculationErrorFromApp) { onClearCalculationErrorFromApp(); }
     setSnackbar({open: true, message: "Form has been reset to default values.", severity: "info"});
   };
 
   const isCalculateDisabled = Object.keys(errors).length > 0 || Boolean(localSymbolFetchError) || Boolean(calculationErrorFromApp) || isOptimizing;
 
   return (
-    <Card sx={{ bgcolor: "background.paper", p: {xs: 1.5, md: 2}, borderRadius: 2, boxShadow: 3 }}> 
-      <CardContent sx={{p: {xs: 1.5, md: 2}}}> 
-        <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2}}> 
+    <Card sx={{ bgcolor: "background.paper", p: {xs: 1.5, md: 2}, borderRadius: 2, boxShadow: 3 }}>
+      <CardContent sx={{p: {xs: 1.5, md: 2}}}>
+        <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2}}>
           <Typography variant="h6" color="primary.main" sx={{ fontWeight: 600 }}>Grid Parameters</Typography>
           <Tooltip title="Reset to default values">
-            <IconButton onClick={handleResetForm} size="small" sx={{color: 'text.secondary'}}>
-              <RestartAltIcon />
-            </IconButton>
+            <IconButton onClick={handleResetForm} size="small" sx={{color: 'text.secondary'}}><RestartAltIcon /></IconButton>
           </Tooltip>
         </Box>
-        <Box sx={{ mb: 3 }}> 
+        <Box sx={{ mb: 3 }}>
           <Alert icon={<TuneIcon fontSize="inherit" />} severity="info" variant="outlined" sx={{borderColor: 'primary.dark', bgcolor: 'rgba(43, 102, 246, 0.08)', '& .MuiAlert-message': {fontSize: '0.85rem'} }}>
             Unsure about values? Click <strong>Optimize Values</strong> for data-driven suggestions.
           </Alert>
         </Box>
         <form onSubmit={handleSubmit} autoComplete="off" noValidate>
           {Object.entries(groupedFields).map(([groupName, fieldsInGroup], groupIndex) => (
-            <motion.div key={groupName} initial="hidden" animate="visible" variants={{visible: {transition: {staggerChildren: 0.07}}}}>
-              <Box sx={{ mb: groupIndex === Object.keys(groupedFields).length - 1 ? 2.5 : 3.5 }}> 
-                <motion.div variants={formItemVariants} custom={0}>
-                  <Typography 
-                    variant="overline" 
-                    display="block" 
-                    sx={{ 
-                      color: 'text.secondary', 
-                      mb: 1.5, 
-                      mt: groupIndex === 0 ? 0.5 : 2.5, 
-                      pb: 0.25, 
-                      fontSize: '0.7rem', 
-                      letterSpacing: '0.05em',
-                      borderBottom: `1px solid ${theme.palette.divider}` 
-                    }}
-                  >
-                    {groupName}
-                  </Typography>
-                </motion.div>
-                <Grid container spacing={{xs:1.5, sm:2, md:2}}>  
+            // Changed motion.div to m.div
+            <m.div key={groupName} initial="hidden" animate="visible" variants={{visible: {transition: {staggerChildren: 0.07}}}}>
+              <Box sx={{ mb: groupIndex === Object.keys(groupedFields).length - 1 ? 2.5 : 3.5 }}>
+                {/* Changed motion.div to m.div */}
+                <m.div variants={formItemVariants} custom={0}>
+                  <Typography variant="overline" display="block"
+                    sx={{ color: 'text.secondary', mb: 1.5, mt: groupIndex === 0 ? 0.5 : 2.5, pb: 0.25, fontSize: '0.7rem', letterSpacing: '0.05em', borderBottom: `1px solid ${theme.palette.divider}` }}
+                  >{groupName}</Typography>
+                </m.div>
+                <Grid container spacing={{xs:1.5, sm:2, md:2}}>
                   {fieldsInGroup.map((field, fieldIdx) => renderField(field, fieldIdx))}
                 </Grid>
               </Box>
-            </motion.div>
+            </m.div>
           ))}
-          <Box sx={{ mt: 3, pt: 1, display: "flex", gap: {xs:1.5, sm:2}, flexDirection: {xs: 'column', sm: 'row'} }}> 
-            <Button
-              component={motion.button} 
-              whileHover={{ scale: 1.03, y: -1, transition: { duration: 0.2, type: "spring", stiffness: 300 } }}
-              whileTap={{ scale: 0.97 }}
+          <Box sx={{ mt: 3, pt: 1, display: "flex", gap: {xs:1.5, sm:2}, flexDirection: {xs: 'column', sm: 'row'} }}>
+            {/* Changed Button component from motion.button to m.button */}
+            <Button component={m.button} whileHover={{ scale: 1.03, y: -1, transition: { duration: 0.2, type: "spring", stiffness: 300 } }} whileTap={{ scale: 0.97 }}
               variant="outlined" color="primary" onClick={handleOptimize} sx={{ flexGrow: 1, minHeight: 48, fontSize: { xs: '0.875rem', md: '0.95rem' } }} type="button" disabled={isOptimizing || !form.symbol.trim()} startIcon={isOptimizing ? <CircularProgress size={20} color="inherit" /> : <TuneIcon />}
-            >
-              {isOptimizing ? "Optimizing..." : "Optimize Values"}
-            </Button>
-            <Button 
-              component={motion.button} 
-              whileHover={{ scale: 1.03, y: -1, boxShadow: `0px 4px 15px ${alpha(theme.palette.primary.main, 0.4)}`, transition: { duration: 0.2, type: "spring", stiffness: 300 } }}
-              whileTap={{ scale: 0.97 }}
+            > {isOptimizing ? "Optimizing..." : "Optimize Values"} </Button>
+            {/* Changed Button component from motion.button to m.button */}
+            <Button component={m.button} whileHover={{ scale: 1.03, y: -1, boxShadow: `0px 4px 15px ${alpha(theme.palette.primary.main, 0.4)}`, transition: { duration: 0.2, type: "spring", stiffness: 300 } }} whileTap={{ scale: 0.97 }}
               type="submit" variant="contained" color="primary" sx={{ flexGrow: 1, minHeight: 48, fontSize: { xs: '0.875rem', md: '0.95rem' } }} disabled={isCalculateDisabled}
-            >
-              Calculate
-            </Button>
+            > Calculate </Button>
           </Box>
           <Box sx={{ mt: 2, textAlign: 'right' }}>
             <Button onClick={() => setAdvancedOpen(x => !x)} color="primary" size="small" sx={{ textTransform: "none", fontWeight: 400, fontSize: '0.8rem' }} endIcon={<TuneIcon fontSize="small"/>} type="button">
@@ -349,43 +288,27 @@ const handleOptimize = async () => {
             </Button>
             <AnimatePresence>
               {advancedOpen && (
-                <motion.div 
-                  initial={{ opacity: 0, height: 0 }} 
-                  animate={{ opacity: 1, height: 'auto' }} 
-                  exit={{ opacity: 0, height: 0 }} 
-                  transition={{duration: 0.3, ease: "easeInOut"}}
-                  style={{overflow: 'hidden'}} 
+                // Changed motion.div to m.div
+                <m.div
+                  initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}
+                  transition={{duration: 0.3, ease: "easeInOut"}} style={{overflow: 'hidden'}}
                 >
-                  <Grid container spacing={{xs:1.5, sm:2, md:2}} sx={{ mt: 0.5 }}> 
-                    {advancedFieldConfigs.map((field, idx) => renderField(field, idx + fieldConfigs.length))} 
+                  <Grid container spacing={{xs:1.5, sm:2, md:2}} sx={{ mt: 0.5 }}>
+                    {advancedFieldConfigs.map((field, idx) => renderField(field, idx + fieldConfigs.length))}
                   </Grid>
-                </motion.div>
+                </m.div>
               )}
             </AnimatePresence>
           </Box>
         </form>
         <Snackbar open={snackbar.open} autoHideDuration={6000} onClose={() => setSnackbar(s => ({...s, open: false}))} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
-          <Alert 
-            onClose={() => setSnackbar(s => ({...s, open: false}))} 
-            severity={snackbar.severity} 
-            sx={{ 
-              width: "100%", 
-              boxShadow: 6,
-              ...(snackbar.severity === 'success' && {
-                bgcolor: theme.palette.success.main, 
-                color: theme.palette.success.contrastText,
-                '& .MuiAlert-icon': { color: theme.palette.success.contrastText }
-              }),
-              ...(snackbar.severity === 'info' && {
-                bgcolor: theme.palette.info.main, 
-                color: theme.palette.info.contrastText,
-                '& .MuiAlert-icon': { color: theme.palette.info.contrastText }
-              }),
-            }} 
-            variant="filled"
-          >
-            {snackbar.message}
-          </Alert>
+          <Alert
+            onClose={() => setSnackbar(s => ({...s, open: false}))} severity={snackbar.severity}
+            sx={{ width: "100%", boxShadow: 6,
+              ...(snackbar.severity === 'success' && { bgcolor: theme.palette.success.main, color: theme.palette.success.contrastText, '& .MuiAlert-icon': { color: theme.palette.success.contrastText } }),
+              ...(snackbar.severity === 'info' && { bgcolor: theme.palette.info.main, color: theme.palette.info.contrastText, '& .MuiAlert-icon': { color: theme.palette.info.contrastText } }),
+            }} variant="filled"
+          > {snackbar.message} </Alert>
         </Snackbar>
       </CardContent>
     </Card>

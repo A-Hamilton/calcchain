@@ -11,6 +11,36 @@
         "source": "**",
         "destination": "/index.html"
       }
+    ],
+    "headers": [
+      {
+        "source": "**/*.@(js|css).gz", 
+        "headers": [
+          {
+            "key": "Content-Encoding",
+            "value": "gzip"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/javascript" 
+          },
+          {
+            "key": "Content-Type",
+            "value": "text/css" 
+          }
+        ]
+      },
+
+      {
+        "source": "**/*.@(js|css).br",
+        "headers": [
+          {
+            "key": "Content-Encoding",
+            "value": "br"
+          }
+
+        ]
+      }
     ]
   }
 }
