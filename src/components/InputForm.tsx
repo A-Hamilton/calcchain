@@ -1,8 +1,8 @@
 // src/components/InputForm.tsx
 import React, { useState, useEffect, useCallback } from "react";
 import {
-  Card, CardContent, Typography, Grid, TextField, Button, Collapse, Snackbar, Alert,
-  MenuItem, IconButton, Tooltip, Box, CircularProgress, Divider, AlertColor, alpha, useTheme
+  Card, CardContent, Typography, Grid, TextField, Button, Collapse, Snackbar, Alert, AlertColor,
+  MenuItem, IconButton, Tooltip, Box, CircularProgress, Divider, alpha, useTheme, Theme
 } from "@mui/material";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import TuneIcon from "@mui/icons-material/Tune";
@@ -76,8 +76,8 @@ const textFieldSx = {
   "& .MuiOutlinedInput-root": {
     "& input": { color: "text.primary" },
     "& .MuiSelect-select": {
-      textAlign: 'left', color: "text.primary", paddingRight: '52px',
-      overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+      textAlign: 'left' as 'left', color: "text.primary", paddingRight: '52px', // Added 'as left' for explicit type
+      overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as 'nowrap', // Added 'as nowrap'
     },
     "& .MuiInputAdornment-root.MuiInputAdornment-positionEnd": { marginRight: '8px' },
     "& fieldset": { borderColor: "divider" },
@@ -87,7 +87,7 @@ const textFieldSx = {
   "& .MuiFormHelperText-root": {
     color: "text.secondary",
     fontSize: '0.7rem', marginLeft: '14px', marginRight: '14px',
-    minHeight: '1.2em', lineHeight: '1.2em', whiteSpace: 'normal',
+    minHeight: '1.2em', lineHeight: '1.2em', whiteSpace: 'normal' as 'normal', // Added 'as normal'
   }
 };
 
@@ -95,7 +95,7 @@ const formItemVariants = {
   hidden: { opacity: 0, y: 15 },
   visible: (i:number) => ({
     opacity: 1, y: 0,
-    transition: { delay: i * 0.05, duration: 0.4, ease: "easeOut", },
+    transition: { delay: i * 0.05, duration: 0.4, ease: "easeOut" as "easeOut", }, // Added 'as easeOut'
   }),
 };
 
@@ -136,7 +136,7 @@ const InputForm: React.FC<InputFormProps> = ({
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | {name?: string; value: unknown}>) => {
     const name = e.target.name as keyof FormFields;
-    const value = e.target.value as string;
+    const value = e.target.value as string; // Select event value is string
     setForm(f => ({
         ...f,
         [name]: name === 'gridType' ? value as GridType :
@@ -169,7 +169,6 @@ const InputForm: React.FC<InputFormProps> = ({
                 sx={{ 
                   color: 'text.secondary', 
                   p: 0.5,
-                  // USER SUGGESTION: Interactive Elements - Hover effects (already good)
                   '&:hover': { 
                     backgroundColor: alpha(theme.palette.action.hover, 0.8), 
                     color: theme.palette.text.primary,
@@ -222,14 +221,22 @@ const handleOptimize = async () => {
     const optimalParams = computeOptimalGridParams({ symbol, currentPrice, principal: investmentAmount, atr, feePercent: feePercentValue, gridType: gridTypeOpt, buyPrice: userBuyPrice, sellPrice: userSellPrice });
     setForm(f => ({ ...f, symbol, lowerBound: optimalParams.lower.toFixed(Math.max(2, (currentPrice < 1 ? 5 : 2))), upperBound: optimalParams.upper.toFixed(Math.max(2, (currentPrice < 1 ? 5 : 2))), gridCount: optimalParams.count.toString() }));
     setSnackbar({open: true, message: "Optimal grid parameters have been applied!", severity: "success"});
-  } catch (err: any) {
+  } catch (err: unknown) { // Changed from 'any' to 'unknown'
     console.error("Optimization Error:", err);
     let specificMessage = "Failed to optimize. Check symbol or network.";
     if (err instanceof Error) {
-      if (err.message.toLowerCase().includes("symbol")) {
-            specificMessage = `No market data for symbol '${form.symbol.trim()}'. It might be delisted. Check 'https://www.binance.com/en/trade' for available symbols.`;
-        } else { specificMessage = err.message; }
+      // Check for symbol specific error message (case-insensitive)
+      if (err.message.toLowerCase().includes("symbol") || err.message.toLowerCase().includes("market data")) {
+          specificMessage = `No market data for symbol '${form.symbol.trim()}'. It might be delisted or connection issue.`;
+      } else { 
+          specificMessage = err.message; // Use the error's message directly
+      }
+    } else if (typeof err === 'string') {
+        specificMessage = err; // Handle plain string errors
     }
+    // It's good practice to log the original error object if it's not an instance of Error for further debugging
+    // else { console.error("Optimization caught non-Error object:", err); }
+
     setLocalSymbolFetchError(specificMessage);
     setSnackbar({open: true, message: specificMessage, severity: "error"});
   } finally { setIsOptimizing(false); }
@@ -262,8 +269,8 @@ const handleOptimize = async () => {
     <Card sx={{ 
         bgcolor: "background.paper", 
         p: {xs: 1.5, md: 2}, 
-        borderRadius: theme.shape.borderRadius, // Use theme border radius
-        boxShadow: theme.palette.mode === 'light' ? theme.shadows[2] : theme.shadows[3] // Consistent with MuiPaper in theme
+        borderRadius: theme.shape.borderRadius,
+        boxShadow: theme.palette.mode === 'light' ? theme.shadows[2] : theme.shadows[3]
     }}>
       <CardContent sx={{p: {xs: 1.5, md: 2}}}>
         <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2.5}}>
@@ -289,17 +296,17 @@ const handleOptimize = async () => {
           {Object.entries(groupedFields).map(([groupName, fieldsInGroup], groupIndex) => (
             <m.div key={groupName} initial="hidden" animate="visible" variants={{visible: {transition: {staggerChildren: 0.07}}}}>
               <Box sx={{ mb: groupIndex === Object.keys(groupedFields).length - 1 ? 2.5 : 3.5 }}>
-                <m.div variants={formItemVariants} custom={0}>
+                <m.div variants={formItemVariants} custom={0}> {/* custom={0} for consistent animation start */}
                   <Typography
                     variant="overline" 
                     display="block"
                     sx={{ 
                       color: theme.palette.mode === 'light' ? alpha(theme.palette.text.primary, 0.85) : theme.palette.text.secondary,
                       fontWeight: theme.palette.mode === 'light' ? 500 : 400,
-                      fontSize: '0.8rem', // Consistent size for section headers
+                      fontSize: '0.8rem',
                       mb: 1.5, 
                       mt: groupIndex === 0 ? 0.5 : 2.5, 
-                      pb: 0.5, // Increased padding bottom
+                      pb: 0.5,
                       letterSpacing: '0.05em', 
                       borderBottom: `1px solid ${theme.palette.divider}` 
                     }}
@@ -319,7 +326,7 @@ const handleOptimize = async () => {
               type="submit" variant="contained" color="primary" sx={{ flexGrow: 1, minHeight: 48, fontSize: { xs: '0.875rem', md: '0.95rem' } }} disabled={isCalculateDisabled}
             > Calculate </Button>
           </Box>
-          <Box sx={{ mt: 2.5, textAlign: 'right' }}> {/* Increased margin top */}
+          <Box sx={{ mt: 2.5, textAlign: 'right' }}>
             <Button onClick={() => setAdvancedOpen(x => !x)} color="primary" size="small" sx={{ textTransform: "none", fontWeight: 400, fontSize: '0.8rem' }} endIcon={<TuneIcon fontSize="small"/>} type="button">
               {advancedOpen ? "Hide Advanced Settings" : "Show Advanced Settings"}
             </Button>
@@ -329,7 +336,7 @@ const handleOptimize = async () => {
                   initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}
                   transition={{duration: 0.3, ease: "easeInOut"}} style={{overflow: 'hidden'}}
                 >
-                  <Grid container spacing={{xs:1.5, sm:2, md:2}} sx={{ mt: 1 }}> {/* Increased margin top */}
+                  <Grid container spacing={{xs:1.5, sm:2, md:2}} sx={{ mt: 1 }}>
                     {advancedFieldConfigs.map((field, idx) => renderField(field, idx + fieldConfigs.length))}
                   </Grid>
                 </m.div>
