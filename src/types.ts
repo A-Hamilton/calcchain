@@ -1,8 +1,15 @@
 // src/types.ts
 
-export type EntryType = "long" | "short" | "neutral";
+export enum EntryType { // Changed to enum for better type safety and iteration
+  Long = "long",
+  Short = "short",
+  Neutral = "neutral"
+}
 
-export type GridType = "arithmetic" | "geometric";
+export enum GridType { // Changed to enum
+  Arithmetic = "arithmetic",
+  Geometric = "geometric"
+}
 
 export interface GridParameters {
   symbol: string;
@@ -11,38 +18,39 @@ export interface GridParameters {
   upperBound: number;
   gridCount: number;
   leverage: number;
-  feePercent: number; // expressed as percent (e.g., 0.05 for 0.05%)
+  feePercent: number; 
   durationDays: number;
   atrPerMin?: number;
-  gridType?: GridType;
-  entryType?: EntryType;
-  buyPrice?: number;
-  sellPrice?: number;
+  atrPeriod?: number; 
+  gridType?: GridType; // Use enum
+  entryType?: EntryType; // Use enum
+  buyPrice?: number; 
+  sellPrice?: number; 
 }
 
 export interface GridResults {
-  gridSpacing: number;
+  gridSpacing: number; 
   estimatedTradesPerDay: number;
   investmentPerGrid: number;
-  grossProfitPerGrid: number;
+  grossProfitPerGrid: number; 
   feePerRoundTrip: number;
   netProfitPerGridTransaction: number;
-  estimatedDailyProfit: number;
+  estimatedDailyProfit: number; 
   atrPerMin: number;
   durationDays: number;
+  gridType: GridType; // Use enum
 
-  // Additional summary metrics
-  totalNetProfit: number;
-  totalGridProfit: number;
-  estimatedDailyGridProfit: number;
+  totalNetProfit: number; 
+  totalGridProfit: number; 
+  estimatedDailyGridProfit: number; 
 
-  // Optional advanced outputs
   entryMessage?: string;
-  principalReturnFromEntryExit?: number | null;
-  overallTotalValue?: number | null;
+  principalReturnFromEntryExit?: number | null; 
+  overallTotalValue?: number | null; 
 }
 
 export interface Metric {
   label: string;
-  value: string;
+  value: string | number | undefined; 
+  isPrimary?: boolean; // Flag for special styling
 }
