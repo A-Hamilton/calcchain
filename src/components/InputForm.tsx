@@ -1,3 +1,4 @@
+// src/components/InputForm.tsx
 import React, { useState, useEffect, useCallback } from "react";
 import {
   Card, CardContent, Typography, Grid, TextField, Button, Collapse, Snackbar, Alert,
@@ -79,11 +80,12 @@ const textFieldSx = {
       overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
     },
     "& .MuiInputAdornment-root.MuiInputAdornment-positionEnd": { marginRight: '8px' },
-    "& fieldset": { borderColor: "rgba(255, 255, 255, 0.23)" },
+    "& fieldset": { borderColor: "divider" },
     "&:hover fieldset": { borderColor: "primary.light" },
     "&.Mui-focused fieldset": { borderColor: "primary.main", borderWidth: '1px' },
   },
   "& .MuiFormHelperText-root": {
+    color: "text.secondary",
     fontSize: '0.7rem', marginLeft: '14px', marginRight: '14px',
     minHeight: '1.2em', lineHeight: '1.2em', whiteSpace: 'normal',
   }
@@ -151,7 +153,6 @@ const InputForm: React.FC<InputFormProps> = ({
   };
 
   const renderField = (cfg: FieldConfig, index: number) => (
-    // Adding component="div" and removing container={false}
     <Grid item component="div" xs={12} sm={6} key={cfg.key} >
       <m.div custom={index} variants={formItemVariants} initial="hidden" animate="visible">
         <TextField label={cfg.label} name={cfg.key} value={form[cfg.key]} onChange={handleChange} type={cfg.type === "number" ? "number" : "text"} select={cfg.type === "select"}
@@ -161,7 +162,24 @@ const InputForm: React.FC<InputFormProps> = ({
           helperText={(cfg.key === "symbol" ? (localSymbolFetchError || calculationErrorFromApp || errors.symbol) : errors[cfg.key]) || cfg.help}
           error={Boolean(cfg.key === "symbol" ? (localSymbolFetchError || calculationErrorFromApp || errors.symbol) : errors[cfg.key])}
           InputProps={{ ...(cfg.adornment && {startAdornment: <Box component="span" sx={{mr:0.5, color: 'text.secondary'}}>{cfg.adornment}</Box> }),
-            endAdornment: ( <Tooltip title={cfg.help} placement="top" arrow><IconButton size="small" sx={{ color: 'text.secondary', p: 0.5 }} aria-label={`Info for ${cfg.label}`}><InfoOutlinedIcon fontSize="small" /></IconButton></Tooltip>)
+            endAdornment: ( 
+            <Tooltip title={cfg.help} placement="top" arrow>
+              <IconButton 
+                size="small" 
+                sx={{ 
+                  color: 'text.secondary', 
+                  p: 0.5,
+                  // USER SUGGESTION: Interactive Elements - Hover effects (already good)
+                  '&:hover': { 
+                    backgroundColor: alpha(theme.palette.action.hover, 0.8), 
+                    color: theme.palette.text.primary,
+                  }
+                }} 
+                aria-label={`Info for ${cfg.label}`}
+              >
+                <InfoOutlinedIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>)
           }}
         >
           {cfg.options && (cfg.options as Array<GridType | EntryType>).map(opt => (<MenuItem key={opt} value={opt} sx={{fontSize: '0.9rem', textAlign: 'left'}}>{opt.charAt(0).toUpperCase() + opt.slice(1)}</MenuItem>))}
@@ -241,16 +259,29 @@ const handleOptimize = async () => {
   const isCalculateDisabled = Object.keys(errors).length > 0 || Boolean(localSymbolFetchError) || Boolean(calculationErrorFromApp) || isOptimizing;
 
   return (
-    <Card sx={{ bgcolor: "background.paper", p: {xs: 1.5, md: 2}, borderRadius: 2, boxShadow: 3 }}>
+    <Card sx={{ 
+        bgcolor: "background.paper", 
+        p: {xs: 1.5, md: 2}, 
+        borderRadius: theme.shape.borderRadius, // Use theme border radius
+        boxShadow: theme.palette.mode === 'light' ? theme.shadows[2] : theme.shadows[3] // Consistent with MuiPaper in theme
+    }}>
       <CardContent sx={{p: {xs: 1.5, md: 2}}}>
-        <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2}}>
+        <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2.5}}>
           <Typography variant="h6" color="primary.main" sx={{ fontWeight: 600 }}>Grid Parameters</Typography>
           <Tooltip title="Reset to default values">
             <IconButton onClick={handleResetForm} size="small" sx={{color: 'text.secondary'}}><RestartAltIcon /></IconButton>
           </Tooltip>
         </Box>
         <Box sx={{ mb: 3 }}>
-          <Alert icon={<TuneIcon fontSize="inherit" />} severity="info" variant="outlined" sx={{borderColor: 'primary.dark', bgcolor: 'rgba(43, 102, 246, 0.08)', '& .MuiAlert-message': {fontSize: '0.85rem'} }}>
+          <Alert icon={<TuneIcon fontSize="inherit" />} severity="info" variant="outlined" 
+            sx={{
+              borderColor: theme.palette.mode === 'light' ? theme.palette.info.main : theme.palette.primary.dark,
+              bgcolor: alpha(theme.palette.info.main, 0.08), 
+              color: theme.palette.mode === 'light' ? theme.palette.info.dark : theme.palette.info.light,
+              '& .MuiAlert-icon': { color: theme.palette.mode === 'light' ? theme.palette.info.main : theme.palette.info.light },
+              '& .MuiAlert-message': {fontSize: '0.85rem'} 
+            }}
+          >
             Unsure about values? Click <strong>Optimize Values</strong> for data-driven suggestions.
           </Alert>
         </Box>
@@ -260,11 +291,20 @@ const handleOptimize = async () => {
               <Box sx={{ mb: groupIndex === Object.keys(groupedFields).length - 1 ? 2.5 : 3.5 }}>
                 <m.div variants={formItemVariants} custom={0}>
                   <Typography
-                    variant="overline" display="block"
-                    sx={{ color: 'text.secondary', mb: 1.5, mt: groupIndex === 0 ? 0.5 : 2.5, pb: 0.25, fontSize: '0.7rem', letterSpacing: '0.05em', borderBottom: `1px solid ${theme.palette.divider}` }}
+                    variant="overline" 
+                    display="block"
+                    sx={{ 
+                      color: theme.palette.mode === 'light' ? alpha(theme.palette.text.primary, 0.85) : theme.palette.text.secondary,
+                      fontWeight: theme.palette.mode === 'light' ? 500 : 400,
+                      fontSize: '0.8rem', // Consistent size for section headers
+                      mb: 1.5, 
+                      mt: groupIndex === 0 ? 0.5 : 2.5, 
+                      pb: 0.5, // Increased padding bottom
+                      letterSpacing: '0.05em', 
+                      borderBottom: `1px solid ${theme.palette.divider}` 
+                    }}
                   >{groupName}</Typography>
                 </m.div>
-                {/* Corrected: Ensured 'container' prop is used for containers, 'item' for items */}
                 <Grid container spacing={{xs:1.5, sm:2, md:2}}>
                   {fieldsInGroup.map((field, fieldIdx) => renderField(field, fieldIdx))}
                 </Grid>
@@ -279,7 +319,7 @@ const handleOptimize = async () => {
               type="submit" variant="contained" color="primary" sx={{ flexGrow: 1, minHeight: 48, fontSize: { xs: '0.875rem', md: '0.95rem' } }} disabled={isCalculateDisabled}
             > Calculate </Button>
           </Box>
-          <Box sx={{ mt: 2, textAlign: 'right' }}>
+          <Box sx={{ mt: 2.5, textAlign: 'right' }}> {/* Increased margin top */}
             <Button onClick={() => setAdvancedOpen(x => !x)} color="primary" size="small" sx={{ textTransform: "none", fontWeight: 400, fontSize: '0.8rem' }} endIcon={<TuneIcon fontSize="small"/>} type="button">
               {advancedOpen ? "Hide Advanced Settings" : "Show Advanced Settings"}
             </Button>
@@ -289,8 +329,7 @@ const handleOptimize = async () => {
                   initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}
                   transition={{duration: 0.3, ease: "easeInOut"}} style={{overflow: 'hidden'}}
                 >
-                  {/* Corrected: Ensured 'container' prop is used for containers */}
-                  <Grid container spacing={{xs:1.5, sm:2, md:2}} sx={{ mt: 0.5 }}>
+                  <Grid container spacing={{xs:1.5, sm:2, md:2}} sx={{ mt: 1 }}> {/* Increased margin top */}
                     {advancedFieldConfigs.map((field, idx) => renderField(field, idx + fieldConfigs.length))}
                   </Grid>
                 </m.div>
@@ -304,6 +343,8 @@ const handleOptimize = async () => {
             sx={{ width: "100%", boxShadow: 6,
               ...(snackbar.severity === 'success' && { bgcolor: theme.palette.success.main, color: theme.palette.success.contrastText, '& .MuiAlert-icon': { color: theme.palette.success.contrastText } }),
               ...(snackbar.severity === 'info' && { bgcolor: theme.palette.info.main, color: theme.palette.info.contrastText, '& .MuiAlert-icon': { color: theme.palette.info.contrastText } }),
+              ...(snackbar.severity === 'error' && { bgcolor: theme.palette.error.main, color: theme.palette.error.contrastText, '& .MuiAlert-icon': { color: theme.palette.error.contrastText } }),
+              ...(snackbar.severity === 'warning' && { bgcolor: theme.palette.warning.main, color: theme.palette.warning.contrastText, '& .MuiAlert-icon': { color: theme.palette.warning.contrastText } }),
             }} variant="filled"
           > {snackbar.message} </Alert>
         </Snackbar>

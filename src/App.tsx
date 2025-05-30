@@ -1,12 +1,15 @@
-import React, { useState, useCallback, useMemo, Suspense, lazy } from "react";
-import { ThemeProvider, useTheme } from "@mui/material/styles";
+// src/App.tsx
+import React, { useState, useCallback, useMemo, Suspense, lazy, createContext, useContext, useEffect } from "react"; // Added useEffect
+import { ThemeProvider, useTheme as useMuiTheme, alpha } from "@mui/material/styles";
 import {
   CssBaseline, Box, Typography, Grid, Paper, CircularProgress, AppBar, Toolbar, IconButton,
   Menu, MenuItem, Divider, ListItemIcon, Container, Accordion, AccordionSummary, AccordionDetails,
-  Alert as MuiAlert, Skeleton,
+  Alert as MuiAlert, Skeleton, PaletteMode, Tooltip, Card // Added Card for InfoSection
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
 import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import ScheduleOutlinedIcon from "@mui/icons-material/ScheduleOutlined";
 import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutlined";
@@ -17,7 +20,9 @@ import ShowChartOutlinedIcon from '@mui/icons-material/ShowChartOutlined';
 import AccountBalanceWalletOutlinedIcon from '@mui/icons-material/AccountBalanceWalletOutlined';
 import FunctionsOutlinedIcon from '@mui/icons-material/FunctionsOutlined';
 import TuneOutlinedIcon from '@mui/icons-material/TuneOutlined';
-import logo from "./assets/calcchainlogo.png";
+
+import logo from "./assets/calcchainlogodark.png"; 
+import darkLogo from "./assets/calcchainlogo.png"; 
 
 import { AnimatePresence, LazyMotion, domAnimation, m } from "framer-motion";
 
@@ -26,12 +31,16 @@ const ResultsDisplay = lazy(() => import("./components/ResultsDisplay"));
 const CryptoInsights = lazy(() => import("./components/CryptoInsights"));
 
 import ErrorBoundary from "./ErrorBoundary";
-import appTheme from "./theme";
+import { createAppTheme } from "./theme";
 import { GridResults, GridParameters, Metric, GridType as GridTypeEnum } from "./types";
 import { calculateGridProfit } from "./utils/calculator";
 
-const NAV_HORIZONTAL_PADDING = { xs: 1, md: 4 };
-const CONTENT_MAX_WIDTH = 1200;
+const NAV_HORIZONTAL_PADDING = { xs: 1.5, sm: 2, md: 3 };
+const CONTENT_MAX_WIDTH = 1320;
+
+export const ThemeModeContext = createContext({
+  toggleThemeMode: () => {},
+});
 
 const sectionVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -54,31 +63,39 @@ interface InfoSectionProps {
 }
 
 const InfoSection: React.FC<InfoSectionProps> = ({ title, icon, children, defaultExpanded }) => {
-  const theme = useTheme();
+  const theme = useMuiTheme();
   return (
     <m.div initial="hidden" animate="visible" variants={sectionVariants} >
-      <Accordion
-        defaultExpanded={defaultExpanded}
-        TransitionProps={{ unmountOnExit: true }}
-        sx={{
-          bgcolor: 'background.paper', border: `1px solid ${theme.palette.divider}`,
-          boxShadow: theme.shadows[1], '&:before': { display: 'none' },
-          mb: 1.5, borderRadius: 2, overflow: 'hidden',
-        }}
-      >
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon sx={{color: 'text.secondary'}} />}
-          sx={{ '& .MuiAccordionSummary-content': { alignItems: 'center' }, '&:hover': { bgcolor: theme.palette.action.hover } }}
+      <Card sx={{ mb: 2, overflow: 'hidden', }}>
+        <Accordion
+          defaultExpanded={defaultExpanded}
+          disableGutters 
+          elevation={0} 
+          TransitionProps={{ unmountOnExit: true }}
+          sx={{
+            bgcolor: 'transparent', 
+            '&:before': { display: 'none' }, 
+          }}
         >
-          {icon && <Box sx={{ mr: 1.5, display: 'flex', alignItems: 'center', color: 'primary.main' }}>{React.cloneElement(icon as React.ReactElement, { fontSize: "small" })}</Box>}
-          <Typography variant="h6" component="h3" sx={{ fontWeight: 500, fontSize: '1.05rem' }}>{title}</Typography>
-        </AccordionSummary>
-        <AccordionDetails sx={{pt:0, pb:1.5, px:2}}>
-          <m.div initial={{opacity:0}} animate={{opacity:1}} transition={{duration:0.3, delay: 0.1}}>
-              {children}
-          </m.div>
-        </AccordionDetails>
-      </Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon sx={{color: 'text.secondary'}} />}
+            sx={{ 
+              '& .MuiAccordionSummary-content': { alignItems: 'center' }, 
+              '&:hover': { bgcolor: theme.palette.action.hover },
+              minHeight: { xs: 52, sm: 56 },
+              px: { xs: 1.5, sm: 2 },
+            }}
+          >
+            {icon && <Box sx={{ mr: 1.5, display: 'flex', alignItems: 'center', color: 'primary.main' }}>{React.cloneElement(icon as React.ReactElement, { fontSize: "small" })}</Box>}
+            <Typography variant="h6" component="h3" sx={{ fontWeight: 500, fontSize: '1.05rem' }}>{title}</Typography>
+          </AccordionSummary>
+          <AccordionDetails sx={{pt:0, pb: {xs: 1.5, sm: 2}, px: {xs: 1.5, sm: 2}}}>
+            <m.div initial={{opacity:0}} animate={{opacity:1}} transition={{duration:0.3, delay: 0.1}}>
+                {children}
+            </m.div>
+          </AccordionDetails>
+        </Accordion>
+      </Card>
     </m.div>
   );
 };
@@ -92,22 +109,24 @@ const LazyLoadingFallback: React.FC<{ height?: number | string, message?: string
 
 const ResultsSectionSkeleton: React.FC = () => (
   <Box>
-    <Skeleton variant="rectangular" width="100%" height={150} sx={{ mb: 2, borderRadius: 2 }} />
-    <Skeleton variant="rectangular" width="100%" height={200} sx={{ mb: 2, borderRadius: 2 }} />
-    <Skeleton variant="rectangular" width="100%" height={180} sx={{ mb: 2, borderRadius: 2 }} />
+    <Skeleton variant="rectangular" width="100%" height={150} sx={{ mb: 2, borderRadius: theme => theme.shape.borderRadius }} />
+    <Skeleton variant="rectangular" width="100%" height={200} sx={{ mb: 2, borderRadius: theme => theme.shape.borderRadius }} />
+    <Skeleton variant="rectangular" width="100%" height={180} sx={{ mb: 2, borderRadius: theme => theme.shape.borderRadius }} />
   </Box>
 );
 
+const AppContent: React.FC = () => {
+  const themeFromProvider = useMuiTheme();
+  const currentMode = themeFromProvider.palette.mode;
+  const themeContext = useContext(ThemeModeContext);
 
-const App: React.FC = () => {
   const [results, setResults] = useState<GridResults | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [calculationError, setCalculationError] = useState<string | null>(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
+  
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
   const handleMenuClose = () => setAnchorEl(null);
-
   const clearCalculationErrorFromApp = useCallback(() => setCalculationError(null), []);
 
   const handleCalculate = useCallback(
@@ -162,29 +181,39 @@ const App: React.FC = () => {
   }, [results]);
 
   return (
-    <ThemeProvider theme={appTheme}>
+    <>
       <CssBaseline />
       <ErrorBoundary>
         <LazyMotion features={domAnimation} strict>
-          <AppBar position="static" color="transparent" elevation={0} sx={{ bgcolor: "background.paper", boxShadow: 3, py: 0.5, borderBottom: `1px solid ${appTheme.palette.divider}`}}>
+          <AppBar position="sticky"
+            color="transparent" elevation={0} sx={{ bgcolor: "background.default", boxShadow: themeFromProvider.shadows[2], py: 1, borderBottom: `0px solid ${themeFromProvider.palette.divider}`}}>
             <Box sx={{ maxWidth: CONTENT_MAX_WIDTH, mx: "auto", width: "100%", px: NAV_HORIZONTAL_PADDING }}>
-              <Toolbar disableGutters sx={{ minHeight: 56, width: "100%", display: "flex", justifyContent: "space-between", px: 0 }}>
+              <Toolbar disableGutters sx={{ minHeight: {xs: 52, sm: 56}, width: "100%", display: "flex", justifyContent: "space-between", px: 0 }}>
                 <Box sx={{ display: "flex", alignItems: "center" }}>
                   <a href="https://calcchain.com" aria-label="CalcChain Home">
                     <m.img
-                      src={logo}
+                      src={currentMode === 'dark' ? darkLogo : logo} 
                       alt="CalcChain Logo"
-                      width="128"
-                      height="32"
-                      style={{ display: 'block', height: '32px', width: 'auto' }}
-                      initial={{ opacity: 0, scale: 0.5 }}
-                      animate={{ opacity: 1, scale: 1 }}
+                      style={{ display: 'block', height: '30px', width: 'auto' }}
+                      initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }}
                       transition={{ duration: 0.5, ease: "circOut" }}
                     />
                   </a>
                 </Box>
-                <Box>
-                  <IconButton edge="end" color="inherit" aria-label="menu" onClick={handleMenuOpen} size="medium" sx={{ bgcolor: "primary.dark", '&:hover': { bgcolor: "primary.main", color: "#fff" }, borderRadius: 2, p: 0.75 }}>
+                <Box sx={{display: 'flex', alignItems: 'center'}}>
+                  <Tooltip title={currentMode === 'dark' ? "Switch to Light Mode" : "Switch to Dark Mode"}>
+                    <IconButton sx={{ mr: {xs: 0.5, sm:1}, color: 'text.primary' }} onClick={themeContext.toggleThemeMode} color="inherit">
+                      {currentMode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+                    </IconButton>
+                  </Tooltip>
+                  <IconButton edge="end" color="inherit" aria-label="menu" onClick={handleMenuOpen} size="medium" 
+                    sx={{ 
+                      bgcolor: "primary.main", 
+                      color: "primary.contrastText", 
+                      '&:hover': { bgcolor: "primary.dark" }, 
+                      borderRadius: themeFromProvider.shape.borderRadius, p: {xs: 0.6, sm: 0.75}
+                    }}
+                  >
                     <MenuIcon fontSize="small" />
                   </IconButton>
                   <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose} anchorOrigin={{ vertical: "bottom", horizontal: "right" }} transformOrigin={{ vertical: "top", horizontal: "right" }} >
@@ -198,24 +227,39 @@ const App: React.FC = () => {
             </Box>
           </AppBar>
 
-          <Container maxWidth={false} sx={{ maxWidth: CONTENT_MAX_WIDTH, mx: "auto", px: NAV_HORIZONTAL_PADDING, pt: {xs: 2, md: 3}, pb: 4 }}>
+          <Container maxWidth={false} sx={{ maxWidth: CONTENT_MAX_WIDTH, mx: "auto", px: NAV_HORIZONTAL_PADDING, pt: {xs: 2.5, md: 3.5}, pb: 4 }}>
             <m.div initial="hidden" animate="visible" variants={sectionVariants}>
-              <Typography variant="h4" component="h1" sx={{ fontWeight: 700, mb: 2, color: "#fff", textAlign: {xs: 'center', sm: 'left'} }}>
+              <Typography variant="h4" component="h1" sx={{ fontWeight: 700, mb: {xs: 2.5, md: 3.5}, color: "text.primary", textAlign: {xs: 'center', sm: 'left'} }}>
                 Grid Trading Profit Estimator
               </Typography>
             </m.div>
 
             <m.div initial="hidden" animate="visible" variants={sectionVariants} transition={{delay: 0.1}}>
-              <Paper sx={{ p: 2, mb: 3, bgcolor: "primary.dark", color: "#fff", borderRadius: 2 }} elevation={0}>
-                <Typography variant="subtitle1" component="h2" sx={{ fontWeight: 500, mb: 0.5 }}> What is Grid Trading? </Typography>
+              <Paper 
+                sx={{ 
+                  p: {xs: 2, sm: 2.5}, mb: {xs: 3, md: 4}, 
+                  bgcolor: currentMode === 'dark' ? themeFromProvider.palette.primary.dark : alpha(themeFromProvider.palette.primary.main, 1),
+                  color: themeFromProvider.palette.primary.contrastText,
+                  borderRadius: themeFromProvider.shape.borderRadius
+                }} 
+                elevation={0}
+              >
+                <Typography component="h2" sx={{ fontWeight: 600, mb: 0.5 }}> What is Grid Trading? </Typography>
                 <Typography variant="body2"> Grid trading automatically places buy and sell orders at preset intervals within a price range to profit from volatility.{" "}
-                  <a href="https://b2broker.com/news/understanding-grid-trading-purpose-pros-cons/" target="_blank" rel="noopener noreferrer" style={{ color: appTheme.palette.primary.light, textDecoration: "underline" }}> Learn more. </a>
+                  <a 
+                    href="https://b2broker.com/news/understanding-grid-trading-purpose-pros-cons/" 
+                    target="_blank" rel="noopener noreferrer" 
+                    style={{ 
+                      color: themeFromProvider.palette.info.light,
+                      textDecoration: "underline",
+                      fontWeight: 500
+                    }}
+                  > Learn more. </a>
                 </Typography>
               </Paper>
             </m.div>
 
-            {/* Explicitly add component="div" to Grid items */}
-            <Grid container spacing={{xs: 2, md: 3}}>
+            <Grid container spacing={{xs: 2.5, md: 4}}>
               <Grid item component="div" xs={12} md={5}>
                 <m.div initial="hidden" animate="visible" variants={sectionVariants} transition={{delay: 0.2}}>
                   <InputForm onCalculate={handleCalculate} calculationErrorFromApp={calculationError} onClearCalculationErrorFromApp={clearCalculationErrorFromApp} />
@@ -227,7 +271,7 @@ const App: React.FC = () => {
                     {isLoading && !results && (
                       <m.div
                         key="global-loader" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}
-                        style={{ position: "absolute", inset: 0, zIndex: 10, backgroundColor: "rgba(16, 19, 29, 0.85)", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: appTheme.shape.borderRadius*2 }}
+                        style={{ position: "absolute", inset: 0, zIndex: 10, backgroundColor: alpha(themeFromProvider.palette.background.default, 0.85), display: "flex", alignItems: "center", justifyContent: "center", borderRadius: themeFromProvider.shape.borderRadius*2 }}
                       ><CircularProgress color="primary" /></m.div>
                     )}
                   </AnimatePresence>
@@ -244,11 +288,11 @@ const App: React.FC = () => {
                         <Suspense fallback={<ResultsSectionSkeleton />}>
                           <Box>
                             {metrics.primary.length > 0 && <ResultsDisplay title="Key Result" metrics={metrics.primary} titleIcon={<AccountBalanceWalletOutlinedIcon />} isLoading={isLoading} delay={0} />}
-                            <ResultsDisplay title="Profit Estimates" metrics={metrics.estimated} titleIcon={<ShowChartOutlinedIcon />} delay={0.05} />
-                            <Box sx={{ mt: 2 }}><ResultsDisplay title="Grid Profit Breakdown" metrics={metrics.breakdown} titleIcon={<FunctionsOutlinedIcon />} delay={0.1} /></Box>
-                            <Box sx={{ mt: 2 }}><ResultsDisplay title="Additional Grid Metrics" metrics={metrics.more} titleIcon={<TuneOutlinedIcon />} delay={0.15} /></Box>
+                            <Box sx={{ mt: { xs: 2.5, md: 3 } }}><ResultsDisplay title="Profit Estimates" metrics={metrics.estimated} titleIcon={<ShowChartOutlinedIcon />} delay={0.05} /></Box>
+                            <Box sx={{ mt: { xs: 2.5, md: 3 } }}><ResultsDisplay title="Grid Profit Breakdown" metrics={metrics.breakdown} titleIcon={<FunctionsOutlinedIcon />} delay={0.1} /></Box>
+                            <Box sx={{ mt: { xs: 2.5, md: 3 } }}><ResultsDisplay title="Additional Grid Metrics" metrics={metrics.more} titleIcon={<TuneOutlinedIcon />} delay={0.15} /></Box>
                             <m.div initial="hidden" animate="visible" variants={{visible: {transition: {staggerChildren: 0.1, delayChildren: 0.4}}}}>
-                              <Box sx={{mt: 3}}>
+                              <Box sx={{mt: { xs: 3.5, md: 4.5 } }}>
                                   <InfoSection title="Why Use Grid Trading?" icon={<HelpOutlineIcon />} defaultExpanded>
                                       <Suspense fallback={<LazyLoadingFallback height={30} message="Loading insight..."/>}><CryptoInsights message="Generates consistent profit in volatile, sideways markets." /></Suspense>
                                       <Suspense fallback={<LazyLoadingFallback height={30} message="Loading insight..."/>}><CryptoInsights message="Removes emotional decision-making by automating trades." /></Suspense>
@@ -270,13 +314,13 @@ const App: React.FC = () => {
                     ) : (
                       !isLoading && !calculationError && (
                         <m.div key="placeholder-content" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} transition={{ duration: 0.3 }} >
-                          <Paper sx={{ p: {xs:2, md:4}, textAlign: "center", bgcolor: "background.paper", color: "text.primary", display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 300, borderRadius: 2 }}>
+                          <Paper sx={{ p: {xs:2.5, md:4}, textAlign: "center", bgcolor: "background.paper", color: "text.primary", display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 300, borderRadius: themeFromProvider.shape.borderRadius }}>
                             <m.img
                               src="https://cdn-icons-png.flaticon.com/512/1995/1995526.png"
                               alt="Get Started Icon"
                               width="48"
                               height="48"
-                              style={{ marginBottom: 16, filter: 'grayscale(30%) opacity(0.8)' }}
+                              style={{ marginBottom: 16, filter: themeFromProvider.palette.mode === 'dark' ? 'grayscale(30%) opacity(0.8)' : 'opacity(0.7)', }}
                               initial={{ scale: 0.5, opacity: 0 }}
                               animate={{ scale: 1, opacity: 1 }}
                               transition={{ delay: 0.1, duration: 0.4, type: "spring", stiffness: 150 }}
@@ -296,8 +340,50 @@ const App: React.FC = () => {
           </Container>
         </LazyMotion>
       </ErrorBoundary>
-    </ThemeProvider>
+    </>
   );
 };
+
+const App: React.FC = () => {
+  const [mode, setMode] = useState<PaletteMode>('dark');
+
+  useEffect(() => {
+    try {
+      const savedMode = localStorage.getItem('calcchain-theme-mode') as PaletteMode | null;
+      if (savedMode) {
+        setMode(savedMode);
+      }
+    } catch (error) {
+      console.error("Failed to load theme mode from localStorage", error);
+    }
+  }, []);
+
+  const themeMode = useMemo(
+    () => ({
+      toggleThemeMode: () => {
+        setMode((prevMode) => {
+          const newMode = prevMode === 'light' ? 'dark' : 'light';
+          try { 
+            localStorage.setItem('calcchain-theme-mode', newMode); 
+          } catch (error) { 
+            console.error("Failed to save theme mode to localStorage", error); 
+          }
+          return newMode;
+        });
+      },
+    }),
+    [],
+  );
+  
+  const theme = useMemo(() => createAppTheme(mode), [mode]);
+
+  return (
+    <ThemeModeContext.Provider value={themeMode}>
+      <ThemeProvider theme={theme}>
+        <AppContent />
+      </ThemeProvider>
+    </ThemeModeContext.Provider>
+  );
+}
 
 export default App;
