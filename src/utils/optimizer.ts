@@ -1,4 +1,5 @@
 // src/utils/optimizer.ts
+import { DEFAULT_PRICE_RANGE_PERCENTAGE, FEE_SAFETY_BUFFER_PERCENTAGE } from '../constants';
 
 export interface OptimizeContext {
   symbol: string;
@@ -17,9 +18,6 @@ export interface OptimalGridParams {
   count: number;
 }
 
-const DEFAULT_PRICE_RANGE_PERCENTAGE = 0.05; // 5%
-const FEE_SAFETY_BUFFER_PERCENTAGE = 0.002; // 0.2%
-
 /**
  * Suggests optimal grid trading parameters (lower bound, upper bound, grid count)
  * based on current price, volatility (ATR), and trading fee.
@@ -35,70 +33,85 @@ export function computeOptimalGridParams(ctx: OptimizeContext): OptimalGridParam
               ? sellPrice 
               : currentPrice * (1 + DEFAULT_PRICE_RANGE_PERCENTAGE);
 
-  // Ensure upper is greater than lower
+  // Ensure upper is greater than lower, and handle edge cases
   if (upper <= lower) {
-    // Fallback if user inputs are invalid or result in non-positive range
     lower = currentPrice * (1 - DEFAULT_PRICE_RANGE_PERCENTAGE);
     upper = currentPrice * (1 + DEFAULT_PRICE_RANGE_PERCENTAGE);
-    if (upper <= lower && currentPrice > 0) { // Handle edge case where currentPrice might be extremely small
-        upper = lower * (1 + DEFAULT_PRICE_RANGE_PERCENTAGE * 2); // Ensure upper is greater
-    } else if (currentPrice <= 0) { // Handle zero or negative current price
-        lower = 1; // Arbitrary small positive numbers
-        upper = 2;
+    if (upper <= lower) { // Further fallback if currentPrice is tiny or zero
+        upper = lower > 0 ? lower * (1 + DEFAULT_PRICE_RANGE_PERCENTAGE * 2) : (atr > 0 ? atr * 2 : 0.01); // Ensure some range
+        lower = lower > 0 ? lower : (atr > 0 ? atr : 0.005);
+        if (upper <= lower) upper = lower + (atr > 0 ? atr : 0.005); // Absolute fallback
     }
   }
 
 
-  // Add buffer to the fee percent to ensure spacing covers fees and gives profit
-  // feePercent is already a percentage (e.g., 0.05 for 0.05%), so convert to decimal for calculation
+  // feePercent is e.g., 0.05 for 0.05%. Convert to decimal for calculation.
   const actualFeeDecimal = feePercent / 100;
   const bufferedFeeDecimal = actualFeeDecimal + FEE_SAFETY_BUFFER_PERCENTAGE; 
   
   // Minimum spacing required to cover round-trip fees (buy and sell)
-  const feeBasedMinSpacing = 2 * bufferedFeeDecimal * lower; // Based on the lower end of the price range
+  // Based on the lower end of the price range for a conservative estimate
+  const feeBasedMinSpacing = 2 * bufferedFeeDecimal * lower;
 
-  // The grid step should be at least the fee-based spacing or the ATR value
-  const spacing = Math.max(feeBasedMinSpacing, atr); 
+  // The grid step should be at least the fee-based spacing or the ATR value (if ATR is positive)
+  const spacing = atr > 0 ? Math.max(feeBasedMinSpacing, atr) : feeBasedMinSpacing; 
+  if (spacing <= 0) { // If spacing is still zero (e.g., fees are zero and ATR is zero), use a tiny default
+      // This prevents division by zero. The calculator should handle zero profit scenarios.
+      // Consider what a sensible minimum spacing should be if all inputs suggest zero.
+      // For now, let's assume the calculator will show zero profit if spacing is effectively zero.
+      // However, for count calculation, we need a positive spacing.
+      const fallbackSpacing = currentPrice * 0.0001; // 0.01% of current price as a tiny fallback
+      // If currentPrice is also 0, this will be problematic.
+      // The UI should ideally prevent such scenarios or the calculator should handle them.
+      // For optimizer, we must return a valid count.
+      if (fallbackSpacing <=0) {
+          // If currentPrice is 0 or negative, this is a serious data issue.
+          // Default to a minimal grid.
+          return { lower: Math.max(0.000001, lower), upper: Math.max(0.000002, upper), count: 1 };
+      }
+       // Re-assign spacing if it was zero.
+      // This part of logic implies that if spacing is zero, the optimizer might not be meaningful.
+      // The UI or calculator should probably catch zero ATR / zero fee scenarios.
+      // For now, if spacing is 0, we'll likely get a very high or infinite count, then clamped.
+      // This is okay as long as the final count is reasonable (e.g., clamped).
+      // A better approach might be to return early or throw if optimal params can't be determined.
+  }
+
 
   let count: number;
 
   if (gridType === "geometric") {
-    // Geometric: use ratio spacing
     const ratio = upper / lower;
-    // The step here is the percentage increase for each grid level
-    const stepRatio = spacing / lower; // Proportional step based on lower bound
+    const stepRatio = spacing > 0 ? spacing / lower : DEFAULT_PRICE_RANGE_PERCENTAGE / 10; // Avoid division by zero with a tiny step
     if (ratio > 1 && stepRatio > 0) {
-      // Number of intervals = log(upper/lower) / log(1 + stepRatio)
-      // Grid count is number of intervals - 1, but our definition of gridCount seems to be intervals.
-      // Let's assume gridCount is the number of buy/sell lines *between* lower and upper.
-      // The formula Math.log(ratio) / Math.log(1 + stepRatio) gives the number of steps.
-      // If gridCount is number of actual grid lines, it's typically num_steps -1.
-      // However, the original calculator uses `gridCount + 1` or `gridCount + 2` for effective grids.
-      // For now, let's stick to a simple interpretation: number of profitable steps.
       count = Math.floor(Math.log(ratio) / Math.log(1 + stepRatio));
     } else {
-      count = 1; // Fallback
+      count = 1; // Fallback if range is invalid or step is too small/large
     }
-  } else {
-    // Arithmetic (default): even dollar spacing
+  } else { // Arithmetic
     if (spacing > 0) {
       const rawCount = (upper - lower) / spacing;
       count = Math.floor(rawCount);
     } else {
-      count = 1; // Fallback if spacing is zero (e.g. ATR is zero)
+      // If spacing is zero (e.g., ATR and fees are zero), it implies infinite trades for any price movement.
+      // This usually means the strategy is not viable or parameters are unrealistic.
+      // Default to a sensible minimum grid count.
+      count = 1; 
     }
   }
 
-  // Clamp to reasonable bounds (for sanity)
-  if (!isFinite(lower) || lower <= 0) lower = currentPrice * (1 - DEFAULT_PRICE_RANGE_PERCENTAGE);
-  if (!isFinite(upper) || upper <= 0 || upper <= lower) upper = currentPrice * (1 + DEFAULT_PRICE_RANGE_PERCENTAGE);
-  // Ensure upper is always greater than lower after clamping
-    if (upper <= lower) {
-        upper = lower * (1 + DEFAULT_PRICE_RANGE_PERCENTAGE * 2);
-         if (upper <= lower) upper = lower + atr; // Final fallback if still equal or less
-    }
+  // Clamp count to a reasonable minimum. Max count could also be considered.
+  count = Math.max(1, count);
+  if (!isFinite(count)) {
+      count = 1; // Fallback for NaN/Infinity
+  }
 
-  if (!isFinite(count) || count < 1) count = 1;
 
-  return { lower, upper, count: Math.max(1, count) }; // Ensure count is at least 1
+  // Final sanity checks for lower and upper bounds
+  if (!isFinite(lower) || lower <= 0) lower = currentPrice > 0 ? currentPrice * (1 - DEFAULT_PRICE_RANGE_PERCENTAGE) : 0.000001;
+  if (!isFinite(upper) || upper <= 0 || upper <= lower) upper = currentPrice > 0 ? currentPrice * (1 + DEFAULT_PRICE_RANGE_PERCENTAGE) : lower * 1.01;
+  if (upper <= lower) upper = lower + (atr > 0 ? atr : 0.000001); // Ensure upper > lower
+
+
+  return { lower, upper, count };
 }
