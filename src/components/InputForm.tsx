@@ -6,8 +6,7 @@ import {
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import TuneIcon from "@mui/icons-material/Tune";
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
-// Import 'm' and 'AnimatePresence' from framer-motion for use within LazyMotion context
-import { m, AnimatePresence } from "framer-motion"; // Ensure 'm' is imported
+import { m, AnimatePresence } from "framer-motion";
 import { fetchCandles, getAtrPerMin, Candle } from "../utils/atr";
 import { computeOptimalGridParams } from "../utils/optimizer";
 import { GridParameters, GridType, EntryType } from "../types";
@@ -152,8 +151,8 @@ const InputForm: React.FC<InputFormProps> = ({
   };
 
   const renderField = (cfg: FieldConfig, index: number) => (
-    <Grid item xs={12} sm={6} key={cfg.key} >
-      {/* Changed motion.div to m.div */}
+    // Adding component="div" and removing container={false}
+    <Grid item component="div" xs={12} sm={6} key={cfg.key} >
       <m.div custom={index} variants={formItemVariants} initial="hidden" animate="visible">
         <TextField label={cfg.label} name={cfg.key} value={form[cfg.key]} onChange={handleChange} type={cfg.type === "number" ? "number" : "text"} select={cfg.type === "select"}
           inputProps={{ inputMode: cfg.type === "number" ? "decimal" : undefined, min: (cfg.key === 'feePercent' || cfg.key === 'buyPrice' || cfg.key === 'sellPrice') ? 0 : 1, step: (cfg.key === 'gridCount' || cfg.key === 'durationDays' || cfg.key === 'leverage') ? "1" : "any", "aria-label": cfg.label }}
@@ -257,15 +256,15 @@ const handleOptimize = async () => {
         </Box>
         <form onSubmit={handleSubmit} autoComplete="off" noValidate>
           {Object.entries(groupedFields).map(([groupName, fieldsInGroup], groupIndex) => (
-            // Changed motion.div to m.div
             <m.div key={groupName} initial="hidden" animate="visible" variants={{visible: {transition: {staggerChildren: 0.07}}}}>
               <Box sx={{ mb: groupIndex === Object.keys(groupedFields).length - 1 ? 2.5 : 3.5 }}>
-                {/* Changed motion.div to m.div */}
                 <m.div variants={formItemVariants} custom={0}>
-                  <Typography variant="overline" display="block"
+                  <Typography
+                    variant="overline" display="block"
                     sx={{ color: 'text.secondary', mb: 1.5, mt: groupIndex === 0 ? 0.5 : 2.5, pb: 0.25, fontSize: '0.7rem', letterSpacing: '0.05em', borderBottom: `1px solid ${theme.palette.divider}` }}
                   >{groupName}</Typography>
                 </m.div>
+                {/* Corrected: Ensured 'container' prop is used for containers, 'item' for items */}
                 <Grid container spacing={{xs:1.5, sm:2, md:2}}>
                   {fieldsInGroup.map((field, fieldIdx) => renderField(field, fieldIdx))}
                 </Grid>
@@ -273,11 +272,9 @@ const handleOptimize = async () => {
             </m.div>
           ))}
           <Box sx={{ mt: 3, pt: 1, display: "flex", gap: {xs:1.5, sm:2}, flexDirection: {xs: 'column', sm: 'row'} }}>
-            {/* Changed Button component from motion.button to m.button */}
             <Button component={m.button} whileHover={{ scale: 1.03, y: -1, transition: { duration: 0.2, type: "spring", stiffness: 300 } }} whileTap={{ scale: 0.97 }}
               variant="outlined" color="primary" onClick={handleOptimize} sx={{ flexGrow: 1, minHeight: 48, fontSize: { xs: '0.875rem', md: '0.95rem' } }} type="button" disabled={isOptimizing || !form.symbol.trim()} startIcon={isOptimizing ? <CircularProgress size={20} color="inherit" /> : <TuneIcon />}
             > {isOptimizing ? "Optimizing..." : "Optimize Values"} </Button>
-            {/* Changed Button component from motion.button to m.button */}
             <Button component={m.button} whileHover={{ scale: 1.03, y: -1, boxShadow: `0px 4px 15px ${alpha(theme.palette.primary.main, 0.4)}`, transition: { duration: 0.2, type: "spring", stiffness: 300 } }} whileTap={{ scale: 0.97 }}
               type="submit" variant="contained" color="primary" sx={{ flexGrow: 1, minHeight: 48, fontSize: { xs: '0.875rem', md: '0.95rem' } }} disabled={isCalculateDisabled}
             > Calculate </Button>
@@ -288,11 +285,11 @@ const handleOptimize = async () => {
             </Button>
             <AnimatePresence>
               {advancedOpen && (
-                // Changed motion.div to m.div
                 <m.div
                   initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}
                   transition={{duration: 0.3, ease: "easeInOut"}} style={{overflow: 'hidden'}}
                 >
+                  {/* Corrected: Ensured 'container' prop is used for containers */}
                   <Grid container spacing={{xs:1.5, sm:2, md:2}} sx={{ mt: 0.5 }}>
                     {advancedFieldConfigs.map((field, idx) => renderField(field, idx + fieldConfigs.length))}
                   </Grid>

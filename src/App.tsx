@@ -17,12 +17,11 @@ import ShowChartOutlinedIcon from '@mui/icons-material/ShowChartOutlined';
 import AccountBalanceWalletOutlinedIcon from '@mui/icons-material/AccountBalanceWalletOutlined';
 import FunctionsOutlinedIcon from '@mui/icons-material/FunctionsOutlined';
 import TuneOutlinedIcon from '@mui/icons-material/TuneOutlined';
+import logo from "./assets/calcchainlogo.png";
 
-// Import Framer Motion components for LazyMotion
 import { AnimatePresence, LazyMotion, domAnimation, m } from "framer-motion";
 
 import InputForm from "./components/InputForm";
-// Lazy load components
 const ResultsDisplay = lazy(() => import("./components/ResultsDisplay"));
 const CryptoInsights = lazy(() => import("./components/CryptoInsights"));
 
@@ -54,7 +53,6 @@ interface InfoSectionProps {
   defaultExpanded?: boolean;
 }
 
-// InfoSection now uses m.div as it's rendered within LazyMotion context in App
 const InfoSection: React.FC<InfoSectionProps> = ({ title, icon, children, defaultExpanded }) => {
   const theme = useTheme();
   return (
@@ -174,10 +172,10 @@ const App: React.FC = () => {
                 <Box sx={{ display: "flex", alignItems: "center" }}>
                   <a href="https://calcchain.com" aria-label="CalcChain Home">
                     <m.img
-                      src="/src/assets/calcchainlogo.png"
+                      src={logo}
                       alt="CalcChain Logo"
-                      width="128"  // Placeholder: MUST be image's natural width
-                      height="32"   // Placeholder: MUST be image's natural height
+                      width="128"
+                      height="32"
                       style={{ display: 'block', height: '32px', width: 'auto' }}
                       initial={{ opacity: 0, scale: 0.5 }}
                       animate={{ opacity: 1, scale: 1 }}
@@ -216,16 +214,14 @@ const App: React.FC = () => {
               </Paper>
             </m.div>
 
+            {/* Explicitly add component="div" to Grid items */}
             <Grid container spacing={{xs: 2, md: 3}}>
-              <Grid item xs={12} md={5}>
+              <Grid item component="div" xs={12} md={5}>
                 <m.div initial="hidden" animate="visible" variants={sectionVariants} transition={{delay: 0.2}}>
-                  {/* InputForm is NOT a motion component itself, but it's rendered within an m.div.
-                      This means any motion components *inside* InputForm must use the `m` prefix.
-                  */}
                   <InputForm onCalculate={handleCalculate} calculationErrorFromApp={calculationError} onClearCalculationErrorFromApp={clearCalculationErrorFromApp} />
                 </m.div>
               </Grid>
-              <Grid item xs={12} md={7}>
+              <Grid item component="div" xs={12} md={7}>
                 <Box sx={{ height: "100%", display: "flex", flexDirection: "column", position: "relative" }}>
                   <AnimatePresence>
                     {isLoading && !results && (
@@ -245,16 +241,12 @@ const App: React.FC = () => {
                   <AnimatePresence mode="wait">
                     {results ? (
                       <m.div key="results-content" initial="hidden" animate="visible" exit={{opacity: 0, y: -10, transition: {duration: 0.2}}} variants={resultsContainerVariants} >
-                        {/* ResultsDisplay and its children (InfoSection, CryptoInsights) are lazy loaded */}
-                        {/* Suspense fallback will be shown while they load */}
                         <Suspense fallback={<ResultsSectionSkeleton />}>
                           <Box>
                             {metrics.primary.length > 0 && <ResultsDisplay title="Key Result" metrics={metrics.primary} titleIcon={<AccountBalanceWalletOutlinedIcon />} isLoading={isLoading} delay={0} />}
                             <ResultsDisplay title="Profit Estimates" metrics={metrics.estimated} titleIcon={<ShowChartOutlinedIcon />} delay={0.05} />
                             <Box sx={{ mt: 2 }}><ResultsDisplay title="Grid Profit Breakdown" metrics={metrics.breakdown} titleIcon={<FunctionsOutlinedIcon />} delay={0.1} /></Box>
                             <Box sx={{ mt: 2 }}><ResultsDisplay title="Additional Grid Metrics" metrics={metrics.more} titleIcon={<TuneOutlinedIcon />} delay={0.15} /></Box>
-                            
-                            {/* This m.div is inside the results-content m.div, so it's fine */}
                             <m.div initial="hidden" animate="visible" variants={{visible: {transition: {staggerChildren: 0.1, delayChildren: 0.4}}}}>
                               <Box sx={{mt: 3}}>
                                   <InfoSection title="Why Use Grid Trading?" icon={<HelpOutlineIcon />} defaultExpanded>

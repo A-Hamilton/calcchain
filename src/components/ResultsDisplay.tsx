@@ -1,7 +1,6 @@
 import React from "react";
 import { Card, CardContent, Typography, Grid, Box, useTheme, Tooltip, CircularProgress, Skeleton, alpha } from "@mui/material";
-// Import 'm' from framer-motion for use within LazyMotion context
-import { m } from "framer-motion"; // Ensure 'm' is imported
+import { m } from "framer-motion";
 import type { Metric } from "../types";
 
 interface ResultsDisplayProps {
@@ -40,9 +39,6 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = React.memo(({ title, metri
   const isKeyResult = title === "Key Result";
 
   return (
-    // This is the main motion component for this ResultsDisplay card.
-    // It MUST be m.div because ResultsDisplay is lazy-loaded and rendered
-    // within the <LazyMotion> provider in App.tsx.
     <m.div custom={delay} initial="hidden" animate="visible" variants={cardVariants}>
       <Card
         elevation={isKeyResult ? 6 : 2}
@@ -85,17 +81,16 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = React.memo(({ title, metri
               {title}
             </Typography>
           </Box>
+          {/* Ensure Grid container has 'container' prop, and items only have 'item' and responsive props */}
           <Grid container spacing={{xs: 2, md: 2.5}}>
-            {/* Changed map variable from 'm' to 'metricItem' to avoid conflict with imported 'm' */}
             {metrics.map((metricItem, i) => (
               <Grid
-                item
+                item // item prop is sufficient for grid items
                 xs={12}
                 sm={metricItem.isPrimary ? 12 : 6}
                 md={metricItem.isPrimary ? 12 : (metrics.length > 3 && metrics.length !==1 ? 4 : 6)}
                 key={`${metricItem.label}-${i}-${String(metricItem.value)}`}
               >
-                {/* This inner div also needs to be m.div as it's a descendant */}
                 <m.div custom={i} initial="hidden" animate="visible" variants={metricItemVariants}>
                   <Box
                     sx={{
