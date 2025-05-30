@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Card,
   CardContent,
@@ -13,11 +13,13 @@ import {
   IconButton,
   Tooltip,
   Box,
+  CircularProgress,
 } from "@mui/material";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import TuneIcon from "@mui/icons-material/Tune";
-import { fetchCandles, getAtrPerMin } from "../utils/atr";
+import { fetchCandles, getAtrPerMin, Candle } from "../utils/atr"; // Import Candle type
 import { computeOptimalGridParams } from "../utils/optimizer";
+import { GridParameters } from "../types"; // Assuming GridParameters is defined here or imported
 
 type FormFields = {
   symbol: string;
@@ -44,8 +46,8 @@ type FieldConfig = {
 };
 
 export interface InputFormProps {
-  onCalculate: (params: any) => void;
-  symbolError?: string | null; // Receives error from App
+  onCalculate: (params: GridParameters) => void; // Use GridParameters type
+  symbolError?: string | null;
 }
 
 const fieldConfigs: FieldConfig[] = [
@@ -105,13 +107,13 @@ const advancedFieldConfigs: FieldConfig[] = [
     key: "buyPrice",
     label: "Buy Price (Override)",
     type: "number",
-    help: "Override default first buy price (advanced).",
+    help: "Override default first buy price (advanced). Used for optimizer if set.",
   },
   {
     key: "sellPrice",
     label: "Sell Price (Override)",
     type: "number",
-    help: "Override default first sell price (advanced).",
+    help: "Override default first sell price (advanced). Used for optimizer if set.",
   },
   {
     key: "gridType",
@@ -148,62 +150,69 @@ const whiteFieldSx = {
   "& input": { color: "#fff" },
   "& label": { color: "#90caf9" },
   "& .MuiOutlinedInput-root": {
-    "& fieldset": { borderColor: "#0F1019" },
-    "&:hover fieldset": { borderColor: "#0F1019" },
-    "&.Mui-focused fieldset": { borderColor: "#2B66F6" },
+    "& fieldset": { borderColor: "#0F1019" }, // Softer border
+    "&:hover fieldset": { borderColor: "#222535" }, // Slightly visible on hover
+    "&.Mui-focused fieldset": { borderColor: "#2B66F6" }, // Primary on focus
   },
 };
 
-const InputForm: React.FC<InputFormProps> = ({ onCalculate, symbolError }) => {
+const InputForm: React.FC<InputFormProps> = ({ onCalculate, symbolError: appSymbolError }) => {
   const [form, setForm] = useState<FormFields>(initialForm);
   const [errors, setErrors] = useState<Partial<Record<keyof FormFields, string>>>({});
   const [advancedOpen, setAdvancedOpen] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("success");
+  const [isOptimizing, setIsOptimizing] = useState(false);
   const [localSymbolError, setLocalSymbolError] = useState<string | null>(null);
 
-  // Basic validation
-  const validate = () => {
-    const next: Partial<Record<keyof FormFields, string>> = {};
-    if (!form.symbol) next.symbol = "Required";
-    if (!form.principal || Number(form.principal) <= 0) next.principal = "Must be > 0";
-    if (!form.lowerBound || Number(form.lowerBound) <= 0) next.lowerBound = "Must be > 0";
-    if (!form.upperBound || Number(form.upperBound) <= 0) next.upperBound = "Must be > 0";
-    if (!form.gridCount || Number(form.gridCount) <= 0) next.gridCount = "Must be > 0";
-    if (!form.leverage || Number(form.leverage) < 1) next.leverage = "Must be ≥ 1";
-    if (!form.feePercent || Number(form.feePercent) < 0) next.feePercent = "Must be ≥ 0";
-    if (!form.durationDays || Number(form.durationDays) <= 0) next.durationDays = "Must be > 0";
-    if (form.lowerBound && form.upperBound && Number(form.lowerBound) >= Number(form.upperBound))
-      next.upperBound = "Must be > Lower Bound";
-    setErrors(next);
-    return Object.keys(next).length === 0;
-  };
-  
-  React.useEffect(() => {
-    validate();
-  }, [form]);
 
-  // Render each field; handle error for the symbol input (either from App or local optimizer)
+  const validate = useCallback(() => {
+    const nextErrors: Partial<Record<keyof FormFields, string>> = {};
+    if (!form.symbol.trim()) nextErrors.symbol = "Symbol is required.";
+    if (!form.principal || Number(form.principal) <= 0) nextErrors.principal = "Must be > 0.";
+    if (form.lowerBound && (isNaN(Number(form.lowerBound)) || Number(form.lowerBound) <= 0)) nextErrors.lowerBound = "Must be a positive number.";
+    if (form.upperBound && (isNaN(Number(form.upperBound)) || Number(form.upperBound) <= 0)) nextErrors.upperBound = "Must be a positive number.";
+    if (form.gridCount && (isNaN(Number(form.gridCount)) || Number(form.gridCount) <= 0 || !Number.isInteger(Number(form.gridCount)))) nextErrors.gridCount = "Must be a positive integer.";
+    if (!form.leverage || Number(form.leverage) < 1) nextErrors.leverage = "Must be ≥ 1.";
+    if (form.feePercent === '' || Number(form.feePercent) < 0) nextErrors.feePercent = "Must be ≥ 0.";
+    if (!form.durationDays || Number(form.durationDays) <= 0 || !Number.isInteger(Number(form.durationDays))) nextErrors.durationDays = "Must be a positive integer.";
+    
+    if (form.lowerBound && form.upperBound && Number(form.lowerBound) >= Number(form.upperBound)) {
+      nextErrors.upperBound = "Upper Bound must be greater than Lower Bound.";
+    }
+    if (form.buyPrice && (isNaN(Number(form.buyPrice)) || Number(form.buyPrice) < 0)) nextErrors.buyPrice = "Must be a non-negative number.";
+    if (form.sellPrice && (isNaN(Number(form.sellPrice)) || Number(form.sellPrice) < 0)) nextErrors.sellPrice = "Must be a non-negative number.";
+
+    setErrors(nextErrors);
+    return Object.keys(nextErrors).length === 0;
+  }, [form]);
+  
+  useEffect(() => {
+    validate();
+  }, [form, validate]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setForm(f => ({ ...f, [name]: value }));
+    if (name === "symbol") {
+      setLocalSymbolError(null); // Clear local error when symbol changes
+    }
+  };
+
   const renderField = (cfg: FieldConfig) => (
     <Grid item xs={12} sm={6} key={cfg.key} sx={{ position: "relative" }}>
       <TextField
         label={cfg.label}
         name={cfg.key}
         value={form[cfg.key]}
-        onChange={e => {
-          setForm(f => ({
-            ...f,
-            [cfg.key]: e.target.value,
-          }));
-          if (cfg.key === "symbol") {
-            setLocalSymbolError(null);
-          }
-        }}
+        onChange={handleChange}
         type={cfg.type === "number" ? "number" : "text"}
         select={cfg.type === "select"}
         inputProps={{
           inputMode: cfg.type === "number" ? "decimal" : undefined,
-          min: 0,
-          step: cfg.type === "number" ? "any" : undefined,
+          min: (cfg.key === 'feePercent' || cfg.key === 'buyPrice' || cfg.key === 'sellPrice') ? 0 : 1, // Allow 0 for fee and buy/sell overrides
+          step: (cfg.key === 'gridCount' || cfg.key === 'durationDays' || cfg.key === 'leverage') ? "1" : "any",
           "aria-label": cfg.label,
         }}
         sx={whiteFieldSx}
@@ -211,18 +220,14 @@ const InputForm: React.FC<InputFormProps> = ({ onCalculate, symbolError }) => {
         fullWidth
         margin="dense"
         helperText={
-          cfg.key === "symbol"
-            ? errors.symbol || localSymbolError || symbolError || cfg.help
-            : errors[cfg.key] || cfg.help
+          (cfg.key === "symbol" ? (localSymbolError || appSymbolError || errors.symbol) : errors[cfg.key]) || cfg.help
         }
         error={
-          cfg.key === "symbol"
-            ? Boolean(errors.symbol) || Boolean(localSymbolError) || Boolean(symbolError)
-            : Boolean(errors[cfg.key])
+          Boolean(cfg.key === "symbol" ? (localSymbolError || appSymbolError || errors.symbol) : errors[cfg.key])
         }
-        InputProps={cfg.adornment ? { startAdornment: <span>{cfg.adornment}</span> } : undefined}
+        InputProps={cfg.adornment ? { startAdornment: <Box component="span" sx={{mr:1, color: 'text.secondary'}}>{cfg.adornment}</Box> } : undefined}
         SelectProps={cfg.options ? { native: false } : undefined}
-        InputLabelProps={{}}
+        InputLabelProps={{ shrink: true }}
       >
         {cfg.options &&
           cfg.options.map(opt => (
@@ -231,9 +236,9 @@ const InputForm: React.FC<InputFormProps> = ({ onCalculate, symbolError }) => {
             </MenuItem>
           ))}
       </TextField>
-      <Tooltip title={cfg.help} placement="right">
-        <IconButton size="small" sx={{ position: "absolute", right: 8, top: 8 }}>
-          <InfoOutlinedIcon fontSize="small" />
+      <Tooltip title={cfg.help} placement="right" arrow>
+        <IconButton size="small" sx={{ position: "absolute", right: 0, top: "50%", transform: 'translateY(-50%)', mr: 0.5, color: 'text.secondary' }}>
+          <InfoOutlinedIcon fontSize="inherit" />
         </IconButton>
       </Tooltip>
     </Grid>
@@ -241,60 +246,85 @@ const InputForm: React.FC<InputFormProps> = ({ onCalculate, symbolError }) => {
 
 const handleOptimize = async () => {
   setLocalSymbolError(null);
+  setIsOptimizing(true);
   try {
-    const symbol = form.symbol.trim() || "BTCUSDT";
-    const candles = await fetchCandles(symbol, "1d", 5);
-    const highs = candles.map(c => c.high);
-    const lows = candles.map(c => c.low);
-    const lowerBound = Math.min(...lows);
-    const upperBound = Math.max(...highs);
-    const principal = Number(form.principal) || 1000;
-    const feePercent = Number(form.feePercent) || 0.05;
+    const symbol = form.symbol.trim() || "BTCUSDT"; // Default to BTCUSDT if empty
+    
+    // Fetch candles to get recent price data
+    // Fetching more candles (e.g., 14 for ATR period + 1 for current price)
+    const candles: Candle[] = await fetchCandles(symbol, "1d", 15); 
+    if (!candles || candles.length === 0) {
+        throw new Error("No candle data received from API.");
+    }
+    const currentPrice = candles[candles.length - 1].close; // Use the last close price as current
+    
+    const investmentAmount = Number(form.principal) || 1000;
+    const feePercent = Number(form.feePercent) || 0.05; // Default fee if not set
 
-    // Fetch ATR and call optimizer for gridCount
-    const atr = await getAtrPerMin(symbol);
-    const gridType = (form.gridType === "arithmetic" || form.gridType === "geometric")
-  ? form.gridType as "arithmetic" | "geometric"
-  : "arithmetic";
+    // Fetch ATR (Average True Range) per minute
+    const atr = await getAtrPerMin(symbol, 14); // Using a common 14-period ATR
+    const gridTypeOpt = (form.gridType === "arithmetic" || form.gridType === "geometric")
+      ? form.gridType as "arithmetic" | "geometric"
+      : "arithmetic";
+
+    const userBuyPrice = form.buyPrice ? Number(form.buyPrice) : undefined;
+    const userSellPrice = form.sellPrice ? Number(form.sellPrice) : undefined;
 
     // Use your optimizer
-    const { count } = computeOptimalGridParams({
+    const optimalParams = computeOptimalGridParams({
       symbol,
-      principal,
+      currentPrice: currentPrice,
+      principal: investmentAmount, // Pass investment amount
       atr,
       feePercent,
-      gridType,
+      gridType: gridTypeOpt,
+      buyPrice: userBuyPrice, // Pass user-defined buy/sell if they exist
+      sellPrice: userSellPrice,
     });
 
     setForm(f => ({
       ...f,
-      lowerBound: lowerBound.toString(),
-      upperBound: upperBound.toString(),
-      gridCount: count.toString(),
+      symbol, // Ensure symbol is updated if it was defaulted
+      lowerBound: optimalParams.lower.toFixed(Math.max(2, (currentPrice < 1 ? 6 : 2))), // Dynamic precision
+      upperBound: optimalParams.upper.toFixed(Math.max(2, (currentPrice < 1 ? 6 : 2))), // Dynamic precision
+      gridCount: optimalParams.count.toString(),
     }));
     
+    setSnackbarMessage("Optimized values have been set!");
+    setSnackbarSeverity("success");
     setShowSnackbar(true);
   } catch (err: any) {
-    setLocalSymbolError(
-      "Failed to fetch data for symbol. Please check spelling, e.g. BTCUSDT or ETHBTC."
-    );
-    setShowSnackbar(false);
+    console.error("Optimization Error:", err);
+    const message = err?.response?.data?.msg || err?.message || "Failed to fetch data for symbol. Ensure it's valid (e.g., BTCUSDT).";
+    setLocalSymbolError(message);
+    setSnackbarMessage(message);
+    setSnackbarSeverity("error");
+    setShowSnackbar(true);
+  } finally {
+    setIsOptimizing(false);
   }
 };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!validate()) return;
-    setLocalSymbolError(null);
-    const params = {
+    if (!validate()) {
+        setSnackbarMessage("Please correct the errors in the form.");
+        setSnackbarSeverity("error");
+        setShowSnackbar(true);
+        return;
+    }
+    setLocalSymbolError(null); // Clear local errors on successful submission attempt
+    
+    const params: GridParameters = {
       symbol: form.symbol.trim(),
       principal: Number(form.principal),
       lowerBound: Number(form.lowerBound),
       upperBound: Number(form.upperBound),
       gridCount: Number(form.gridCount),
       leverage: Number(form.leverage),
-      feePercent: Number(form.feePercent),
+      feePercent: Number(form.feePercent), // Already a percentage
       durationDays: Number(form.durationDays),
+      // atrPerMin will be fetched by calculator if not provided
       buyPrice: form.buyPrice ? Number(form.buyPrice) : undefined,
       sellPrice: form.sellPrice ? Number(form.sellPrice) : undefined,
       gridType: form.gridType as "arithmetic" | "geometric",
@@ -303,37 +333,39 @@ const handleOptimize = async () => {
     onCalculate(params);
   };
 
-  const isValid = Object.keys(errors).length === 0;
+  const isFormValid = Object.keys(errors).length === 0 && !localSymbolError && !appSymbolError;
 
   return (
-    <Card sx={{ bgcolor: "background.paper", p: 2 }}>
+    <Card sx={{ bgcolor: "background.paper", p: {xs: 1.5, md: 2}, borderRadius: 2 }}>
       <CardContent>
-        <Typography variant="h6" color="primary" sx={{ mb: 2 }}>
+        <Typography variant="h6" color="primary" sx={{ mb: 2, fontWeight: 600 }}>
           Grid Parameters
         </Typography>
         <Box sx={{ mb: 2 }}>
-          <Alert icon={<TuneIcon color="primary" />} severity="info">
+          <Alert icon={<TuneIcon color="primary" />} severity="info" variant="outlined" sx={{borderColor: 'primary.dark', bgcolor: 'rgba(43, 102, 246, 0.1)'}}>
             Not sure what values to use? Click <strong>Optimize Values</strong> to use real-time data and AI to fill in optimal grid settings!
           </Alert>
         </Box>
-        <form onSubmit={handleSubmit} autoComplete="off">
+        <form onSubmit={handleSubmit} autoComplete="off" noValidate>
           <Grid container spacing={2}>
             {fieldConfigs.map(renderField)}
           </Grid>
-          <Box sx={{ mt: 2, display: "flex", gap: 2 }}>
+          <Box sx={{ mt: 3, display: "flex", gap: 2, flexDirection: {xs: 'column', sm: 'row'} }}>
             <Button
               variant="outlined"
               onClick={handleOptimize}
-              sx={{ minHeight: 48, fontSize: { xs: 16, md: 18 } }}
+              sx={{ flexGrow: 1, minHeight: 48, fontSize: { xs: '0.9rem', md: '1rem' } }}
               type="button"
+              disabled={isOptimizing || !form.symbol.trim()} // Disable if no symbol
+              startIcon={isOptimizing ? <CircularProgress size={20} color="inherit" /> : null}
             >
-              Optimize Values
+              {isOptimizing ? "Optimizing..." : "Optimize Values"}
             </Button>
             <Button
               type="submit"
               variant="contained"
-              sx={{ minHeight: 48, fontSize: { xs: 16, md: 18 } }}
-              disabled={!isValid}
+              sx={{ flexGrow: 1, minHeight: 48, fontSize: { xs: '0.9rem', md: '1rem' } }}
+              disabled={!isFormValid} // Use combined validity
             >
               Calculate
             </Button>
@@ -348,7 +380,7 @@ const handleOptimize = async () => {
             >
               {advancedOpen ? "Hide Advanced Settings" : "Show Advanced Settings"}
             </Button>
-            <Collapse in={advancedOpen}>
+            <Collapse in={advancedOpen} timeout="auto" unmountOnExit>
               <Grid container spacing={2} sx={{ mt: 1 }}>
                 {advancedFieldConfigs.map(renderField)}
               </Grid>
@@ -357,11 +389,12 @@ const handleOptimize = async () => {
         </form>
         <Snackbar
           open={showSnackbar}
-          autoHideDuration={2500}
+          autoHideDuration={4000}
           onClose={() => setShowSnackbar(false)}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
         >
-          <Alert severity="success" sx={{ width: "100%" }}>
-            Optimized values have been set!
+          <Alert onClose={() => setShowSnackbar(false)} severity={snackbarSeverity} sx={{ width: "100%" }} variant="filled">
+            {snackbarMessage}
           </Alert>
         </Snackbar>
       </CardContent>
