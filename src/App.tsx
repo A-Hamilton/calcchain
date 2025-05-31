@@ -360,7 +360,6 @@ const App: React.FC = () => {
           setMode(savedMode);
       }
     } catch (error) {
-      console.error('Failed to load theme mode from localStorage:', error);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // mode dependency removed to prevent re-triggering setMode on mode change from toggle
@@ -369,7 +368,6 @@ const App: React.FC = () => {
   const themeModeProviderValue = useMemo(() => ({ // Renamed to avoid conflict with 'themeMode' name if any
     toggleThemeMode: () => {
       if (isInitialLoad) { // Should ideally not be callable if isInitialLoad is true
-        console.warn("Theme toggle called during initial load phase.");
         return;
       }
 
@@ -388,7 +386,6 @@ const App: React.FC = () => {
         try {
           localStorage.setItem('calcchain-theme-mode', newMode);
         } catch (error) {
-          console.error('Failed to save theme mode to localStorage:', error);
         }
         animationControls.start({
           opacity: 0,

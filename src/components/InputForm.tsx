@@ -222,7 +222,6 @@ const handleOptimize = async () => {
     setForm(f => ({ ...f, symbol, lowerBound: optimalParams.lower.toFixed(Math.max(2, (currentPrice < 1 ? 5 : 2))), upperBound: optimalParams.upper.toFixed(Math.max(2, (currentPrice < 1 ? 5 : 2))), gridCount: optimalParams.count.toString() }));
     setSnackbar({open: true, message: "Optimal grid parameters have been applied!", severity: "success"});
   } catch (err: unknown) { // Changed from 'any' to 'unknown'
-    console.error("Optimization Error:", err);
     let specificMessage = "Failed to optimize. Check symbol or network.";
     if (err instanceof Error) {
       // Check for symbol specific error message (case-insensitive)

@@ -43,7 +43,6 @@ export async function fetchCandles(symbol: string, interval: string, limit: numb
         throw new Error(`Binance API Error: ${rawData.msg} (Code: ${rawData.code}, Symbol: ${symbol})`);
       }
       // Log the unexpected data format for debugging before throwing
-      console.error(`Unexpected data format from Binance API for symbol ${symbol}. Expected array, got:`, rawData);
       throw new Error(`Unexpected data format from Binance API for symbol ${symbol}. Expected array.`);
     }
 
@@ -89,8 +88,6 @@ export async function fetchCandles(symbol: string, interval: string, limit: numb
     else if (typeof error === 'string') {
         errorMessage = error;
     }
-
-    console.error(`Error in fetchCandles for ${symbol}:`, errorMessage, error); // Log the detailed original error object too
     throw new Error(errorMessage); // Re-throw with a consolidated or specific message
   }
 }
@@ -132,8 +129,6 @@ export function computeAtr(candles: Candle[], period: number): number {
 // Fetches candles and computes ATR for a given interval
 export async function getAtr(symbol: string, interval: string, period: number = DEFAULT_ATR_PERIOD): Promise<number> {
   if (period <= 0) {
-      // Consider throwing an error or returning a specific value like NaN
-      // console.warn(`ATR period must be positive for getAtr. Received ${period}.`);
       throw new Error("ATR period must be positive.");
   }
   // Fetch period + 1 candles to have 'period' number of TRs
@@ -144,14 +139,12 @@ export async function getAtr(symbol: string, interval: string, period: number = 
 // Fetches daily candles and computes ATR per minute
 export async function getAtrPerMin(symbol: string, period: number = DEFAULT_ATR_PERIOD): Promise<number> {
   if (period <= 0) {
-      // console.warn(`ATR period must be positive for getAtrPerMin. Received ${period}.`);
       throw new Error("ATR period must be positive.");
   }
   // Fetch period + 1 daily candles
   const dailyCandles = await fetchCandles(symbol, "1d", period + 1);
   const atr1d = computeAtr(dailyCandles, period);
   if (MINUTES_IN_DAY <= 0) { // Defensive check for MINUTES_IN_DAY constant
-      console.error("MINUTES_IN_DAY constant is not positive, cannot calculate ATR per minute.");
       throw new Error("Invalid MINUTES_IN_DAY configuration.");
   }
   return atr1d / MINUTES_IN_DAY;

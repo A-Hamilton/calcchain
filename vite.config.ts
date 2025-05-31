@@ -23,43 +23,42 @@ export default defineConfig(({ mode }) => { // Add mode to access environment
         output: {
           manualChunks(id, { getModuleInfo }) {
             // Group major libraries into their own chunks
+            // Temporarily comment out or remove these blocks
+            /*
             if (id.includes('node_modules/@mui/material')) {
               return 'vendor-mui-material';
             }
             if (id.includes('node_modules/@mui/icons-material')) {
               return 'vendor-mui-icons';
             }
+            */
+            // Emotion, React, ReactDOM chunks should still be commented out from previous steps
+            /*
             if (id.includes('node_modules/@emotion')) {
               return 'vendor-emotion';
             }
+            */
             if (id.includes('node_modules/framer-motion')) {
               return 'vendor-framer-motion';
             }
+            /*
             if (id.includes('node_modules/react-dom')) {
               return 'vendor-react-dom';
             }
             if (id.includes('node_modules/react')) {
-              // Note: React itself is small, often better to keep with app code or react-dom
               return 'vendor-react';
             }
+            */
             // Catch-all for other node_modules
             if (id.includes('node_modules')) {
               return 'vendor-others';
             }
-
-            // You can also try to group components or utilities
-            // For example, if you have many components in src/components
-            // const moduleInfo = getModuleInfo(id);
-            // if (moduleInfo && moduleInfo.isEntry === false && id.includes('/src/components/')) {
-            //   return 'app-components';
-            // }
           },
         },
       },
-      // Consider setting a higher target if you don't need to support very old browsers
-      // target: 'es2020', // Example: supports most modern browsers, smaller output
-      // sourcemap: isProduction ? false : 'inline', // Disable sourcemaps in production
+      // ...
     },
+
     server: {
       port: 3000, // Or your preferred port
     },
