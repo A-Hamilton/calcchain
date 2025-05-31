@@ -250,7 +250,7 @@ const AppContent: React.FC = () => {
             <Typography component="h2" sx={{ fontWeight: 600, mb: 0.5 }}>What is Grid Trading?</Typography>
             <Typography variant="body2">
               Grid trading automatically places buy and sell orders at preset intervals within a price range to profit from volatility.{' '}
-              <a href="https://b2broker.com/news/understanding-grid-trading-purpose-pros-cons/" target="_blank" rel="noopener noreferrer" style={{ color: themeFromProvider.palette.info.light, textDecoration: 'underline', fontWeight: 500 }}>
+              <a href="https://support.pionex.com/hc/en-us/articles/45085712163225-Grid-Trading-Bot#h_01JQDJY326ASK9EM41WQ3ZQDX5/" target="_blank" rel="noopener noreferrer" style={{ color: themeFromProvider.palette.info.light, textDecoration: 'underline', fontWeight: 500 }}>
                 Learn more.
               </a>
             </Typography>
