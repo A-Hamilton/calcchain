@@ -90,28 +90,6 @@ Built with React, TypeScript, Vite, and Material-UI.
 * `dev`: Starts the development server with Hot Module Replacement (HMR).
 * `build`: Bundles the application for production.
 * `preview`: Serves the production build locally for previewing.
-* `test`: Runs the test suite (using Vitest).
-* `test:ui`: Runs tests with the Vitest UI for interactive testing.
-
-## 🧪 Testing
-
-This project uses [Vitest](https://vitest.dev/) for unit and component testing, along with [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/) for testing React components.
-
-* **Run all tests:**
-    ```bash
-    npm test
-    # or
-    yarn test
-    ```
-
-* **Run tests in watch mode with UI:**
-    ```bash
-    npm run test:ui
-    # or
-    yarn test:ui
-    ```
-
-Test files are located alongside the files they test (e.g., `calculator.test.ts` for `calculator.ts`) or in a `__tests__` directory.
 
 ## 📁 Project Structure
 
@@ -158,7 +136,7 @@ Contributions are welcome! Please feel free to submit a pull request or open an 
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the `LICENSE` file for details (if one exists, otherwise assume MIT or check with the author).
+This project is licensed under the MIT License - see the `LICENSE` file for details
 
 ## 🙏 Acknowledgements
 

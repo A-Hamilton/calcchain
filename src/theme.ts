@@ -37,7 +37,7 @@ const lightPalette: PaletteOptions = {
   mode: "light",
   primary: { main: "#2B66F6", light: "#42A5F5", dark: "#1565C0", contrastText: "#ffffff", },
   secondary: { main: "#9C27B0", light: "#BA68C8", dark: "#7B1FA2", contrastText: "#ffffff", },
-  background: { default: "#FAFBFD", paper: "#FFFFFF", },
+  background: { default: "#F5F5F5", paper: "#FFFFFF", },
   divider: "rgba(0, 0, 0, 0.12)",
   text: { primary: "rgba(0, 0, 0, 0.87)", secondary: "rgba(0, 0, 0, 0.65)", disabled: "rgba(0, 0, 0, 0.38)", },
   error: { main: "#D32F2F", light: "#E57373", dark: "#C62828", contrastText: "#fff", },

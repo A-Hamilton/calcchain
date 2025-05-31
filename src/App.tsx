@@ -289,7 +289,7 @@ interface MainAppBarProps {
 const MainAppBar: React.FC<MainAppBarProps> = ({ onMenuOpen, currentMode, toggleTheme, anchorEl, handleMenuClose }) => {
   const themeToggleButtonTitle = currentMode === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode';
   return (
-    <AppBar position="sticky" color="transparent" elevation={0} sx={{ bgcolor: 'background.default', boxShadow: (theme) => theme.shadows[2], py: 1, borderBottom: (theme) => `0px solid ${theme.palette.divider}` }}>
+    <AppBar position="sticky" color="transparent" elevation={0} sx={{ bgcolor: 'background.paper', boxShadow: (theme) => theme.shadows[2], py: 1, borderBottom: (theme) => `0px solid ${theme.palette.divider}` }}>
       <Box sx={{ maxWidth: CONTENT_MAX_WIDTH, mx: 'auto', width: '100%', px: NAV_HORIZONTAL_PADDING }}>
         <Toolbar disableGutters sx={{ minHeight: { xs: 52, sm: 56 }, width: '100%', display: 'flex', justifyContent: 'space-between', px: 0 }}>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
