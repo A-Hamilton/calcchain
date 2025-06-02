@@ -296,21 +296,27 @@ const CryptoInsights: React.FC<CryptoInsightsProps> = React.memo(
                 }}
               >
                 <Tooltip
-                  title={copied ? "Copied!" : "Copy insight"}
+                  title={copied ? "✓ Copied!" : "Copy insight"}
                   arrow
                   TransitionComponent={Fade}
                 >
                   <IconButton
-                    size="small"
+                    size="medium"
                     onClick={handleCopy}
                     sx={{
+                      width: 36,
+                      height: 36,
                       color: "text.secondary",
+                      border: `1px solid ${alpha(variantConfig.color, 0.2)}`,
+                      borderRadius: 1,
                       "&:hover": {
                         color: variantConfig.color,
                         bgcolor: alpha(variantConfig.color, 0.1),
+                        borderColor: variantConfig.color,
+                        transform: "scale(1.05)",
                       },
                       transition: "all 0.2s ease",
-                      opacity: copied ? 1 : 0.7,
+                      opacity: copied ? 1 : 0.8,
                     }}
                     aria-label="Copy insight to clipboard"
                   >
