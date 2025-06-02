@@ -573,6 +573,12 @@ const InputForm: React.FC<InputFormProps> = ({
                     : "any"),
                 "aria-label": cfg.label,
                 "aria-describedby": `${cfg.key}-helper`,
+                style:
+                  cfg.type === "number"
+                    ? {
+                        MozAppearance: "textfield",
+                      }
+                    : undefined,
               }}
               SelectProps={
                 cfg.options
