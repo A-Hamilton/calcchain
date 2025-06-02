@@ -32,6 +32,8 @@ import {
   TrendingUp as TrendingUpIcon,
   Calculate as CalculateIcon,
   AutoFixHigh as AutoFixHighIcon,
+  Add as AddIcon,
+  Remove as RemoveIcon,
 } from "@mui/icons-material";
 import { m, AnimatePresence, useSpring, useTransform } from "framer-motion";
 import { fetchCandles, getAtrPerMin, Candle } from "../utils/atr";
