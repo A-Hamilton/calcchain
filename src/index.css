@@ -126,6 +126,20 @@ body {
   ::-webkit-scrollbar-thumb:hover {
     background: rgba(255, 255, 255, 0.5);
   }
+
+  /* Enhanced icon visibility in dark mode */
+  .MuiSvgIcon-root {
+    filter: none; /* Ensure icons aren't dimmed */
+  }
+
+  /* Ensure proper contrast for colored icons */
+  .MuiIconButton-root .MuiSvgIcon-colorPrimary {
+    color: #5c85f6 !important; /* Lighter primary for better contrast */
+  }
+
+  .MuiIconButton-root .MuiSvgIcon-colorSecondary {
+    color: #ba68c8 !important; /* Lighter secondary for better contrast */
+  }
 }
 
 /* Enhanced focus styles for better accessibility */
