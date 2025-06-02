@@ -560,6 +560,27 @@ export const createAppTheme = (mode: "light" | "dark") => {
       },
     },
 
+    // Add MuiInputBase to remove number spinners
+    MuiInputBase: {
+      styleOverrides: {
+        input: ({ theme }) => ({
+          '&[type="number"]': {
+            MozAppearance: "textfield !important",
+            "&::-webkit-outer-spin-button": {
+              WebkitAppearance: "none !important",
+              margin: "0 !important",
+              display: "none !important",
+            },
+            "&::-webkit-inner-spin-button": {
+              WebkitAppearance: "none !important",
+              margin: "0 !important",
+              display: "none !important",
+            },
+          },
+        }),
+      },
+    },
+
     // Enhanced Menu with backdrop blur and better shadows
     MuiMenu: {
       styleOverrides: {
