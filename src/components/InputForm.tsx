@@ -485,6 +485,39 @@ const InputForm: React.FC<InputFormProps> = ({
     );
   }, []);
 
+  // Stepper functionality for numerical inputs
+  const handleStepperChange = useCallback(
+    (field: keyof FormFields, direction: "up" | "down") => {
+      const currentValue = Number(form[field]) || 0;
+      const stepValue =
+        field === "gridCount" ||
+        field === "durationDays" ||
+        field === "leverage"
+          ? 1
+          : field === "feePercent"
+            ? 0.01
+            : field === "principal"
+              ? 100
+              : 0.01;
+
+      const newValue =
+        direction === "up"
+          ? currentValue + stepValue
+          : Math.max(0, currentValue - stepValue);
+
+      const formattedValue =
+        field === "gridCount" ||
+        field === "durationDays" ||
+        field === "leverage"
+          ? Math.round(newValue).toString()
+          : newValue.toFixed(field === "feePercent" ? 2 : 2);
+
+      setForm((prev) => ({ ...prev, [field]: formattedValue }));
+      setFormTouched((prev) => ({ ...prev, [field]: true }));
+    },
+    [form],
+  );
+
   // Enhanced field rendering with better accessibility and animations
   const renderField = useCallback(
     (cfg: FieldConfig, index: number) => {
@@ -498,6 +531,16 @@ const InputForm: React.FC<InputFormProps> = ({
           ? localSymbolFetchError || calculationErrorFromApp || errors.symbol
           : errors[cfg.key];
       const showError = hasError && formTouched[cfg.key];
+
+      const isNumericalField =
+        cfg.type === "number" &&
+        [
+          "gridCount",
+          "leverage",
+          "feePercent",
+          "principal",
+          "durationDays",
+        ].includes(cfg.key);
 
       return (
         <Grid item component="div" xs={12} sm={6} key={cfg.key}>
