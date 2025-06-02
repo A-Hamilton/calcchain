@@ -298,18 +298,40 @@ export const createAppTheme = (mode: "light" | "dark") => {
           outline: `2px solid ${currentPalette.primary?.main}`,
           outlineOffset: "2px",
         },
-        // Remove number input spinners globally
+        // Remove number input spinners globally with multiple approaches
         'input[type="number"]': {
-          MozAppearance: "textfield",
+          MozAppearance: "textfield !important",
           "&::-webkit-outer-spin-button": {
-            WebkitAppearance: "none",
-            margin: 0,
-            display: "none",
+            WebkitAppearance: "none !important",
+            margin: "0 !important",
+            display: "none !important",
+            opacity: "0 !important",
+            pointerEvents: "none !important",
+            position: "absolute !important",
+            right: "-9999px !important",
           },
           "&::-webkit-inner-spin-button": {
-            WebkitAppearance: "none",
-            margin: 0,
-            display: "none",
+            WebkitAppearance: "none !important",
+            margin: "0 !important",
+            display: "none !important",
+            opacity: "0 !important",
+            pointerEvents: "none !important",
+            position: "absolute !important",
+            right: "-9999px !important",
+          },
+        },
+        // Target all possible input selectors
+        '.MuiInputBase-input[type="number"]': {
+          MozAppearance: "textfield !important",
+          "&::-webkit-outer-spin-button": {
+            WebkitAppearance: "none !important",
+            margin: "0 !important",
+            display: "none !important",
+          },
+          "&::-webkit-inner-spin-button": {
+            WebkitAppearance: "none !important",
+            margin: "0 !important",
+            display: "none !important",
           },
         },
         // Custom scrollbar styling
