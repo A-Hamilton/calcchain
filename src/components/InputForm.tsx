@@ -573,6 +573,7 @@ const InputForm: React.FC<InputFormProps> = ({
                     : "any"),
                 "aria-label": cfg.label,
                 "aria-describedby": `${cfg.key}-helper`,
+                className: cfg.type === "number" ? "no-spinners" : undefined,
                 style:
                   cfg.type === "number"
                     ? {
