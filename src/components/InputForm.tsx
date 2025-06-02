@@ -331,6 +331,27 @@ const InputForm: React.FC<InputFormProps> = ({
     Partial<Record<keyof FormFields, boolean>>
   >({});
 
+  // Force remove number input spinners with JavaScript
+  React.useEffect(() => {
+    const style = document.createElement("style");
+    style.textContent = `
+      input[type="number"]::-webkit-outer-spin-button,
+      input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none !important;
+        margin: 0 !important;
+        display: none !important;
+      }
+      input[type="number"] {
+        -moz-appearance: textfield !important;
+      }
+    `;
+    document.head.appendChild(style);
+
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
+
   // Enhanced spring animation for button interactions
   const buttonSpring = useSpring(0);
   const buttonScale = useTransform(buttonSpring, [0, 1], [1, 1.05]);
