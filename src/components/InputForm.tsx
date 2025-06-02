@@ -606,7 +606,25 @@ const InputForm: React.FC<InputFormProps> = ({
                     }
                   : undefined
               }
-              sx={textFieldSx}
+              sx={{
+                ...textFieldSx,
+                // Remove number input spinners
+                ...(cfg.type === "number" && {
+                  '& input[type="number"]::-webkit-outer-spin-button': {
+                    WebkitAppearance: "none",
+                    margin: 0,
+                    display: "none !important",
+                  },
+                  '& input[type="number"]::-webkit-inner-spin-button': {
+                    WebkitAppearance: "none",
+                    margin: 0,
+                    display: "none !important",
+                  },
+                  '& input[type="number"]': {
+                    MozAppearance: "textfield",
+                  },
+                }),
+              }}
               variant="outlined"
               fullWidth
               margin="dense"
