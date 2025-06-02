@@ -325,20 +325,29 @@ const CryptoInsights: React.FC<CryptoInsightsProps> = React.memo(
                 </Tooltip>
 
                 <Tooltip
-                  title={bookmarked ? "Remove bookmark" : "Bookmark insight"}
+                  title={bookmarked ? "✓ Bookmarked" : "Bookmark insight"}
                   arrow
                   TransitionComponent={Fade}
                 >
                   <IconButton
-                    size="small"
+                    size="medium"
                     onClick={handleBookmark}
                     sx={{
+                      width: 36,
+                      height: 36,
                       color: bookmarked
                         ? variantConfig.color
                         : "text.secondary",
+                      border: `1px solid ${alpha(variantConfig.color, bookmarked ? 0.4 : 0.2)}`,
+                      borderRadius: 1,
+                      bgcolor: bookmarked
+                        ? alpha(variantConfig.color, 0.1)
+                        : "transparent",
                       "&:hover": {
                         color: variantConfig.color,
-                        bgcolor: alpha(variantConfig.color, 0.1),
+                        bgcolor: alpha(variantConfig.color, 0.15),
+                        borderColor: variantConfig.color,
+                        transform: "scale(1.05)",
                       },
                       transition: "all 0.2s ease",
                     }}
@@ -356,21 +365,27 @@ const CryptoInsights: React.FC<CryptoInsightsProps> = React.memo(
 
                 {!isMobile && (
                   <Tooltip
-                    title={shared ? "Shared!" : "Share insight"}
+                    title={shared ? "✓ Shared!" : "Share insight"}
                     arrow
                     TransitionComponent={Fade}
                   >
                     <IconButton
-                      size="small"
+                      size="medium"
                       onClick={handleShare}
                       sx={{
+                        width: 36,
+                        height: 36,
                         color: "text.secondary",
+                        border: `1px solid ${alpha(variantConfig.color, 0.2)}`,
+                        borderRadius: 1,
                         "&:hover": {
                           color: variantConfig.color,
                           bgcolor: alpha(variantConfig.color, 0.1),
+                          borderColor: variantConfig.color,
+                          transform: "scale(1.05)",
                         },
                         transition: "all 0.2s ease",
-                        opacity: shared ? 1 : 0.7,
+                        opacity: shared ? 1 : 0.8,
                       }}
                       aria-label="Share insight"
                     >
