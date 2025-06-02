@@ -1174,48 +1174,132 @@ const AppContent: React.FC = () => {
           animate="visible"
           variants={sectionVariants}
           transition={{ delay: 0.1 }}
+          whileHover={{ y: -2 }}
         >
           <Paper
+            component="a"
+            href="https://support.pionex.com/hc/en-us/articles/45085712163225-Grid-Trading-Bot#h_01JQDJY326ASK9EM41WQ3ZQDX5/"
+            target="_blank"
+            rel="noopener noreferrer"
             sx={{
-              p: { xs: 2, sm: 2.5 },
+              p: { xs: 2.5, sm: 3 },
               mb: { xs: 3, md: 4 },
               bgcolor: alpha(themeFromProvider.palette.primary.main, 0.95),
               color: themeFromProvider.palette.primary.contrastText,
               borderRadius: themeFromProvider.shape.borderRadius,
-              border: `1px solid ${alpha(themeFromProvider.palette.primary.light, 0.3)}`,
+              border: `2px solid ${alpha(themeFromProvider.palette.primary.light, 0.3)}`,
               boxShadow: `0 4px 20px ${alpha(themeFromProvider.palette.primary.main, 0.25)}`,
+              textDecoration: "none",
+              display: "block",
+              cursor: "pointer",
+              position: "relative",
+              overflow: "hidden",
+              transition: "all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1)",
+              "&:hover": {
+                transform: "translateY(-3px)",
+                boxShadow: `0 8px 32px ${alpha(themeFromProvider.palette.primary.main, 0.4)}`,
+                borderColor: alpha(
+                  themeFromProvider.palette.primary.light,
+                  0.6,
+                ),
+                "&::before": {
+                  opacity: 1,
+                },
+              },
+              "&::before": {
+                content: '""',
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: `linear-gradient(45deg, ${alpha(themeFromProvider.palette.primary.light, 0.1)}, transparent)`,
+                opacity: 0,
+                transition: "opacity 0.3s ease",
+                pointerEvents: "none",
+              },
+              "&:focus-visible": {
+                outline: `3px solid ${alpha(themeFromProvider.palette.primary.light, 0.8)}`,
+                outlineOffset: "2px",
+              },
             }}
             elevation={0}
+            role="banner"
+            aria-label="Learn about Grid Trading - opens in new tab"
           >
-            <Typography
-              component="h2"
-              sx={{
-                fontWeight: 600,
-                mb: 0.5,
-                fontSize: "1.1rem",
-              }}
-            >
-              What is Grid Trading?
-            </Typography>
-            <Typography variant="body2" sx={{ lineHeight: 1.6 }}>
-              Grid trading automatically places buy and sell orders at preset
-              intervals within a price range to profit from volatility.{" "}
-              <a
-                href="https://support.pionex.com/hc/en-us/articles/45085712163225-Grid-Trading-Bot#h_01JQDJY326ASK9EM41WQ3ZQDX5/"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  color: themeFromProvider.palette.info.light,
-                  textDecoration: "underline",
-                  fontWeight: 500,
-                  "&:hover": {
-                    textDecoration: "none",
-                  },
+            <Box sx={{ position: "relative", zIndex: 1 }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  mb: 1,
                 }}
               >
-                Learn more →
-              </a>
-            </Typography>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                  <Box
+                    sx={{
+                      width: 32,
+                      height: 32,
+                      borderRadius: "50%",
+                      bgcolor: alpha(
+                        themeFromProvider.palette.primary.light,
+                        0.2,
+                      ),
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Typography sx={{ fontSize: "1.2rem" }}>📈</Typography>
+                  </Box>
+                  <Typography
+                    component="h2"
+                    sx={{
+                      fontWeight: 700,
+                      fontSize: "1.2rem",
+                      color: "inherit",
+                    }}
+                  >
+                    What is Grid Trading?
+                  </Typography>
+                </Box>
+                <Box
+                  sx={{
+                    width: 24,
+                    height: 24,
+                    borderRadius: "50%",
+                    bgcolor: alpha(
+                      themeFromProvider.palette.primary.light,
+                      0.2,
+                    ),
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    transition: "transform 0.3s ease",
+                  }}
+                  className="learn-more-icon"
+                >
+                  <Typography sx={{ fontSize: "0.8rem", fontWeight: "bold" }}>
+                    →
+                  </Typography>
+                </Box>
+              </Box>
+              <Typography
+                variant="body2"
+                sx={{
+                  lineHeight: 1.6,
+                  color: "inherit",
+                  opacity: 0.95,
+                }}
+              >
+                Grid trading automatically places buy and sell orders at preset
+                intervals within a price range to profit from volatility.
+                <strong style={{ fontWeight: 600, marginLeft: "8px" }}>
+                  Click to learn more about this strategy →
+                </strong>
+              </Typography>
+            </Box>
           </Paper>
         </m.div>
 
