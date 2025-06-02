@@ -295,7 +295,7 @@ export const createAppTheme = (mode: "light" | "dark") => {
           boxSizing: "border-box",
         },
         "*:focus-visible": {
-          outline: `2px solid ${currentPalette.primary?.main}`,
+          outline: `2px solid ${(currentPalette.primary as any)?.main || '#2B66F6'}`, // Type assertion added
           outlineOffset: "2px",
         },
         // Remove number input spinners globally with multiple approaches

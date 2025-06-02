@@ -604,7 +604,7 @@ const InputForm: React.FC<InputFormProps> = ({
                       }
                     : undefined,
               }}
-              InputProps={{
+              InputProps={{ // Merged InputProps
                 ...(cfg.adornment && {
                   startAdornment: (
                     <InputAdornment position="start">
@@ -623,7 +623,6 @@ const InputForm: React.FC<InputFormProps> = ({
                     <Box
                       sx={{ display: "flex", alignItems: "center", gap: 0.5 }}
                     >
-                      {/* Stepper buttons for numerical fields */}
                       {isNumericalField && (
                         <Box
                           sx={{
@@ -679,7 +678,6 @@ const InputForm: React.FC<InputFormProps> = ({
                           </IconButton>
                         </Box>
                       )}
-
                       <Tooltip
                         title={cfg.help}
                         placement="top"
@@ -719,26 +717,26 @@ const InputForm: React.FC<InputFormProps> = ({
                     </Box>
                   </InputAdornment>
                 ),
-                // Add direct styles to remove spinners
+                // Add direct styles to remove spinners (if needed here, though also handled by inputProps.style)
                 ...(cfg.type === "number" && {
-                  sx: {
-                    "& input": {
-                      "&::-webkit-outer-spin-button": {
-                        WebkitAppearance: "none",
-                        margin: 0,
-                        display: "none",
-                      },
-                      "&::-webkit-inner-spin-button": {
-                        WebkitAppearance: "none",
-                        margin: 0,
-                        display: "none",
-                      },
-                      '&[type="number"]': {
-                        MozAppearance: "textfield",
+                    sx: {
+                      "& input": {
+                        "&::-webkit-outer-spin-button": {
+                          WebkitAppearance: "none",
+                          margin: 0,
+                          display: "none",
+                        },
+                        "&::-webkit-inner-spin-button": {
+                          WebkitAppearance: "none",
+                          margin: 0,
+                          display: "none",
+                        },
+                        '&[type="number"]': {
+                          MozAppearance: "textfield",
+                        },
                       },
                     },
-                  },
-                }),
+                  }),
               }}
               SelectProps={
                 cfg.options
@@ -768,144 +766,12 @@ const InputForm: React.FC<InputFormProps> = ({
               }
               sx={{
                 ...textFieldSx,
-                // Remove number input spinners
-                ...(cfg.type === "number" && {
-                  '& input[type="number"]::-webkit-outer-spin-button': {
-                    WebkitAppearance: "none",
-                    margin: 0,
-                    display: "none !important",
-                  },
-                  '& input[type="number"]::-webkit-inner-spin-button': {
-                    WebkitAppearance: "none",
-                    margin: 0,
-                    display: "none !important",
-                  },
-                  '& input[type="number"]': {
-                    MozAppearance: "textfield",
-                  },
-                }),
               }}
               variant="outlined"
               fullWidth
               margin="dense"
               error={showError}
               required={cfg.validation?.required}
-              InputProps={{
-                ...(cfg.adornment && {
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <Typography
-                        variant="body2"
-                        color="text.secondary"
-                        sx={{ fontWeight: 600 }}
-                      >
-                        {cfg.adornment}
-                      </Typography>
-                    </InputAdornment>
-                  ),
-                }),
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <Box
-                      sx={{ display: "flex", alignItems: "center", gap: 0.5 }}
-                    >
-                      {/* Stepper buttons for numerical fields */}
-                      {isNumericalField && (
-                        <Box
-                          sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                            border: `1px solid ${theme.palette.divider}`,
-                            borderRadius: 1,
-                            overflow: "hidden",
-                          }}
-                        >
-                          <IconButton
-                            size="small"
-                            onClick={() => handleStepperChange(cfg.key, "up")}
-                            sx={{
-                              minWidth: 20,
-                              width: 20,
-                              height: 16,
-                              borderRadius: 0,
-                              color: "text.secondary",
-                              "&:hover": {
-                                bgcolor: alpha(theme.palette.primary.main, 0.1),
-                                color: "primary.main",
-                              },
-                              transition: "all 0.2s ease",
-                            }}
-                            aria-label={`Increase ${cfg.label}`}
-                            tabIndex={-1}
-                          >
-                            <AddIcon sx={{ fontSize: 12 }} />
-                          </IconButton>
-                          <Divider
-                            sx={{ borderColor: theme.palette.divider }}
-                          />
-                          <IconButton
-                            size="small"
-                            onClick={() => handleStepperChange(cfg.key, "down")}
-                            sx={{
-                              minWidth: 20,
-                              width: 20,
-                              height: 16,
-                              borderRadius: 0,
-                              color: "text.secondary",
-                              "&:hover": {
-                                bgcolor: alpha(theme.palette.primary.main, 0.1),
-                                color: "primary.main",
-                              },
-                              transition: "all 0.2s ease",
-                            }}
-                            aria-label={`Decrease ${cfg.label}`}
-                            tabIndex={-1}
-                          >
-                            <RemoveIcon sx={{ fontSize: 12 }} />
-                          </IconButton>
-                        </Box>
-                      )}
-
-                      <Tooltip
-                        title={cfg.help}
-                        placement="top"
-                        arrow
-                        TransitionComponent={Zoom}
-                        componentsProps={{
-                          tooltip: {
-                            sx: {
-                              maxWidth: 300,
-                              fontSize: "0.75rem",
-                            },
-                          },
-                        }}
-                      >
-                        <IconButton
-                          size="small"
-                          sx={{
-                            color: "text.secondary",
-                            p: 0.5,
-                            width: 28,
-                            height: 28,
-                            "&:hover": {
-                              backgroundColor: alpha(
-                                theme.palette.action.hover,
-                                0.8,
-                              ),
-                              color: theme.palette.text.primary,
-                              transform: "scale(1.1)",
-                            },
-                            transition: "all 0.2s ease-in-out",
-                          }}
-                          aria-label={`Information about ${cfg.label}`}
-                        >
-                          <InfoOutlinedIcon fontSize="small" />
-                        </IconButton>
-                      </Tooltip>
-                    </Box>
-                  </InputAdornment>
-                ),
-              }}
               FormHelperTextProps={{
                 id: `${cfg.key}-helper`,
               }}
@@ -1008,6 +874,7 @@ const InputForm: React.FC<InputFormProps> = ({
       calculationErrorFromApp,
       formTouched,
       handleChange,
+      handleStepperChange,
       renderSelectValue,
       theme,
     ],
