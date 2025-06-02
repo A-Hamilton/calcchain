@@ -411,6 +411,20 @@ export const createAppTheme = (mode: "light" | "dark") => {
               color: theme.palette.text.disabled,
               opacity: 1,
             },
+            // Remove number input spinners
+            '&[type="number"]::-webkit-outer-spin-button': {
+              WebkitAppearance: "none",
+              margin: 0,
+              display: "none",
+            },
+            '&[type="number"]::-webkit-inner-spin-button': {
+              WebkitAppearance: "none",
+              margin: 0,
+              display: "none",
+            },
+            '&[type="number"]': {
+              MozAppearance: "textfield",
+            },
           },
           "& .MuiFormHelperText-root": {
             color: theme.palette.text.secondary,
