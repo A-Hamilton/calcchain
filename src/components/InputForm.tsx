@@ -87,7 +87,7 @@ const fieldConfigs: FieldConfig[] = [
     key: "symbol",
     label: "Trading Symbol",
     type: "text",
-    help: "Enter a valid trading pair (e.g., BTCUSDT, ETHUSDT). Must be available on Binance.",
+    help: "Enter a valid trading pair (e.g., BTCUSDT, ETHUSDT). Data sourced from Binance.",
     group: "Asset & Investment",
     icon: <TrendingUpIcon />,
     validation: { required: true },
