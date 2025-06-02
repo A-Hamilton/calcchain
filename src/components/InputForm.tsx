@@ -1201,22 +1201,56 @@ const InputForm: React.FC<InputFormProps> = ({
                   fontSize: { xs: "0.875rem", md: "0.95rem" },
                   fontWeight: 600,
                   borderWidth: "2px",
+                  position: "relative",
+                  overflow: "hidden",
                   "&:hover": {
                     borderWidth: "2px",
+                  },
+                  "&:disabled": {
+                    borderWidth: "2px",
+                    opacity: 0.6,
+                  },
+                  // Loading shimmer effect
+                  ...(isOptimizing && {
+                    "&::before": {
+                      content: '""',
+                      position: "absolute",
+                      top: 0,
+                      left: "-100%",
+                      width: "100%",
+                      height: "100%",
+                      background: `linear-gradient(90deg, transparent, ${alpha(theme.palette.primary.main, 0.2)}, transparent)`,
+                      animation: "shimmer 2s infinite",
+                    },
+                  }),
+                  "@keyframes shimmer": {
+                    "0%": { left: "-100%" },
+                    "100%": { left: "100%" },
                   },
                 }}
                 type="button"
                 disabled={isOptimizing || !form.symbol.trim()}
                 startIcon={
                   isOptimizing ? (
-                    <CircularProgress size={20} color="inherit" />
+                    <m.div
+                      animate={{ rotate: 360 }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: "linear",
+                      }}
+                    >
+                      <AutoFixHighIcon />
+                    </m.div>
                   ) : (
                     <AutoFixHighIcon />
                   )
                 }
                 aria-label="Optimize trading parameters using AI"
               >
-                {isOptimizing ? "Optimizing..." : "Optimize Values"}
+                {isOptimizing
+                  ? "Analyzing Market Data..."
+                  : "✨ Optimize Values"}
               </Button>
 
               <Button
