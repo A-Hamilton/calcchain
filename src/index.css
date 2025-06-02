@@ -341,6 +341,27 @@ input[type="number"]::-webkit-inner-spin-button {
   height: 0 !important;
 }
 
+/* Specific class for removing spinners */
+.no-spinners {
+  -moz-appearance: textfield !important;
+  appearance: textfield !important;
+}
+
+.no-spinners::-webkit-outer-spin-button,
+.no-spinners::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  margin: 0 !important;
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  position: absolute !important;
+  right: -999px !important;
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
 /* Enhanced button styles */
 button {
   cursor: pointer;
