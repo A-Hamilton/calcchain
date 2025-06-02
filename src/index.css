@@ -362,6 +362,63 @@ input[type="number"]::-webkit-inner-spin-button {
   height: 0 !important;
 }
 
+/* Maximum specificity approach - target everything */
+html body #root * input[type="number"] {
+  -moz-appearance: textfield !important;
+  appearance: textfield !important;
+}
+
+html body #root * input[type="number"]::-webkit-outer-spin-button,
+html body #root * input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  margin: 0 !important;
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  position: absolute !important;
+  right: -999px !important;
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* Target the specific MUI classes with maximum specificity */
+html
+  body
+  #root
+  .MuiTextField-root
+  .MuiOutlinedInput-root
+  .MuiOutlinedInput-input[type="number"] {
+  -moz-appearance: textfield !important;
+  appearance: textfield !important;
+}
+
+html
+  body
+  #root
+  .MuiTextField-root
+  .MuiOutlinedInput-root
+  .MuiOutlinedInput-input[type="number"]::-webkit-outer-spin-button,
+html
+  body
+  #root
+  .MuiTextField-root
+  .MuiOutlinedInput-root
+  .MuiOutlinedInput-input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  margin: 0 !important;
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  position: absolute !important;
+  right: -999px !important;
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
 /* Enhanced button styles */
 button {
   cursor: pointer;
