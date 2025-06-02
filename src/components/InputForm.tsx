@@ -1375,10 +1375,15 @@ const InputForm: React.FC<InputFormProps> = ({
           {/* Enhanced snackbar */}
           <Snackbar
             open={snackbar.open}
-            autoHideDuration={6000}
+            autoHideDuration={snackbar.severity === "error" ? 8000 : 5000}
             onClose={() => setSnackbar((s) => ({ ...s, open: false }))}
             anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
             TransitionComponent={Fade}
+            sx={{
+              "& .MuiSnackbar-root": {
+                bottom: { xs: 80, sm: 24 }, // Account for mobile keyboards
+              },
+            }}
           >
             <Alert
               onClose={() => setSnackbar((s) => ({ ...s, open: false }))}
