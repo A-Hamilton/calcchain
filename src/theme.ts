@@ -298,6 +298,20 @@ export const createAppTheme = (mode: "light" | "dark") => {
           outline: `2px solid ${currentPalette.primary?.main}`,
           outlineOffset: "2px",
         },
+        // Remove number input spinners globally
+        'input[type="number"]': {
+          MozAppearance: "textfield",
+          "&::-webkit-outer-spin-button": {
+            WebkitAppearance: "none",
+            margin: 0,
+            display: "none",
+          },
+          "&::-webkit-inner-spin-button": {
+            WebkitAppearance: "none",
+            margin: 0,
+            display: "none",
+          },
+        },
         // Custom scrollbar styling
         "*::-webkit-scrollbar": {
           width: "8px",
