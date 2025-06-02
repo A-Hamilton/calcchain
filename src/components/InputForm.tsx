@@ -577,6 +577,29 @@ const InputForm: React.FC<InputFormProps> = ({
                   cfg.type === "number"
                     ? {
                         MozAppearance: "textfield",
+                        WebkitAppearance: "none",
+                      }
+                    : undefined,
+              }}
+              slotProps={{
+                input:
+                  cfg.type === "number"
+                    ? {
+                        sx: {
+                          "&::-webkit-outer-spin-button": {
+                            WebkitAppearance: "none !important",
+                            margin: 0,
+                            display: "none !important",
+                          },
+                          "&::-webkit-inner-spin-button": {
+                            WebkitAppearance: "none !important",
+                            margin: 0,
+                            display: "none !important",
+                          },
+                          '&[type="number"]': {
+                            MozAppearance: "textfield !important",
+                          },
+                        },
                       }
                     : undefined,
               }}
