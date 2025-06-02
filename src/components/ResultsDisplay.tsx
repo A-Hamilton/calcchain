@@ -5,6 +5,7 @@ import {
   Typography,
   Grid,
   Box,
+  Paper,
   useTheme,
   Tooltip,
   CircularProgress,
