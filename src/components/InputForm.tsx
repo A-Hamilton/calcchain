@@ -621,40 +621,103 @@ const InputForm: React.FC<InputFormProps> = ({
                 }),
                 endAdornment: (
                   <InputAdornment position="end">
-                    <Tooltip
-                      title={cfg.help}
-                      placement="top"
-                      arrow
-                      TransitionComponent={Zoom}
-                      componentsProps={{
-                        tooltip: {
-                          sx: {
-                            maxWidth: 300,
-                            fontSize: "0.75rem",
-                          },
-                        },
-                      }}
+                    <Box
+                      sx={{ display: "flex", alignItems: "center", gap: 0.5 }}
                     >
-                      <IconButton
-                        size="small"
-                        sx={{
-                          color: "text.secondary",
-                          p: 0.5,
-                          "&:hover": {
-                            backgroundColor: alpha(
-                              theme.palette.action.hover,
-                              0.8,
-                            ),
-                            color: theme.palette.text.primary,
-                            transform: "scale(1.1)",
+                      {/* Stepper buttons for numerical fields */}
+                      {isNumericalField && (
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            border: `1px solid ${theme.palette.divider}`,
+                            borderRadius: 1,
+                            overflow: "hidden",
+                          }}
+                        >
+                          <IconButton
+                            size="small"
+                            onClick={() => handleStepperChange(cfg.key, "up")}
+                            sx={{
+                              minWidth: 20,
+                              width: 20,
+                              height: 16,
+                              borderRadius: 0,
+                              color: "text.secondary",
+                              "&:hover": {
+                                bgcolor: alpha(theme.palette.primary.main, 0.1),
+                                color: "primary.main",
+                              },
+                              transition: "all 0.2s ease",
+                            }}
+                            aria-label={`Increase ${cfg.label}`}
+                            tabIndex={-1}
+                          >
+                            <AddIcon sx={{ fontSize: 12 }} />
+                          </IconButton>
+                          <Divider
+                            sx={{ borderColor: theme.palette.divider }}
+                          />
+                          <IconButton
+                            size="small"
+                            onClick={() => handleStepperChange(cfg.key, "down")}
+                            sx={{
+                              minWidth: 20,
+                              width: 20,
+                              height: 16,
+                              borderRadius: 0,
+                              color: "text.secondary",
+                              "&:hover": {
+                                bgcolor: alpha(theme.palette.primary.main, 0.1),
+                                color: "primary.main",
+                              },
+                              transition: "all 0.2s ease",
+                            }}
+                            aria-label={`Decrease ${cfg.label}`}
+                            tabIndex={-1}
+                          >
+                            <RemoveIcon sx={{ fontSize: 12 }} />
+                          </IconButton>
+                        </Box>
+                      )}
+
+                      <Tooltip
+                        title={cfg.help}
+                        placement="top"
+                        arrow
+                        TransitionComponent={Zoom}
+                        componentsProps={{
+                          tooltip: {
+                            sx: {
+                              maxWidth: 300,
+                              fontSize: "0.75rem",
+                            },
                           },
-                          transition: "all 0.2s ease-in-out",
                         }}
-                        aria-label={`Information about ${cfg.label}`}
                       >
-                        <InfoOutlinedIcon fontSize="small" />
-                      </IconButton>
-                    </Tooltip>
+                        <IconButton
+                          size="small"
+                          sx={{
+                            color: "text.secondary",
+                            p: 0.5,
+                            width: 28,
+                            height: 28,
+                            "&:hover": {
+                              backgroundColor: alpha(
+                                theme.palette.action.hover,
+                                0.8,
+                              ),
+                              color: theme.palette.text.primary,
+                              transform: "scale(1.1)",
+                            },
+                            transition: "all 0.2s ease-in-out",
+                          }}
+                          aria-label={`Information about ${cfg.label}`}
+                        >
+                          <InfoOutlinedIcon fontSize="small" />
+                        </IconButton>
+                      </Tooltip>
+                    </Box>
                   </InputAdornment>
                 ),
               }}
