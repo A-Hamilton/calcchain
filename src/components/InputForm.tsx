@@ -741,16 +741,60 @@ const InputForm: React.FC<InputFormProps> = ({
                       })}
                     </Box>
                   )}
-                  <Typography
-                    variant="caption"
-                    sx={{
-                      color: showError ? "error.main" : "text.secondary",
-                      fontWeight: showError ? 500 : 400,
-                      lineHeight: 1.4,
-                    }}
-                  >
-                    {showError ? errorMessage : cfg.help}
-                  </Typography>
+                  <Box sx={{ flex: 1 }}>
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        color: showError ? "error.main" : "text.secondary",
+                        fontWeight: showError ? 500 : 400,
+                        lineHeight: 1.4,
+                        display: "block",
+                      }}
+                    >
+                      {showError ? errorMessage : cfg.help}
+                    </Typography>
+                    {cfg.key === "symbol" && !showError && (
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 0.5,
+                          mt: 0.5,
+                          p: 0.5,
+                          bgcolor: alpha(theme.palette.warning.main, 0.1),
+                          borderRadius: 1,
+                          border: `1px solid ${alpha(theme.palette.warning.main, 0.2)}`,
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            width: 16,
+                            height: 16,
+                            bgcolor: "#F0B90B", // Binance yellow
+                            borderRadius: "50%",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            fontSize: "10px",
+                            fontWeight: "bold",
+                            color: "white",
+                          }}
+                        >
+                          B
+                        </Box>
+                        <Typography
+                          variant="caption"
+                          sx={{
+                            fontSize: "0.7rem",
+                            color: "warning.dark",
+                            fontWeight: 500,
+                          }}
+                        >
+                          Powered by Binance API
+                        </Typography>
+                      </Box>
+                    )}
+                  </Box>
                 </Box>
               }
             >
