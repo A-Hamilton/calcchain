@@ -1271,6 +1271,8 @@ const InputForm: React.FC<InputFormProps> = ({
                   fontSize: { xs: "0.875rem", md: "0.95rem" },
                   fontWeight: 600,
                   background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
+                  position: "relative",
+                  overflow: "hidden",
                   "&:hover": {
                     background: `linear-gradient(45deg, ${theme.palette.primary.dark}, ${theme.palette.primary.main})`,
                   },
@@ -1278,12 +1280,31 @@ const InputForm: React.FC<InputFormProps> = ({
                     background: theme.palette.action.disabledBackground,
                     color: theme.palette.action.disabled,
                   },
+                  // Success pulse effect when enabled
+                  ...(!isCalculateDisabled && {
+                    "&::after": {
+                      content: '""',
+                      position: "absolute",
+                      top: "50%",
+                      left: "50%",
+                      width: "0",
+                      height: "0",
+                      borderRadius: "50%",
+                      background: alpha(theme.palette.common.white, 0.3),
+                      transform: "translate(-50%, -50%)",
+                      transition: "width 0.6s ease, height 0.6s ease",
+                    },
+                    "&:hover::after": {
+                      width: "300px",
+                      height: "300px",
+                    },
+                  }),
                 }}
                 disabled={isCalculateDisabled}
                 startIcon={<CalculateIcon />}
                 aria-label="Calculate grid trading profits"
               >
-                Calculate Results
+                🚀 Calculate Results
               </Button>
             </Box>
 
