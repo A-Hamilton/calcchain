@@ -577,31 +577,146 @@ const InputForm: React.FC<InputFormProps> = ({
                   cfg.type === "number"
                     ? {
                         MozAppearance: "textfield",
-                        WebkitAppearance: "none",
+                        WebkitAppearance: "textfield",
+                        appearance: "textfield",
                       }
                     : undefined,
               }}
-              slotProps={{
-                input:
-                  cfg.type === "number"
-                    ? {
-                        sx: {
-                          "&::-webkit-outer-spin-button": {
-                            WebkitAppearance: "none !important",
-                            margin: 0,
-                            display: "none !important",
+              InputProps={{
+                ...(cfg.adornment && {
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        sx={{ fontWeight: 600 }}
+                      >
+                        {cfg.adornment}
+                      </Typography>
+                    </InputAdornment>
+                  ),
+                }),
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <Box
+                      sx={{ display: "flex", alignItems: "center", gap: 0.5 }}
+                    >
+                      {/* Stepper buttons for numerical fields */}
+                      {isNumericalField && (
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            border: `1px solid ${theme.palette.divider}`,
+                            borderRadius: 1,
+                            overflow: "hidden",
+                          }}
+                        >
+                          <IconButton
+                            size="small"
+                            onClick={() => handleStepperChange(cfg.key, "up")}
+                            sx={{
+                              minWidth: 20,
+                              width: 20,
+                              height: 16,
+                              borderRadius: 0,
+                              color: "text.secondary",
+                              "&:hover": {
+                                bgcolor: alpha(theme.palette.primary.main, 0.1),
+                                color: "primary.main",
+                              },
+                              transition: "all 0.2s ease",
+                            }}
+                            aria-label={`Increase ${cfg.label}`}
+                            tabIndex={-1}
+                          >
+                            <AddIcon sx={{ fontSize: 12 }} />
+                          </IconButton>
+                          <Divider
+                            sx={{ borderColor: theme.palette.divider }}
+                          />
+                          <IconButton
+                            size="small"
+                            onClick={() => handleStepperChange(cfg.key, "down")}
+                            sx={{
+                              minWidth: 20,
+                              width: 20,
+                              height: 16,
+                              borderRadius: 0,
+                              color: "text.secondary",
+                              "&:hover": {
+                                bgcolor: alpha(theme.palette.primary.main, 0.1),
+                                color: "primary.main",
+                              },
+                              transition: "all 0.2s ease",
+                            }}
+                            aria-label={`Decrease ${cfg.label}`}
+                            tabIndex={-1}
+                          >
+                            <RemoveIcon sx={{ fontSize: 12 }} />
+                          </IconButton>
+                        </Box>
+                      )}
+
+                      <Tooltip
+                        title={cfg.help}
+                        placement="top"
+                        arrow
+                        TransitionComponent={Zoom}
+                        componentsProps={{
+                          tooltip: {
+                            sx: {
+                              maxWidth: 300,
+                              fontSize: "0.75rem",
+                            },
                           },
-                          "&::-webkit-inner-spin-button": {
-                            WebkitAppearance: "none !important",
-                            margin: 0,
-                            display: "none !important",
-                          },
-                          '&[type="number"]': {
-                            MozAppearance: "textfield !important",
-                          },
-                        },
-                      }
-                    : undefined,
+                        }}
+                      >
+                        <IconButton
+                          size="small"
+                          sx={{
+                            color: "text.secondary",
+                            p: 0.5,
+                            width: 28,
+                            height: 28,
+                            "&:hover": {
+                              backgroundColor: alpha(
+                                theme.palette.action.hover,
+                                0.8,
+                              ),
+                              color: theme.palette.text.primary,
+                              transform: "scale(1.1)",
+                            },
+                            transition: "all 0.2s ease-in-out",
+                          }}
+                          aria-label={`Information about ${cfg.label}`}
+                        >
+                          <InfoOutlinedIcon fontSize="small" />
+                        </IconButton>
+                      </Tooltip>
+                    </Box>
+                  </InputAdornment>
+                ),
+                // Add direct styles to remove spinners
+                ...(cfg.type === "number" && {
+                  sx: {
+                    "& input": {
+                      "&::-webkit-outer-spin-button": {
+                        WebkitAppearance: "none",
+                        margin: 0,
+                        display: "none",
+                      },
+                      "&::-webkit-inner-spin-button": {
+                        WebkitAppearance: "none",
+                        margin: 0,
+                        display: "none",
+                      },
+                      '&[type="number"]': {
+                        MozAppearance: "textfield",
+                      },
+                    },
+                  },
+                }),
               }}
               SelectProps={
                 cfg.options
