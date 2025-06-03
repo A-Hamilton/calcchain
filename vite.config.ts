@@ -5,62 +5,89 @@ import { visualizer } from 'rollup-plugin-visualizer'; // To analyze bundle size
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => { // Add mode to access environment
   const isProduction = mode === 'production';
+  const isAnalyze = mode === 'analyze';
 
   return {
     plugins: [
       react(),
-      // Add visualizer plugin only in non-production modes or when specifically enabled
-      // To run: `vite build --mode analyze` (or similar, then open the stats.html)
-      !isProduction ? visualizer({
-        filename: 'dist/stats.html', // Output stats file to dist directory
-        open: true, // Automatically open in browser
-        gzipSize: true,
-        brotliSize: true,
-      }) : undefined,
-    ].filter(Boolean), // Filter out undefined plugins
+      // Add bundle analyzer when in analyze mode
+      ...(isAnalyze ? [visualizer({ filename: 'dist/stats.html', open: true })] : []),
+    ],
+
     build: {
       rollupOptions: {
         output: {
-          manualChunks(id, { getModuleInfo }) {
-            // Group major libraries into their own chunks
-            // Temporarily comment out or remove these blocks
-            /*
-            if (id.includes('node_modules/@mui/material')) {
-              return 'vendor-mui-material';
-            }
-            if (id.includes('node_modules/@mui/icons-material')) {
-              return 'vendor-mui-icons';
-            }
-            */
-            // Emotion, React, ReactDOM chunks should still be commented out from previous steps
-            /*
-            if (id.includes('node_modules/@emotion')) {
-              return 'vendor-emotion';
-            }
-            */
-            if (id.includes('node_modules/framer-motion')) {
-              return 'vendor-framer-motion';
-            }
-            /*
-            if (id.includes('node_modules/react-dom')) {
-              return 'vendor-react-dom';
-            }
-            if (id.includes('node_modules/react')) {
-              return 'vendor-react';
-            }
-            */
-            // Catch-all for other node_modules
-            if (id.includes('node_modules')) {
-              return 'vendor-others';
-            }
+          manualChunks: {
+            // Keep React and React-DOM together to avoid initialization issues
+            'vendor-react': ['react', 'react-dom'],
+            // Group MUI with Emotion since they're tightly coupled
+            'vendor-mui': [
+              '@mui/material',
+              '@mui/system', 
+              '@mui/icons-material',
+              '@mui/x-date-pickers',
+              '@emotion/react',
+              '@emotion/styled'
+            ],
+            // Chart libraries
+            'vendor-charts': ['recharts'],
+            // Other utilities
+            'vendor-utils': ['framer-motion', 'axios', 'dayjs', 'jspdf']
           },
         },
       },
-      // ...
+      // Enhanced build optimization with better compatibility
+      target: 'es2020', // Updated for better modern browser support
+      minify: isProduction ? 'terser' : false, // Only minify in production
+      terserOptions: isProduction ? {
+        compress: {
+          drop_console: true,
+          drop_debugger: true,
+          passes: 1, // Single pass for stability
+          pure_funcs: ['console.log'], // Remove console.log calls
+        },
+        mangle: {
+          toplevel: false, // Prevent variable conflicts
+          keep_fnames: true, // Keep function names for better debugging
+        },
+        format: {
+          comments: false,
+        },
+      } : undefined,
+      sourcemap: !isProduction,
+      chunkSizeWarningLimit: 1000,
+      cssCodeSplit: true,
+      // Add explicit external dependencies handling
+      assetsInlineLimit: 4096, // Inline small assets
     },
 
     server: {
-      port: 3000, // Or your preferred port
+      port: 3000,
+      host: true, // Allow external connections
+    },
+    
+    // Enhanced resolve configuration to prevent dependency conflicts
+    resolve: {
+      dedupe: ['react', 'react-dom', '@emotion/react', '@emotion/styled', '@mui/material'],
+      alias: {
+        // Ensure consistent React imports
+        'react': 'react',
+        'react-dom': 'react-dom',
+      },
+    },
+
+    // Add optimizeDeps to handle problematic dependencies
+    optimizeDeps: {
+      include: [
+        'react',
+        'react-dom',
+        '@emotion/react',
+        '@emotion/styled',
+        '@mui/material',
+        '@mui/system',
+        '@mui/icons-material',
+      ],
+      exclude: [],
     },
   };
 });

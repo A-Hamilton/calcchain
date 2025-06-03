@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import {
   Alert,
   AlertTitle,
@@ -161,19 +161,19 @@ class ErrorBoundary extends React.Component<
   }
 }
 
-// Enhanced error UI component
-const EnhancedErrorUI: React.FC<{
+// Enhanced error UI component with memoization
+const EnhancedErrorUI = React.memo<{
   hasError: boolean;
   error: Error | null;
   errorInfo: React.ErrorInfo | null;
   errorId: string;
   onRetry: () => void;
-}> = ({ error, errorInfo, errorId, onRetry }) => {
+}>(({ error, errorInfo, errorId, onRetry }) => {
   const theme = useTheme();
-  const [showDetails, setShowDetails] = React.useState(false);
-  const [copied, setCopied] = React.useState(false);
+  const [showDetails, setShowDetails] = useState(false);
+  const [copied, setCopied] = useState(false);
 
-  const copyErrorReport = React.useCallback(async () => {
+  const copyErrorReport = useCallback(async () => {
     const errorReport = {
       errorId,
       error: error?.message,
@@ -192,12 +192,12 @@ const EnhancedErrorUI: React.FC<{
     }
   }, [error, errorInfo, errorId]);
 
-  const isNetworkError =
+  const isNetworkError = useMemo(() => 
     error?.message?.toLowerCase().includes("network") ||
     error?.message?.toLowerCase().includes("fetch") ||
-    error?.name === "TypeError";
-
-  const errorVariants = {
+    error?.name === "TypeError"
+  , [error]);
+  const errorVariants = useMemo(() => ({
     hidden: { opacity: 0, y: 20, scale: 0.95 },
     visible: {
       opacity: 1,
@@ -209,9 +209,9 @@ const EnhancedErrorUI: React.FC<{
         type: "spring",
         stiffness: 120,
         damping: 20,
-      },
-    },
-  };
+      }
+    }
+  }), []);
 
   return (
     <Box
@@ -251,7 +251,7 @@ const EnhancedErrorUI: React.FC<{
             >
               <ErrorOutlineIcon sx={{ fontSize: 48, mb: 1 }} />
             </m.div>
-            <Typography variant="h5" fontWeight={700} gutterBottom>
+            <Typography variant="h5" component="h1" fontWeight={700} gutterBottom>
               Oops! Something went wrong
             </Typography>
             <Typography variant="body2" sx={{ opacity: 0.9 }}>
@@ -403,8 +403,7 @@ const EnhancedErrorUI: React.FC<{
                 </AnimatePresence>
               </Box>
 
-              {/* Help text */}
-              <Typography
+              {/* Help text */}              <Typography
                 variant="body2"
                 color="text.secondary"
                 textAlign="center"
@@ -421,6 +420,6 @@ const EnhancedErrorUI: React.FC<{
       </m.div>
     </Box>
   );
-};
+});
 
 export default ErrorBoundary;

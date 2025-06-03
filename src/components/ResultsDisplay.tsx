@@ -893,9 +893,8 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = React.memo(
                     ? alpha(theme.palette.primary.contrastText, 0.6)
                     : "text.secondary",
                 }}
-              >
-                <InfoIcon sx={{ fontSize: 64, mb: 2, opacity: 0.3 }} />
-                <Typography variant="h6" gutterBottom>
+              >                <InfoIcon sx={{ fontSize: 64, mb: 2, opacity: 0.3 }} />
+                <Typography variant="h6" component="h3" gutterBottom>
                   No metrics available
                 </Typography>
                 <Typography variant="body2">

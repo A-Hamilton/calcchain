@@ -6,12 +6,9 @@ import React, {
   lazy,
   useContext,
   useEffect,
+  memo,
 } from "react";
-import {
-  ThemeProvider,
-  useTheme as useMuiTheme,
-  alpha,
-} from "@mui/material/styles";
+import { ThemeProvider, useTheme as useMuiTheme, alpha } from "@mui/material/styles";
 import {
   CssBaseline,
   Box,
@@ -36,7 +33,6 @@ import {
   Card,
   useMediaQuery,
   Fade,
-  Backdrop,
 } from "@mui/material";
 import {
   Menu as MenuIcon,
@@ -79,9 +75,34 @@ import {
   GridType as GridTypeEnum,
 } from "./types";
 import { calculateGridProfit } from "./utils/calculator";
+import { debounce, performanceMonitor, cleanupMemory } from "./utils/performance";
+import { registerServiceWorker, createUpdateNotification } from "./utils/serviceWorker";
+import PerformanceMonitor from "./components/PerformanceMonitor";
 
-const ResultsDisplay = lazy(() => import("./components/ResultsDisplay"));
-const CryptoInsights = lazy(() => import("./components/CryptoInsights"));
+const ResultsDisplay = lazy(() => 
+  import("./components/ResultsDisplay").then(module => ({
+    default: module.default
+  }))
+);
+
+const CryptoInsights = lazy(() => 
+  import("./components/CryptoInsights").then(module => ({
+    default: module.default
+  }))
+);
+
+// Preload critical components for better performance
+const preloadCriticalComponents = () => {
+  // Preload ResultsDisplay after a short delay
+  setTimeout(() => {
+    import("./components/ResultsDisplay");
+  }, 1000);
+  
+  // Preload CryptoInsights after user interaction
+  setTimeout(() => {
+    import("./components/CryptoInsights");
+  }, 2000);
+};
 
 // Constants for responsive design
 const NAV_HORIZONTAL_PADDING = { xs: 1.5, sm: 2, md: 3 };
@@ -162,7 +183,7 @@ interface ResultsAreaProps {
 }
 
 // Enhanced InfoSection Component with accessibility improvements
-const InfoSection: React.FC<InfoSectionProps> = ({
+const InfoSection = memo<InfoSectionProps>(({
   title,
   icon,
   children,
@@ -263,10 +284,9 @@ const InfoSection: React.FC<InfoSectionProps> = ({
                   fontSize: "small",
                 })}
               </Box>
-            )}
-            <Typography
-              variant="h6"
-              component="h3"
+            )}            <Typography
+              variant="h5"
+              component="h2"
               sx={{
                 fontWeight: 500,
                 fontSize: "1.05rem",
@@ -294,18 +314,19 @@ const InfoSection: React.FC<InfoSectionProps> = ({
               {children}
             </m.div>
           </AccordionDetails>
-        </Accordion>
-      </Card>
+        </Accordion>      </Card>
     </m.div>
   );
-};
+});
 
-// Enhanced loading fallback with better UX
-const LazyLoadingFallback: React.FC<{
+InfoSection.displayName = 'InfoSection';
+
+// Memoized loading fallback component
+const LazyLoadingFallback = memo<{
   height?: number | string;
   message?: string;
   showProgress?: boolean;
-}> = ({ height = 200, message = "Loading...", showProgress = true }) => (
+}>(({ height = 200, message = "Loading...", showProgress = true }) => (
   <Box
     sx={{
       display: "flex",
@@ -341,10 +362,12 @@ const LazyLoadingFallback: React.FC<{
       {message}
     </Typography>
   </Box>
-);
+));
+
+LazyLoadingFallback.displayName = 'LazyLoadingFallback';
 
 // Enhanced skeleton with shimmer effect
-const ResultsSectionSkeleton: React.FC = () => {
+const ResultsSectionSkeleton = memo(() => {
   const theme = useMuiTheme();
   return (
     <Box role="status" aria-label="Loading results">
@@ -367,14 +390,15 @@ const ResultsSectionSkeleton: React.FC = () => {
               },
             }}
           />
-        </m.div>
-      ))}
+        </m.div>      ))}
     </Box>
   );
-};
+});
+
+ResultsSectionSkeleton.displayName = 'ResultsSectionSkeleton';
 
 // Enhanced main app bar with better accessibility
-const MainAppBar: React.FC<MainAppBarProps> = ({
+const MainAppBar = memo<MainAppBarProps>(({
   onMenuOpen,
   currentMode,
   toggleTheme,
@@ -558,14 +582,15 @@ const MainAppBar: React.FC<MainAppBarProps> = ({
               </MenuItem>
             </Menu>
           </Box>
-        </Toolbar>
-      </Box>
+        </Toolbar>      </Box>
     </AppBar>
   );
-};
+});
+
+MainAppBar.displayName = 'MainAppBar';
 
 // Enhanced results area with better error handling and loading states
-const ResultsArea: React.FC<ResultsAreaProps> = ({
+const ResultsArea = memo<ResultsAreaProps>(({
   isLoading,
   results,
   calculationError,
@@ -826,14 +851,15 @@ const ResultsArea: React.FC<ResultsAreaProps> = ({
           </m.div>
         ) : (
           !isLoading && !calculationError && <PlaceholderWelcome />
-        )}
-      </AnimatePresence>
+        )}      </AnimatePresence>
     </Box>
   );
-};
+});
+
+ResultsArea.displayName = 'ResultsArea';
 
 // Enhanced placeholder with better onboarding
-const PlaceholderWelcome: React.FC = () => {
+const PlaceholderWelcome = memo(() => {
   const theme = useMuiTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -966,14 +992,15 @@ const PlaceholderWelcome: React.FC = () => {
               AI-Optimized
             </Typography>
           </Box>
-        </Box>
-      </m.div>
+        </Box>      </m.div>
     </Paper>
   );
-};
+});
+
+PlaceholderWelcome.displayName = 'PlaceholderWelcome';
 
 // Enhanced main content component
-const AppContent: React.FC = () => {
+const AppContent = memo(() => {
   const themeFromProvider = useMuiTheme();
   const currentMode = themeFromProvider.palette.mode;
   const themeContext = useContext(ThemeModeContext);
@@ -982,47 +1009,114 @@ const AppContent: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [calculationError, setCalculationError] = useState<string | null>(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  // Cleanup effect to prevent memory leaks
+  useEffect(() => {
+    // Performance monitoring
+    performanceMonitor.startRender('AppContent');
+    
+    return () => {
+      // Cancel any pending calculations
+      setIsLoading(false);
+      setCalculationError(null);
+      
+      // Performance monitoring cleanup
+      performanceMonitor.endRender('AppContent');
+      
+      // Memory cleanup
+      cleanupMemory();
+    };
+  }, []);
 
-  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) =>
-    setAnchorEl(event.currentTarget);
-  const handleMenuClose = () => setAnchorEl(null);
+  const handleMenuOpen = useCallback((event: React.MouseEvent<HTMLElement>) =>
+    setAnchorEl(event.currentTarget), []);
+  
+  const handleMenuClose = useCallback(() => setAnchorEl(null), []);
+  
   const clearCalculationErrorFromApp = useCallback(
     () => setCalculationError(null),
     [],
   );
 
-  // Enhanced calculation handler with better error handling
-  const handleCalculate = useCallback(async (params: GridParameters) => {
+  // Memoized styles for better performance
+  const titleGradientStyle = useMemo(() => ({
+    fontWeight: 700,
+    mb: { xs: 2.5, md: 3.5 },
+    color: "text.primary",
+    textAlign: { xs: "center", sm: "left" } as const,
+    background: `linear-gradient(45deg, ${themeFromProvider.palette.primary.main}, ${themeFromProvider.palette.secondary.main})`,
+    backgroundClip: "text",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+  }), [themeFromProvider.palette.primary.main, themeFromProvider.palette.secondary.main]);
+
+  const containerStyle = useMemo(() => ({
+    maxWidth: CONTENT_MAX_WIDTH,
+    mx: "auto",
+    width: "100%",
+    px: NAV_HORIZONTAL_PADDING,
+  }), []);
+
+  const mainContainerStyle = useMemo(() => ({
+    maxWidth: CONTENT_MAX_WIDTH,
+    mx: "auto",
+    px: NAV_HORIZONTAL_PADDING,
+    pt: { xs: 2.5, md: 3.5 },
+    pb: 4,
+  }), []);
+
+  // Enhanced calculation handler with better error handling and AbortController for cleanup  // Enhanced calculation handler with better error handling and AbortController for cleanup
+  const handleCalculateInternal = useCallback(async (params: GridParameters) => {
+    const abortController = new AbortController();
+    
     setIsLoading(true);
     setCalculationError(null);
     setResults(null);
 
     try {
       const res = await calculateGridProfit(params);
-      setResults(res);
+      
+      // Check if component is still mounted
+      if (!abortController.signal.aborted) {
+        setResults(res);
+      }
     } catch (err: unknown) {
-      let friendlyMessage =
-        "Calculation failed. Please check parameters and try again.";
-      let specificErrorMessage: string | undefined = undefined;
+      if (!abortController.signal.aborted) {
+        let friendlyMessage =
+          "Calculation failed. Please check parameters and try again.";
+        let specificErrorMessage: string | undefined = undefined;
 
-      if (err instanceof Error) {
-        specificErrorMessage = err.message;
-      } else if (typeof err === "string") {
-        specificErrorMessage = err;
+        if (err instanceof Error) {
+          specificErrorMessage = err.message;
+        } else if (typeof err === "string") {
+          specificErrorMessage = err;
+        }
+
+        const lowerCaseErrorMessage = specificErrorMessage?.toLowerCase() || "";
+        if (params.symbol && lowerCaseErrorMessage.includes("symbol")) {
+          friendlyMessage = `No market data for symbol '${params.symbol.trim()}'. It might be delisted or temporarily unavailable.`;
+        } else if (specificErrorMessage) {
+          friendlyMessage = `Calculation error: ${specificErrorMessage}`;
+        }
+
+        setCalculationError(friendlyMessage);
       }
-
-      const lowerCaseErrorMessage = specificErrorMessage?.toLowerCase() || "";
-      if (params.symbol && lowerCaseErrorMessage.includes("symbol")) {
-        friendlyMessage = `No market data for symbol '${params.symbol.trim()}'. It might be delisted or temporarily unavailable.`;
-      } else if (specificErrorMessage) {
-        friendlyMessage = `Calculation error: ${specificErrorMessage}`;
-      }
-
-      setCalculationError(friendlyMessage);
     } finally {
-      setIsLoading(false);
+      if (!abortController.signal.aborted) {
+        setIsLoading(false);
+      }
     }
+
+    // Cleanup function
+    return () => {
+      abortController.abort();
+    };
   }, []);
+
+  // Debounced calculation handler to prevent excessive API calls
+  const handleCalculate = useMemo(
+    () => debounce(handleCalculateInternal, 300),
+    [handleCalculateInternal]
+  );
 
   // Enhanced metrics calculation with better formatting
   const metrics = useMemo(() => {
@@ -1138,33 +1232,16 @@ const AppContent: React.FC = () => {
         toggleTheme={themeContext.toggleThemeMode}
         anchorEl={anchorEl}
         handleMenuClose={handleMenuClose}
-      />
-
-      <Container
-        maxWidth={false}
-        sx={{
-          maxWidth: CONTENT_MAX_WIDTH,
-          mx: "auto",
-          px: NAV_HORIZONTAL_PADDING,
-          pt: { xs: 2.5, md: 3.5 },
-          pb: 4,
-        }}
-      >
-        <m.div initial="hidden" animate="visible" variants={sectionVariants}>
-          <Typography
-            variant="h4"
-            component="h1"
-            sx={{
-              fontWeight: 700,
-              mb: { xs: 2.5, md: 3.5 },
-              color: "text.primary",
-              textAlign: { xs: "center", sm: "left" },
-              background: `linear-gradient(45deg, ${themeFromProvider.palette.primary.main}, ${themeFromProvider.palette.secondary.main})`,
-              backgroundClip: "text",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-            }}
-          >
+      />        <Container
+          maxWidth={false}
+          sx={mainContainerStyle}
+        >
+          <m.div initial="hidden" animate="visible" variants={sectionVariants}>
+            <Typography
+              variant="h4"
+              component="h1"
+              sx={titleGradientStyle}
+            >
             Grid Trading Profit Estimator
           </Typography>
         </m.div>
@@ -1222,9 +1299,7 @@ const AppContent: React.FC = () => {
                 outline: `3px solid ${alpha(themeFromProvider.palette.primary.light, 0.8)}`,
                 outlineOffset: "2px",
               },
-            }}
-            elevation={0}
-            role="banner"
+            }}            elevation={0}
             aria-label="Learn about Grid Trading - opens in new tab"
           >
             <Box sx={{ position: "relative", zIndex: 1 }}>
@@ -1333,11 +1408,12 @@ const AppContent: React.FC = () => {
               metrics={metrics}
             />
           </Grid>
-        </Grid>
-      </Container>
+        </Grid>      </Container>
     </Box>
   );
-};
+});
+
+AppContent.displayName = 'AppContent';
 
 // Enhanced animated section wrapper
 const AnimatedSection: React.FC<{
@@ -1362,6 +1438,7 @@ const App: React.FC = () => {
   const theme = useMemo(() => createAppTheme(mode), [mode]);
   const animationControls = useAnimationControls();
   const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const [showUpdateNotification, setShowUpdateNotification] = useState(false);
 
   // Enhanced theme persistence with error handling
   useEffect(() => {
@@ -1377,6 +1454,70 @@ const App: React.FC = () => {
     } catch (error) {
       console.warn("Failed to load theme preference from localStorage:", error);
     }
+  }, []);  // Preload critical components for better performance
+  useEffect(() => {
+    if (!isInitialLoad) {
+      preloadCriticalComponents();
+      
+      // Log performance metrics in development
+      if (import.meta.env.DEV) {
+        setTimeout(() => {
+          performanceMonitor.logMetrics();
+        }, 3000);
+      }
+    }
+  }, [isInitialLoad]);
+
+  // Register service worker when app loads
+  useEffect(() => {
+    // Register service worker with handlers for updates
+    registerServiceWorker({
+      onUpdate: (registration) => {
+        // Create notification UI when update is available
+        const notification = createUpdateNotification(() => {
+          // Force page reload when user clicks update button
+          window.location.reload();
+        });
+      },
+      onSuccess: (registration) => {
+        console.log('Content cached successfully for offline use');
+      },
+      onError: (error) => {
+        console.error('Service worker registration failed:', error);
+      }
+    });
+
+    // Cleanup function to avoid memory leaks
+    return () => {
+      cleanupMemory();
+    };
+  }, []);
+
+  // Register service worker when app loads
+  useEffect(() => {
+    // Register service worker with handlers for updates
+    registerServiceWorker({
+      onUpdate: (registration) => {
+        setShowUpdateNotification(true);
+        
+        // Create notification UI when update is available
+        const notification = createUpdateNotification(() => {
+          // Force page reload when user clicks update button
+          window.location.reload();
+        });
+      },
+      onSuccess: (registration) => {
+        console.log('Content cached successfully for offline use');
+      },
+      onError: (error) => {
+        console.error('Service worker registration failed:', error);
+      }
+    });
+
+    // Cleanup function to avoid memory leaks
+    return () => {
+      cleanupMemory();
+    };
   }, []);
 
   // Enhanced theme toggle with smooth animation
@@ -1424,9 +1565,10 @@ const App: React.FC = () => {
     >
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <ErrorBoundary>
-          <LazyMotion features={domAnimation} strict>
+        <ErrorBoundary>          <LazyMotion features={domAnimation} strict>
             <AppContent />
+            {/* Add Performance Monitor for production environments only */}
+            {import.meta.env.PROD && <PerformanceMonitor />}
             {!isInitialLoad && (
               <m.div
                 animate={animationControls}

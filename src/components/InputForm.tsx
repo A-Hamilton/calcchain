@@ -1131,9 +1131,9 @@ const InputForm: React.FC<InputFormProps> = ({
                 }}
               >
                 <TuneIcon sx={{ color: "primary.main", fontSize: 20 }} />
-              </Box>
-              <Typography
+              </Box>              <Typography
                 variant="h6"
+                component="h3"
                 color="primary.main"
                 sx={{
                   fontWeight: 600,
