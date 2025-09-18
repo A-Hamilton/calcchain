@@ -103,7 +103,13 @@ export function computeOptimalGridParams(ctx: OptimizeContext): OptimalGridParam
         const desiredPercentageStep = spacingToUse / lower; // spacingToUse is > 0, lower should be > 0 here
 
         if (rangeRatio > 1 && desiredPercentageStep > 0) {
-            count = Math.floor(Math.log(rangeRatio) / Math.log(1 + desiredPercentageStep));
+            const logBase = Math.log(1 + desiredPercentageStep);
+            // Prevent division by zero if desiredPercentageStep is extremely small
+            if (logBase > 1e-10) {
+                count = Math.floor(Math.log(rangeRatio) / logBase);
+            } else {
+                count = 1; // Fallback if logarithm base is too small
+            }
         } else {
             count = 1; // Fallback if range is invalid or step is non-positive
         }

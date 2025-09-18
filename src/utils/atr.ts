@@ -51,14 +51,29 @@ export async function fetchCandles(symbol: string, interval: string, limit: numb
     }
 
     // Map the raw candle data to our Candle interface
-    return rawData.map((c: BinanceRawCandle): Candle => ({ // Explicit return type for clarity
-      time: Number(c[0]),
-      open: parseFloat(c[1]),
-      high: parseFloat(c[2]),
-      low: parseFloat(c[3]),
-      close: parseFloat(c[4]),
-      volume: parseFloat(c[5]),
-    }));
+    return rawData.map((c: BinanceRawCandle): Candle => { // Explicit return type for clarity
+      const candle = {
+        time: Number(c[0]),
+        open: parseFloat(c[1]),
+        high: parseFloat(c[2]),
+        low: parseFloat(c[3]),
+        close: parseFloat(c[4]),
+        volume: parseFloat(c[5]),
+      };
+      
+      // Validate that all parsed values are valid numbers
+      if (!isFinite(candle.open) || !isFinite(candle.high) || !isFinite(candle.low) || 
+          !isFinite(candle.close) || !isFinite(candle.volume) || !isFinite(candle.time)) {
+        throw new Error(`Invalid candle data received from Binance API for symbol ${symbol}. Contains NaN or infinite values.`);
+      }
+      
+      // Validate logical constraints
+      if (candle.high < candle.low) {
+        throw new Error(`Invalid candle data for symbol ${symbol}: high price is less than low price.`);
+      }
+      
+      return candle;
+    });
   } catch (error) {
     let errorMessage = `Network error or issue fetching candles for ${symbol}.`;
     if (axios.isAxiosError(error)) {
@@ -95,8 +110,7 @@ export async function fetchCandles(symbol: string, interval: string, limit: numb
 // Computes Average True Range (ATR) from candle data
 export function computeAtr(candles: Candle[], period: number): number {
   if (period <= 0) { // ATR period must be positive
-    // console.warn(`ATR period must be positive. Received ${period}, returning 0.`);
-    return 0; // Or throw an error: throw new Error("ATR period must be positive.");
+    throw new Error(`ATR period must be positive. Received ${period}.`);
   }
   if (!candles || candles.length < period + 1) { // Need 'period' TRs, so 'period + 1' candles
     // console.warn(`Not enough candle data for ATR calculation. Need ${period + 1} candles, got ${candles.length}. Returning 0.`);
@@ -113,17 +127,36 @@ export function computeAtr(candles: Candle[], period: number): number {
     const currentCandle = candles[i];
     const previousCandle = candles[i - 1]; // Safe due to the length check above (candles[i-1] will exist)
     
+    // Validate candle data integrity
+    if (currentCandle.high < currentCandle.low) {
+      throw new Error(`Invalid candle data at index ${i}: high (${currentCandle.high}) is less than low (${currentCandle.low}).`);
+    }
+    
     const highLow = currentCandle.high - currentCandle.low;
     const highPrevClose = Math.abs(currentCandle.high - previousCandle.close);
     const lowPrevClose = Math.abs(currentCandle.low - previousCandle.close);
-    trueRanges.push(Math.max(highLow, highPrevClose, lowPrevClose));
+    const trueRange = Math.max(highLow, highPrevClose, lowPrevClose);
+    
+    // Validate the true range is a valid positive number
+    if (!isFinite(trueRange) || trueRange < 0) {
+      throw new Error(`Invalid True Range calculation at candle ${i}: ${trueRange}. Check candle data integrity.`);
+    }
+    
+    trueRanges.push(trueRange);
   }
 
   // This check is defensive; given period > 0 and enough candles, trueRanges should not be empty.
   if (trueRanges.length === 0) return 0; 
 
   const sumOfTrueRanges = trueRanges.reduce((acc, tr) => acc + tr, 0);
-  return sumOfTrueRanges / period; // period is guaranteed > 0 here
+  const atr = sumOfTrueRanges / period; // period is guaranteed > 0 here
+  
+  // Validate the result
+  if (!isFinite(atr) || atr < 0) {
+    throw new Error(`Invalid ATR calculation result: ${atr}. Check input candle data.`);
+  }
+  
+  return atr;
 }
 
 // Fetches candles and computes ATR for a given interval
