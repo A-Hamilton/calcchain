@@ -91,8 +91,12 @@ export async function calculateGridProfit(
     }
     // Calculate the geometric ratio per grid
     const ratioPerGrid = Math.pow(upperBound / lowerBound, 1 / gridCount);
-    if (!isFinite(ratioPerGrid) || ratioPerGrid <= 0) {
+    if (!isFinite(ratioPerGrid) || ratioPerGrid <= 0 || ratioPerGrid === 1) {
         throw new Error("Could not calculate a valid ratio for geometric grid. Check bounds and grid count.");
+    }
+    // Additional check for extremely small ratios that could cause numerical issues
+    if (Math.abs(ratioPerGrid - 1) < 1e-6) {
+        throw new Error("Geometric grid ratio too close to 1. Consider using arithmetic grid or adjusting bounds/count.");
     }
     gridSpacingOutput = ratioPerGrid;
     // For estimating grid crossings, an arithmetic average step is used as an approximation for geometric grids.
@@ -121,7 +125,12 @@ export async function calculateGridProfit(
     grossProfitPerGridTransaction = investmentPerGrid * (gridSpacingOutput - 1) * leverage; // gridSpacingOutput is the ratio
     if (entryType === "short") {
       // Profit from price drop: Investment * (1 - 1/Ratio)
-      grossProfitPerGridTransaction = investmentPerGrid * (1 - (1 / gridSpacingOutput)) * leverage;
+      // Add safety check to prevent division by zero
+      if (gridSpacingOutput > 1e-10) {
+        grossProfitPerGridTransaction = investmentPerGrid * (1 - (1 / gridSpacingOutput)) * leverage;
+      } else {
+        grossProfitPerGridTransaction = 0; // Set to 0 if ratio is too small
+      }
     }
   } else { // Arithmetic grid
     const averagePriceInRange = (lowerBound + upperBound) / 2;

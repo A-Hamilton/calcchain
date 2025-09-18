@@ -192,9 +192,13 @@ export const cleanupMemory = () => {
       caches.keys().then(cacheNames => {
         cacheNames.forEach(cacheName => {
           if (cacheName.includes('old') || cacheName.includes('temp')) {
-            caches.delete(cacheName);
+            caches.delete(cacheName).catch(error => {
+              console.warn('Failed to delete cache:', cacheName, error);
+            });
           }
         });
+      }).catch(error => {
+        console.warn('Failed to access cache keys:', error);
       });
     }
   }
