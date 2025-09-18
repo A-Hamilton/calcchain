@@ -333,7 +333,15 @@ const InputForm: React.FC<InputFormProps> = ({
 
   // Force remove number input spinners with JavaScript
   React.useEffect(() => {
+    const styleId = 'calcchain-number-input-spinner-styles';
+    
+    // Check if style already exists to prevent duplicates
+    if (document.getElementById(styleId)) {
+      return;
+    }
+
     const style = document.createElement("style");
+    style.id = styleId;
     style.textContent = `
       input[type="number"]::-webkit-outer-spin-button,
       input[type="number"]::-webkit-inner-spin-button {
@@ -348,7 +356,11 @@ const InputForm: React.FC<InputFormProps> = ({
     document.head.appendChild(style);
 
     return () => {
-      document.head.removeChild(style);
+      // Safely remove the style element if it still exists
+      const existingStyle = document.getElementById(styleId);
+      if (existingStyle && existingStyle.parentNode) {
+        existingStyle.parentNode.removeChild(existingStyle);
+      }
     };
   }, []);
 
