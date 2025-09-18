@@ -278,13 +278,13 @@ const formItemVariants = {
     transition: {
       delay: i * 0.05,
       duration: 0.4,
-      ease: [0.25, 0.1, 0.25, 1],
-      type: "spring",
+      ease: [0.25, 0.1, 0.25, 1] as const,
+      type: "spring" as const,
       stiffness: 100,
       damping: 15,
     },
   }),
-};
+} as const;
 
 const cardVariants = {
   hidden: { opacity: 0, y: 30, scale: 0.95 },
@@ -294,13 +294,13 @@ const cardVariants = {
     scale: 1,
     transition: {
       duration: 0.5,
-      ease: [0.25, 0.1, 0.25, 1],
-      type: "spring",
+      ease: [0.25, 0.1, 0.25, 1] as const,
+      type: "spring" as const,
       stiffness: 120,
       damping: 20,
     },
   },
-};
+} as const;
 
 const InputForm: React.FC<InputFormProps> = ({
   onCalculate,
