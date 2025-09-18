@@ -43,13 +43,13 @@ const paperVariants = {
     rotateX: 0,
     transition: {
       duration: 0.4,
-      ease: [0.25, 0.1, 0.25, 1],
-      type: "spring",
+      ease: [0.25, 0.1, 0.25, 1] as const,
+      type: "spring" as const,
       stiffness: 120,
       damping: 20,
     },
   },
-};
+} as const;
 
 const iconVariants = {
   initial: { scale: 0.8, rotate: -10 },
@@ -58,7 +58,7 @@ const iconVariants = {
     rotate: 0,
     transition: {
       duration: 0.3,
-      ease: "backOut",
+      ease: "backOut" as const,
     },
   },
   hover: {
@@ -66,10 +66,10 @@ const iconVariants = {
     rotate: 5,
     transition: {
       duration: 0.2,
-      ease: "easeInOut",
+      ease: "easeInOut" as const,
     },
   },
-};
+} as const;
 
 const CryptoInsights: React.FC<CryptoInsightsProps> = React.memo(
   ({

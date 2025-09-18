@@ -61,14 +61,14 @@ const cardVariants = {
     rotateX: 0,
     transition: {
       duration: 0.5,
-      ease: [0.25, 0.1, 0.25, 1],
+      ease: [0.25, 0.1, 0.25, 1] as const,
       delay,
-      type: "spring",
+      type: "spring" as const,
       stiffness: 120,
       damping: 20,
     },
   }),
-};
+} as const;
 
 const metricItemVariants = {
   hidden: {
@@ -83,36 +83,36 @@ const metricItemVariants = {
     transition: {
       delay: i * 0.08,
       duration: 0.4,
-      ease: [0.25, 0.1, 0.25, 1],
-      type: "spring",
+      ease: [0.25, 0.1, 0.25, 1] as const,
+      type: "spring" as const,
       stiffness: 150,
       damping: 25,
     },
   }),
-};
+} as const;
 
 const shimmerVariants = {
   animate: {
-    x: ["-100%", "100%"],
+    x: ["-100%", "100%"] as string[],
     transition: {
       duration: 1.5,
       repeat: Infinity,
-      ease: "linear",
+      ease: "linear" as const,
     },
   },
-};
+} as const;
 
 const pulseVariants = {
   animate: {
-    scale: [1, 1.02, 1],
-    opacity: [0.8, 1, 0.8],
+    scale: [1, 1.02, 1] as number[],
+    opacity: [0.8, 1, 0.8] as number[],
     transition: {
       duration: 2,
       repeat: Infinity,
-      ease: "easeInOut",
+      ease: "easeInOut" as const,
     },
   },
-};
+} as const;
 
 // Enhanced metric item component with card-based layout
 const MetricItem: React.FC<{
