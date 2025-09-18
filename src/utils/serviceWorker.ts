@@ -209,6 +209,12 @@ export const clearAllCaches = async (): Promise<boolean> => {
 
 // Service worker update notification component
 export const createUpdateNotification = (onUpdate: () => void) => {
+  // Safety check for DOM availability
+  if (typeof document === 'undefined') {
+    console.warn('DOM not available for creating update notification');
+    return null;
+  }
+
   const notification = document.createElement('div');
   notification.style.cssText = `
     position: fixed;
@@ -255,28 +261,54 @@ export const createUpdateNotification = (onUpdate: () => void) => {
     ">Later</button>
   `;
 
-  document.body.appendChild(notification);
+  // Safely append to document
+  try {
+    document.body.appendChild(notification);
+  } catch (error) {
+    console.error('Failed to append notification to document:', error);
+    return null;
+  }
 
   // Animate in
-  setTimeout(() => {
-    notification.style.transform = 'translateX(0)';
+  const animateIn = setTimeout(() => {
+    if (notification.parentNode) {
+      notification.style.transform = 'translateX(0)';
+    }
   }, 100);
 
-  // Event listeners
-  notification.querySelector('#update-btn')?.addEventListener('click', () => {
-    skipWaiting();
-    onUpdate();
-    document.body.removeChild(notification);
-  });
+  // Cleanup function for removing notification
+  const removeNotification = () => {
+    clearTimeout(animateIn);
+    if (notification.parentNode) {
+      notification.style.transform = 'translateX(100%)';
+      setTimeout(() => {
+        if (notification.parentNode) {
+          notification.parentNode.removeChild(notification);
+        }
+      }, 300);
+    }
+  };
 
-  notification.querySelector('#dismiss-btn')?.addEventListener('click', () => {
-    notification.style.transform = 'translateX(100%)';
-    setTimeout(() => {
-      if (document.body.contains(notification)) {
-        document.body.removeChild(notification);
+  // Event listeners
+  const updateBtn = notification.querySelector('#update-btn');
+  const dismissBtn = notification.querySelector('#dismiss-btn');
+
+  if (updateBtn) {
+    updateBtn.addEventListener('click', () => {
+      try {
+        skipWaiting();
+        onUpdate();
+        removeNotification();
+      } catch (error) {
+        console.error('Error handling update:', error);
+        removeNotification();
       }
-    }, 300);
-  });
+    });
+  }
+
+  if (dismissBtn) {
+    dismissBtn.addEventListener('click', removeNotification);
+  }
 
   return notification;
 };

@@ -67,8 +67,9 @@ export class PerformanceMonitor {
 
   // Get memory usage if available
   private getMemoryUsage(): number | undefined {
-    if ('memory' in performance) {
-      return (performance as any).memory?.usedJSHeapSize;
+    if (typeof performance !== 'undefined' && 'memory' in performance) {
+      const memoryInfo = (performance as any).memory;
+      return memoryInfo?.usedJSHeapSize;
     }
     return undefined;
   }
@@ -104,8 +105,12 @@ export class PerformanceMonitor {
   }
 
   // Observe Web Vitals metrics
-  observeWebVitals(callbacks: WebVitalsObserverCallbacks): void {
+  observeWebVitals(callbacks: WebVitalsObserverCallbacks): (() => void) {
+    let isActive = true;
+    
     import('web-vitals').then(({ onCLS, onINP, onLCP, onFCP, onTTFB }) => {
+      if (!isActive) return; // Don't setup if already cleaned up
+      
       if (callbacks.onCLS) {
         onCLS(callbacks.onCLS);
       }
@@ -121,7 +126,16 @@ export class PerformanceMonitor {
       if (callbacks.onTTFB) {
         onTTFB(callbacks.onTTFB);
       }
+    }).catch(error => {
+      console.warn('Failed to load web vitals:', error);
     });
+
+    // Return cleanup function
+    return () => {
+      isActive = false;
+      // Note: Web vitals doesn't provide cleanup functions directly
+      // but we can at least prevent setup if cleanup is called before async load
+    };
   }
 
   // Log FPS (Frames Per Second) data
@@ -213,10 +227,10 @@ export const createLazyLoader = (threshold = 0.1) => {
   return new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const target = entry.target as HTMLElement;
+        if (entry.isIntersecting && entry.target instanceof HTMLElement) {
+          const target = entry.target;
           const src = target.dataset.src;
-          if (src) {
+          if (src && typeof target.setAttribute === 'function') {
             target.setAttribute('src', src);
             target.removeAttribute('data-src');
           }
@@ -229,7 +243,7 @@ export const createLazyLoader = (threshold = 0.1) => {
 
 // Bundle size analyzer (development only)
 export const analyzeBundleSize = () => {
-  if (process.env.NODE_ENV === 'development') {
+  if (import.meta.env.DEV) {
     const scripts = document.querySelectorAll('script[src]');
     let totalSize = 0;
     
