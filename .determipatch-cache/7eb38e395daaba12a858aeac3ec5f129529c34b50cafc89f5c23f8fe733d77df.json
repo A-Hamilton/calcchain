@@ -1,0 +1,1193 @@
+{
+  "cache_format_version": 3,
+  "artifact": {
+    "schema_version": "ucg-file-scaffold-v5",
+    "language": "typescript",
+    "path_provenance": {
+      "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+    },
+    "nodes": [
+      {
+        "id": "3c8271e50f268c34b51080e0811d2da76aa38d85bf9f410755cd0602bedd0a20",
+        "kind": "module",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        }
+      },
+      {
+        "id": "13645783631b18004333659d30530780482bf6fc39b52139a74461bc2c4bdc9a",
+        "kind": "import_export_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "edge_kind": "export",
+          "line": "912",
+          "statement": "export default ResultsDisplay;"
+        }
+      },
+      {
+        "id": "423d4f08bf13d39c6a8e5367899975740a9f5da40fe5068b78edc4f32eed39f0",
+        "kind": "import_export_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "edge_kind": "import_from",
+          "line": "35",
+          "statement": "import { m, AnimatePresence, useSpring, useTransform } from \"framer-motion\";"
+        }
+      },
+      {
+        "id": "4db38a28bcaf96425c6ded64ad510d4bdba43a2df14726b774231a49cb6b97b0",
+        "kind": "import_export_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "edge_kind": "import_from",
+          "line": "1",
+          "statement": "import React, { useState, useCallback, useMemo } from \"react\";"
+        }
+      },
+      {
+        "id": "ab14db5608ff4111e701cbbb5649dfa1bd3d3525b4c80cb450739de07c47dd29",
+        "kind": "import_export_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "edge_kind": "import_from",
+          "line": "36",
+          "statement": "import type { Metric } from \"../types\";"
+        }
+      },
+      {
+        "id": "003299498c367d1d0e875c71a069b49375386be61558ab79727b398683dbb055",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "down",
+          "column": "52",
+          "confidence": "low",
+          "line": "128"
+        }
+      },
+      {
+        "id": "04180d31c2bc7c115848aada6717eb5961a6dad2ee3f34d08191b0690ba45f40",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "setCopied",
+          "column": "24",
+          "confidence": "low",
+          "line": "151"
+        }
+      },
+      {
+        "id": "059f86cf6fe23e84062a9b2def91eaebe653e666259d48bc580d88b88a99d151",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "useCallback",
+          "column": "28",
+          "confidence": "low",
+          "line": "173"
+        }
+      },
+      {
+        "id": "0bf83b2692f7adc485781a3f046c43b08720acdf946df5f95d6795b0a3175707",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "includes",
+          "column": "42",
+          "confidence": "low",
+          "line": "582"
+        }
+      },
+      {
+        "id": "0d9dcb7c1dd85110b4359b6fa6e39d2a14b7b96b592cea00fe2a22c0760c9f10",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "alpha",
+          "column": "40",
+          "confidence": "low",
+          "line": "441"
+        }
+      },
+      {
+        "id": "1254ee11085d476c3db48ba024d0b246a88d168e9b5a72d53426661809764a2c",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "setCopied",
+          "column": "7",
+          "confidence": "low",
+          "line": "150"
+        }
+      },
+      {
+        "id": "128f7bb170ad7cb2f27325bd2b38b9febf06d0695a49ca93e478dc002a976acb",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "memo",
+          "column": "12",
+          "confidence": "low",
+          "line": "124"
+        }
+      },
+      {
+        "id": "14aa49bbae82813b9b42101b952a8cf84f00c91116f5941db3d92b95bd4225a1",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "map",
+          "column": "26",
+          "confidence": "low",
+          "line": "873"
+        }
+      },
+      {
+        "id": "1a40b93b4d18b2a2afa1c756c829e38c5e3e6268006c097b077b85b8b7586267",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "alpha",
+          "column": "19",
+          "confidence": "low",
+          "line": "233"
+        }
+      },
+      {
+        "id": "1aaae9d08b62d866b824f996a587931faf1666dc97dacc2b6a0ba085349c3e8e",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "useTheme",
+          "column": "19",
+          "confidence": "low",
+          "line": "666"
+        }
+      },
+      {
+        "id": "1ccdf37309997dda0ad2a002eb256a5b20d6794c031d2f8037c8a7cda560601e",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "warn",
+          "column": "15",
+          "confidence": "low",
+          "line": "198"
+        }
+      },
+      {
+        "id": "1dbd521131d33e324bbe1951d2620fc40dadb05047421be21e2b50394b647667",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "useMediaQuery",
+          "column": "22",
+          "confidence": "low",
+          "line": "667"
+        }
+      },
+      {
+        "id": "1ded1b953469d93f2994b3c7140d52cadc8bca9c6054eb2c8ada3b1111055af0",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "alpha",
+          "column": "40",
+          "confidence": "low",
+          "line": "854"
+        }
+      },
+      {
+        "id": "26615c562c1a4e7e7a3abe2b9fb5059f7013142de4e8a5724765e10bb8ec0cd2",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "filter",
+          "column": "36",
+          "confidence": "low",
+          "line": "191"
+        }
+      },
+      {
+        "id": "286fb4944b7914070f74b832152c6e7e614a6363d2870f1ce8ceab9e44e77af3",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "alpha",
+          "column": "32",
+          "confidence": "low",
+          "line": "245"
+        }
+      },
+      {
+        "id": "30273a5f8cd97ff922c2bd3ce56c207dbb2d71de7c67db6dd6aa32953ae0c13b",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "push",
+          "column": "19",
+          "confidence": "low",
+          "line": "185"
+        }
+      },
+      {
+        "id": "324d21a128d958fb3686f84bedb91295e849e5aefffa7161bc58c37fc9b242b1",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "useState",
+          "column": "31",
+          "confidence": "low",
+          "line": "125"
+        }
+      },
+      {
+        "id": "3f5ccd5ccdd8f02753e0b4472e91bb629ce385b83b455695175936cfe806345d",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "parse",
+          "column": "30",
+          "confidence": "low",
+          "line": "181"
+        }
+      },
+      {
+        "id": "3f86783fb1aefb4b26e748fa8f205c65b8541f922813207c828f080d2f2b9518",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "useMemo",
+          "column": "25",
+          "confidence": "low",
+          "line": "693"
+        }
+      },
+      {
+        "id": "45450271d5d2e7309da15702fd556306690253adb5c10e62cc671a24bc7fbf9b",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "handleCopy",
+          "column": "15",
+          "confidence": "low",
+          "line": "166"
+        }
+      },
+      {
+        "id": "4a6ca17a0b4a31bfa56ba4dd7c38610c39a82e01a2e3b9b135227e2ee03393fd",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "includes",
+          "column": "36",
+          "confidence": "low",
+          "line": "575"
+        }
+      },
+      {
+        "id": "516098fb68d7703926ba17abb0688497db85bd7b14ffb0f4c62787d860295706",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "writeText",
+          "column": "33",
+          "confidence": "low",
+          "line": "149"
+        }
+      },
+      {
+        "id": "54c244680dd4e6f3a0cb376ea261c665951cc2bc1ccc7bb70b6514a9ade192a0",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "includes",
+          "column": "42",
+          "confidence": "low",
+          "line": "584"
+        }
+      },
+      {
+        "id": "558c39ac7cfc1baef0f2d9d312e5d786c4de974a358593c362a10fcb36e755f9",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "includes",
+          "column": "62",
+          "confidence": "low",
+          "line": "353"
+        }
+      },
+      {
+        "id": "5a7736561ce78b810020880d692c1f60fb3b55dff6c5d63e091f9ed2707daa1e",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "warn",
+          "column": "15",
+          "confidence": "low",
+          "line": "153"
+        }
+      },
+      {
+        "id": "5c248210f60ae30b0d581663d22071a06177955c6373aee8c6c60eee0ff845ec",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "alpha",
+          "column": "16",
+          "confidence": "low",
+          "line": "695"
+        }
+      },
+      {
+        "id": "5d5e0151b1081b70840ba1198ee0dece413196c20d2c85d7f931a8affe3581f5",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "setBookmarked",
+          "column": "5",
+          "confidence": "low",
+          "line": "178"
+        }
+      },
+      {
+        "id": "66bebfe69141919d001e8dd0975c68c27879462e42269df6f760fe32ba0a4bea",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "String",
+          "column": "23",
+          "confidence": "low",
+          "line": "503"
+        }
+      },
+      {
+        "id": "6a4d239d39353c58669a3e1ad2b61c05d4155a57b5ec0df08e77658973ce6e4a",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "useState",
+          "column": "37",
+          "confidence": "low",
+          "line": "668"
+        }
+      },
+      {
+        "id": "74bc618265cba99eb7c58102c1aa9884e004be78b31e65082ab5a8bc5d20c266",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "alpha",
+          "column": "28",
+          "confidence": "low",
+          "line": "285"
+        }
+      },
+      {
+        "id": "7911b8aa1d89c57c70581ade649f41febc7c85e5dc61a3ae915d163f17ba1eee",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "useMediaQuery",
+          "column": "20",
+          "confidence": "low",
+          "line": "128"
+        }
+      },
+      {
+        "id": "7ac03e7a91c41e7a0245fc6b93a2798303482cebe04d5b983fdb2cd93b18f3b1",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "setIsVisible",
+          "column": "5",
+          "confidence": "low",
+          "line": "174"
+        }
+      },
+      {
+        "id": "7ae26fce977ef8b0b7ca27a5c71c14b09b2f80c3e4089ed93b2601fd55e8707f",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "alpha",
+          "column": "23",
+          "confidence": "low",
+          "line": "893"
+        }
+      },
+      {
+        "id": "8044c34684ffe03baa155ec6c225b6d1026b8087ee21600ca175cc77c0d24c3f",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "replace",
+          "column": "36",
+          "confidence": "low",
+          "line": "134"
+        }
+      },
+      {
+        "id": "83e7d24bcd9f7bd0dd15131130a98288581b1aa58ef910511d0f070ffb4cc01c",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "memo",
+          "column": "61",
+          "confidence": "low",
+          "line": "655"
+        }
+      },
+      {
+        "id": "85ee42df39d8ad276f4b46d75eab00eec0293160aa26f5d33be1be47326edb9b",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "useMemo",
+          "column": "24",
+          "confidence": "low",
+          "line": "131"
+        }
+      },
+      {
+        "id": "8785673431bc4b2f8a0449cdf41e2fdb95e5de6dcbbd74991808673f90293581",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "setExpanded",
+          "column": "34",
+          "confidence": "low",
+          "line": "846"
+        }
+      },
+      {
+        "id": "8dde5f74978b0b929602cc4846736e4db23d2e9dadab3f5b3fac08d51047bf3e",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "useMemo",
+          "column": "32",
+          "confidence": "low",
+          "line": "672"
+        }
+      },
+      {
+        "id": "8e2a7d6c2726e22a3e84457f7425bc9fb7c34803ea49df31eae39e47be967f79",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "setItem",
+          "column": "20",
+          "confidence": "low",
+          "line": "196"
+        }
+      },
+      {
+        "id": "902780f3569a0e470879534f8060dfd7029986c5ef3313c503b96db99c6f54f3",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "now",
+          "column": "27",
+          "confidence": "low",
+          "line": "188"
+        }
+      },
+      {
+        "id": "96a4c3132b628d3d2215c3859e4bc379254a937e4c2179907ae2f7be1e173b47",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "alpha",
+          "column": "36",
+          "confidence": "low",
+          "line": "519"
+        }
+      },
+      {
+        "id": "96aa2b6d1dc67c192809705d7c89d51d35394df5f7ef5fd02b9b753cb6c11f83",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "String",
+          "column": "43",
+          "confidence": "low",
+          "line": "149"
+        }
+      },
+      {
+        "id": "97b88b15b6475a096de53ba1ffc9a1b58f288f1bd70e5b54ab20afca796260dc",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "getItem",
+          "column": "22",
+          "confidence": "low",
+          "line": "182"
+        }
+      },
+      {
+        "id": "99bc73a0366d909d290f5f43fb77028eb5b83ef607f52477a34cf4487bdcb234",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "includes",
+          "column": "38",
+          "confidence": "low",
+          "line": "577"
+        }
+      },
+      {
+        "id": "a6716ed5b77428175403e61dcb3431f74c49b1c7de09cc6b0bf4826a0297f00c",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "useCallback",
+          "column": "26",
+          "confidence": "low",
+          "line": "177"
+        }
+      },
+      {
+        "id": "a7367ea382e0e0853ca50a81fd4f122a57a8e81fcc0768066ec9d5ce688dac15",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "useState",
+          "column": "39",
+          "confidence": "low",
+          "line": "127"
+        }
+      },
+      {
+        "id": "a90626741bdccff79e209ca3544446304483040429ac2988138f3c8d8783c97b",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "warn",
+          "column": "15",
+          "confidence": "low",
+          "line": "169"
+        }
+      },
+      {
+        "id": "ae008616ce645c625956af7c941c5f7228b11d4d0e6680543b168d7c4f5038e4",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "useCallback",
+          "column": "23",
+          "confidence": "low",
+          "line": "157"
+        }
+      },
+      {
+        "id": "af03226d851783a4f8ca97de2522867248624524aaf738579fc8b62a7d4d7c7c",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "share",
+          "column": "25",
+          "confidence": "low",
+          "line": "160"
+        }
+      },
+      {
+        "id": "b01dc5b162e08928fe6ac429a1e8f0c1a1e10c10d547817914d7e55bda8a1f03",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "alpha",
+          "column": "27",
+          "confidence": "low",
+          "line": "315"
+        }
+      },
+      {
+        "id": "b07f1589fd70a1688cb084ab9f20540d50869706c8511f06287cf92968e12b68",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "stringify",
+          "column": "53",
+          "confidence": "low",
+          "line": "196"
+        }
+      },
+      {
+        "id": "b2c98b0846a697f8cf1189cea50be445f653214edbe09cafe1722814995891fa",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "alpha",
+          "column": "40",
+          "confidence": "low",
+          "line": "415"
+        }
+      },
+      {
+        "id": "b6d3e086cfa07d5e9eafef2b448bd9cafaf2ee6e0c184d53430c5adb24657432",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "cloneElement",
+          "column": "28",
+          "confidence": "low",
+          "line": "818"
+        }
+      },
+      {
+        "id": "b6d9d44e8ee5ca95a73ea5acd8ecd8d8dd8e201874dbd452c8909db8c6cc1f9c",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "includes",
+          "column": "49",
+          "confidence": "low",
+          "line": "427"
+        }
+      },
+      {
+        "id": "ba5d74cacec41765c242b0e0e0b65e9b6c7f7c380d7d6c834f631e568f2bbd25",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "alpha",
+          "column": "28",
+          "confidence": "low",
+          "line": "246"
+        }
+      },
+      {
+        "id": "bfbf9be687e990210f9b7f15f78001203b6f19081206cb301da73e7f9dddacee",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "useState",
+          "column": "37",
+          "confidence": "low",
+          "line": "126"
+        }
+      },
+      {
+        "id": "c17b42dc84a1cbd83c04059e72532accc3b6905d8696abb61cefe6fadc9653db",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "alpha",
+          "column": "36",
+          "confidence": "low",
+          "line": "540"
+        }
+      },
+      {
+        "id": "c6e9a824ae967b7c164d434c571504c0ccf4e6a6ebe6bfb729759a7bc65e9e6d",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "setItem",
+          "column": "22",
+          "confidence": "low",
+          "line": "194"
+        }
+      },
+      {
+        "id": "ca99ceb95cd77d545e661460479b47822e37ace69b64d84f13c1ac86cbf16a16",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "alpha",
+          "column": "27",
+          "confidence": "low",
+          "line": "812"
+        }
+      },
+      {
+        "id": "cad50e76367e7d133fdfc2abd2911811969e34ae004b9a70125bc39ab3ee6829",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "alpha",
+          "column": "38",
+          "confidence": "low",
+          "line": "369"
+        }
+      },
+      {
+        "id": "cbaa777fcb6558bd4ccbdd7535c1f911d514333b9e51b6b3d8803295b343a8d1",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "alpha",
+          "column": "19",
+          "confidence": "low",
+          "line": "234"
+        }
+      },
+      {
+        "id": "cdfc68bf0d0d25eeef24a625a616aa034c7b120a7ae8b0a3f5ab11e744e4f430",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "setTimeout",
+          "column": "7",
+          "confidence": "low",
+          "line": "151"
+        }
+      },
+      {
+        "id": "d219efb9fffc0d8ef959413a3d10eec6ecb0c8697bcf331d3bfc1b1e724a1f03",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "isNaN",
+          "column": "14",
+          "confidence": "low",
+          "line": "136"
+        }
+      },
+      {
+        "id": "d3c52758da73d91c59dae59aca7fdd43bf4dceefbb6dd6c42f4ebe654a830836",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "alpha",
+          "column": "38",
+          "confidence": "low",
+          "line": "393"
+        }
+      },
+      {
+        "id": "d57efa8a137eabc94f938ab04c0ba142d70ee16f7219c0671848f98e05117c47",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "stringify",
+          "column": "55",
+          "confidence": "low",
+          "line": "194"
+        }
+      },
+      {
+        "id": "d84b8f9b55cdb28a54163aee550557a0f96c0adcf055beb43f21d28a8ea0ee86",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "useCallback",
+          "column": "22",
+          "confidence": "low",
+          "line": "145"
+        }
+      },
+      {
+        "id": "d918f144a6feec27e8b49c1e4b245e1befe9cc5c676428a811aa2eac73ccad65",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "includes",
+          "column": "42",
+          "confidence": "low",
+          "line": "579"
+        }
+      },
+      {
+        "id": "d93128fc3a638d5259fc8aeb63b0f7e0a496a5d25908cb1b69f06c668cf8f3e4",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "alpha",
+          "column": "34",
+          "confidence": "low",
+          "line": "739"
+        }
+      },
+      {
+        "id": "da5fde6566f950c3f65d80878917aca3d7e762c8fff21819ac25bc7e00b9fccb",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "useMemo",
+          "column": "28",
+          "confidence": "low",
+          "line": "684"
+        }
+      },
+      {
+        "id": "def7a74bf216f548d27d67af21d9b51fc6d0bf120d192785a2d02c1b970718e0",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "alpha",
+          "column": "28",
+          "confidence": "low",
+          "line": "293"
+        }
+      },
+      {
+        "id": "df9d595141205fa6164ca599ae091e593ee12dc6e5d934a9ae58ed35692bcfb7",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "parseFloat",
+          "column": "19",
+          "confidence": "low",
+          "line": "135"
+        }
+      },
+      {
+        "id": "e6ee671ebd62a0a191e58bc339999a04e2ffe32fe44e01b94bc6d0ad5fb68936",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "alpha",
+          "column": "27",
+          "confidence": "low",
+          "line": "813"
+        }
+      },
+      {
+        "id": "e7305284739f3c2910ddeb2b489a229ebbd6d8e6480a10896e5b4c7557c99bf9",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "toLowerCase",
+          "column": "33",
+          "confidence": "low",
+          "line": "590"
+        }
+      },
+      {
+        "id": "e8fa5650e64e9fc8c282f3df86f4857d5bf459e6de03bf921ab56b5322281f99",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "toLowerCase",
+          "column": "35",
+          "confidence": "low",
+          "line": "427"
+        }
+      },
+      {
+        "id": "ede813626bc900d0bb8700569e0be799800fe969d4827a0adfa08f1d5309a6bd",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "alpha",
+          "column": "31",
+          "confidence": "low",
+          "line": "632"
+        }
+      },
+      {
+        "id": "f291444809cb688fc9826b4fe06121b386b9825ef72b64dbb8a3e5519b780113",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "includes",
+          "column": "47",
+          "confidence": "low",
+          "line": "590"
+        }
+      },
+      {
+        "id": "f2e7076dc443cad391db6f0ed103cc60426f908f7b77c18c6da523248968fb98",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "includes",
+          "column": "35",
+          "confidence": "low",
+          "line": "573"
+        }
+      },
+      {
+        "id": "fc4f0926251e4f7489935558dd4d68757f494dfa77dae06b3667517e8009113c",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "includes",
+          "column": "40",
+          "confidence": "low",
+          "line": "581"
+        }
+      },
+      {
+        "id": "fd1c0a099a432c9ddb2eef55eeeecf8d87b12f6005c33cd3482327b075e3d3b2",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "alpha",
+          "column": "29",
+          "confidence": "low",
+          "line": "488"
+        }
+      },
+      {
+        "id": "ff6a7b3665ee113c0d7780a83575e49d3adb3aa2446d256b99f376b0015460eb",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/ResultsDisplay.tsx"
+        },
+        "attributes": {
+          "callee": "down",
+          "column": "54",
+          "confidence": "low",
+          "line": "667"
+        }
+      }
+    ]
+  },
+  "extraction_mode": "heuristic"
+}

@@ -1,0 +1,60 @@
+{
+  "cache_format_version": 3,
+  "artifact": {
+    "schema_version": "ucg-file-scaffold-v5",
+    "language": "typescript",
+    "path_provenance": {
+      "workspace_relative_path": "src/ThemeModeContext.ts"
+    },
+    "nodes": [
+      {
+        "id": "fcce4a461b41acc454991c759bdfda30ae59e5a7bb158f70ae55ca91f6a6db9e",
+        "kind": "module",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/ThemeModeContext.ts"
+        }
+      },
+      {
+        "id": "0f5cbc0d896ebaef47e80ebb9dcb7df62643614250c83ee451d9378d5e07bd90",
+        "kind": "import_export_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/ThemeModeContext.ts"
+        },
+        "attributes": {
+          "edge_kind": "export",
+          "line": "8",
+          "statement": "export const ThemeModeContext = createContext<ThemeModeContextType>({"
+        }
+      },
+      {
+        "id": "d168765318d32eeb07cb2115034084c6527527f09f4968988f9a84eb74d886ac",
+        "kind": "import_export_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/ThemeModeContext.ts"
+        },
+        "attributes": {
+          "edge_kind": "export",
+          "line": "4",
+          "statement": "export interface ThemeModeContextType {"
+        }
+      },
+      {
+        "id": "f76aeedfbf8a6b48bdd7260358411586a88a20f6535222e24bb203f9ba01e52c",
+        "kind": "import_export_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/ThemeModeContext.ts"
+        },
+        "attributes": {
+          "edge_kind": "import_from",
+          "line": "2",
+          "statement": "import { createContext } from 'react';"
+        }
+      }
+    ]
+  },
+  "extraction_mode": "heuristic"
+}

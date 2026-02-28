@@ -1,0 +1,979 @@
+{
+  "cache_format_version": 3,
+  "artifact": {
+    "schema_version": "ucg-file-scaffold-v5",
+    "language": "typescript",
+    "path_provenance": {
+      "workspace_relative_path": "src/utils/serviceWorker.ts"
+    },
+    "nodes": [
+      {
+        "id": "65f5b5c5f940aaaa4837d31a5111803395c36a5e04590b47c46c9c35db437ab8",
+        "kind": "module",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        }
+      },
+      {
+        "id": "0ff3baaddd31288e03e4a7b72fa42afa778aee62cd2bd47d0e5f0af06d4146f9",
+        "kind": "symbol",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "end_line": "118",
+          "line": "116",
+          "protection_range_source": "body_range",
+          "symbol_kind": "variable",
+          "symbol_name": "handleMessage"
+        }
+      },
+      {
+        "id": "e884f0a78f4b996a3aa705ee9bd3b76f05a251bc6e7815dea62de90a1f5887e2",
+        "kind": "symbol",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "end_line": "282",
+          "line": "211",
+          "protection_range_source": "body_range",
+          "symbol_kind": "variable",
+          "symbol_name": "createUpdateNotification"
+        }
+      },
+      {
+        "id": "092180ddd387f063162507350b283da74a14483a7be139b8ae4634ed38161eae",
+        "kind": "import_export_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "edge_kind": "export",
+          "line": "12",
+          "statement": "export const isServiceWorkerSupported = (): boolean => {"
+        }
+      },
+      {
+        "id": "28fc0e76ebd76c04f70fa2e835d4f6d42c6bec06b1fa61d43c9ef8c5820a1279",
+        "kind": "import_export_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "edge_kind": "export",
+          "line": "211",
+          "statement": "export const createUpdateNotification = (onUpdate: () => void) => {"
+        }
+      },
+      {
+        "id": "3d44f3e0a28e91a140d46b247853903ec84bf355700244c3333e29d7dff20ef1",
+        "kind": "import_export_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "edge_kind": "export",
+          "line": "128",
+          "statement": "export const cacheUrls = async (urls: string[]): Promise<boolean> => {"
+        }
+      },
+      {
+        "id": "7b8518fc477c00bb663fbfb7951ae68c2b50fc605c84bede67d47a3a4248e9ea",
+        "kind": "import_export_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "edge_kind": "export",
+          "line": "17",
+          "statement": "export const registerServiceWorker = async (config: ServiceWorkerConfig = {}): Promise<void> => {"
+        }
+      },
+      {
+        "id": "b22c0751a29c69246a2f9250a05809d656b40d56dd688290d30e17e15e741d47",
+        "kind": "import_export_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "edge_kind": "export",
+          "line": "109",
+          "statement": "export const listenForServiceWorkerMessages = ("
+        }
+      },
+      {
+        "id": "cef24a13b8ffc57ba6d88c897ec4877d30a7a5f4e34565fd9787ab52a51a3428",
+        "kind": "import_export_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "edge_kind": "export",
+          "line": "194",
+          "statement": "export const clearAllCaches = async (): Promise<boolean> => {"
+        }
+      },
+      {
+        "id": "d8289b39198dab21b6ed9e5822a917a2637373136fc96fc0d0a4699b44150177",
+        "kind": "import_export_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "edge_kind": "export",
+          "line": "64",
+          "statement": "export const unregisterServiceWorker = async (): Promise<boolean> => {"
+        }
+      },
+      {
+        "id": "d973dcf5eb818bfef20cfc324a3616dc088dcf1de3dc892d21ac5b70f1f070c1",
+        "kind": "import_export_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "edge_kind": "export",
+          "line": "158",
+          "statement": "export const getCacheInfo = async (): Promise<{"
+        }
+      },
+      {
+        "id": "f0d47b3223783985ac05868e86c16d9c07102d73618f323fe00e9e9737f63417",
+        "kind": "import_export_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "edge_kind": "export",
+          "line": "81",
+          "statement": "export const checkForUpdates = async (): Promise<void> => {"
+        }
+      },
+      {
+        "id": "fc20dcc4ccb0df99577f171a95467800ebfa318ab20db33c1e8b01f1239add61",
+        "kind": "import_export_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "edge_kind": "export",
+          "line": "96",
+          "statement": "export const skipWaiting = (): void => {"
+        }
+      },
+      {
+        "id": "0b0a7636d40fbb8aa9594a902cfda36857712d969009479c2cbcb190fd4e547f",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "log",
+          "column": "13",
+          "confidence": "low",
+          "line": "89"
+        }
+      },
+      {
+        "id": "0be76636c85cfb2f4ddc93b6244e355a55e8917d92891fc14875f2f05cdf926e",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "appendChild",
+          "column": "17",
+          "confidence": "low",
+          "line": "258"
+        }
+      },
+      {
+        "id": "0e65b3daba606a12251f345f21e62bf19aab4f787e951ed852884231c66ab154",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "log",
+          "column": "13",
+          "confidence": "low",
+          "line": "32"
+        }
+      },
+      {
+        "id": "0f9f5994bd4d3c5840a5b87823bba2e40449a5be8a4d70daffa5e696e0ecd37f",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "postMessage",
+          "column": "29",
+          "confidence": "low",
+          "line": "143"
+        }
+      },
+      {
+        "id": "10c70e06b17d9e6daf8518677af8589f8686921f4d2b8f06d5b8cc2494e7097a",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "postMessage",
+          "column": "28",
+          "confidence": "low",
+          "line": "103"
+        }
+      },
+      {
+        "id": "18b1b9fcc12bbeda87cdd1a170bc3c24e025743e1d0aa6ca7a34354848a8b23e",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "error",
+          "column": "13",
+          "confidence": "low",
+          "line": "91"
+        }
+      },
+      {
+        "id": "1a1fe72918b39be469c5320232fecd6fa1652e438211f4db3c3b3b3a496e2da5",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "onUpdate",
+          "column": "5",
+          "confidence": "low",
+          "line": "268"
+        }
+      },
+      {
+        "id": "1de25f8e98a8f029f079523f25c75053a199a908069c126655d086b9200d184b",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "removeChild",
+          "column": "19",
+          "confidence": "low",
+          "line": "269"
+        }
+      },
+      {
+        "id": "2136ea776c5290ba5c9fd5a2ff97b41ec29b3f0ab416076f8019d6aeabf5eff6",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "keys",
+          "column": "37",
+          "confidence": "low",
+          "line": "200"
+        }
+      },
+      {
+        "id": "2160232faafb4fa30f7cf2f803b9873e498327354853e9205dae86bcbaa9221a",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "callback",
+          "column": "5",
+          "confidence": "low",
+          "line": "117"
+        }
+      },
+      {
+        "id": "2342864674f0d04e2991442cf6781f3b3a2da874b270dfc741b8d41b9b7ba3db",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "removeChild",
+          "column": "23",
+          "confidence": "low",
+          "line": "276"
+        }
+      },
+      {
+        "id": "2e4b3928192b1d367ea50ce978c747a3ffc682f60d0f0b8d81bb75ca5705d3a9",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "log",
+          "column": "13",
+          "confidence": "low",
+          "line": "23"
+        }
+      },
+      {
+        "id": "38b862ad65ac685b91f45459a680f70fe040ccde183d3f2c19ac0a40d00e8951",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "keys",
+          "column": "37",
+          "confidence": "low",
+          "line": "167"
+        }
+      },
+      {
+        "id": "3a738aa5de714920eb7728ed332b0cfb0fcfc788043208f20fe815196a47db3d",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "addEventListener",
+          "column": "18",
+          "confidence": "low",
+          "line": "35"
+        }
+      },
+      {
+        "id": "3ae5d3609967deec35c2475f94da2f07a80dc16c00036b9032c908fe5ef61df9",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "isServiceWorkerSupported",
+          "column": "8",
+          "confidence": "low",
+          "line": "97"
+        }
+      },
+      {
+        "id": "3e845ec8f1c7790bfbaa2f76cc5f4cd75e81480af4fc05691b605868077d9bd8",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "register",
+          "column": "56",
+          "confidence": "low",
+          "line": "28"
+        }
+      },
+      {
+        "id": "435cad8d3622bf896e213ae807f8e8823ea666c4f941d0a00354f5cf7303af78",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "querySelector",
+          "column": "16",
+          "confidence": "low",
+          "line": "272"
+        }
+      },
+      {
+        "id": "48229e7d8611664bdd2406c910082d5ad24d48af60fe5d463a271f7e721e6f03",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "Promise",
+          "column": "16",
+          "confidence": "low",
+          "line": "137"
+        }
+      },
+      {
+        "id": "48a785978c95fa0f8f02a92a159f4288a07bf13caea69a9a7d8b2eb1fe8be3dc",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "isServiceWorkerSupported",
+          "column": "8",
+          "confidence": "low",
+          "line": "82"
+        }
+      },
+      {
+        "id": "4f22e9cf6bb1061905c708656fe6883f419f6b51e7af9d86dde8cb41c490e739",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "log",
+          "column": "23",
+          "confidence": "low",
+          "line": "46"
+        }
+      },
+      {
+        "id": "536ae471bf5f613f7f825d94390ecd4821236f04b251dfb00afca085c8b03e07",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "log",
+          "column": "13",
+          "confidence": "low",
+          "line": "72"
+        }
+      },
+      {
+        "id": "563e94d93c37fcc8f0be5a01d4be17aff4809d030cfc8a7549e32fdf8ce5d55b",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "log",
+          "column": "23",
+          "confidence": "low",
+          "line": "42"
+        }
+      },
+      {
+        "id": "569dca602d0e36a1f6be504bf2435f21869dd4c14ed4520f4cf3b8b487e81880",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "contains",
+          "column": "25",
+          "confidence": "low",
+          "line": "275"
+        }
+      },
+      {
+        "id": "56e2796712fc6ca0a3f5ccae909906842120999a5f9474df8d8ad816378fd0cf",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "map",
+          "column": "34",
+          "confidence": "low",
+          "line": "201"
+        }
+      },
+      {
+        "id": "570dc5cc9385fb3c76812fd2e0409cd6e3b730590853dddbd2a426d63ecc3c7d",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "querySelector",
+          "column": "16",
+          "confidence": "low",
+          "line": "266"
+        }
+      },
+      {
+        "id": "58ca5e0510ce248d6e95103a2ea5a0ad565d857e9f4d70fe49bcc4eb03c1bf8d",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "error",
+          "column": "13",
+          "confidence": "low",
+          "line": "75"
+        }
+      },
+      {
+        "id": "62b0146b7b98e41b622f8f87d0935017a21eb9feb0c13c88da15fcc291c7a607",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "error",
+          "column": "13",
+          "confidence": "low",
+          "line": "58"
+        }
+      },
+      {
+        "id": "670e2426d8ff1fd4c83b7379373a27251bae9a46fc88ed7670bab7341e6ca45b",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "resolve",
+          "column": "9",
+          "confidence": "low",
+          "line": "148"
+        }
+      },
+      {
+        "id": "6850242a00a992628f818c1f1888e054fb801f53b17d10854edae618250041e9",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "isServiceWorkerSupported",
+          "column": "8",
+          "confidence": "low",
+          "line": "65"
+        }
+      },
+      {
+        "id": "7033fd6ebc72e168e83dfd0f71eddb533bdfea0e7405db5a918b8fa1ae7dc1ca",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "log",
+          "column": "13",
+          "confidence": "low",
+          "line": "202"
+        }
+      },
+      {
+        "id": "73f8c3284353d80442d8bb61e9eeb724a8d7419015a8cba13a8e00acb5cbb0af",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "error",
+          "column": "13",
+          "confidence": "low",
+          "line": "188"
+        }
+      },
+      {
+        "id": "7518db2824395d6f1b664f8cd50bc5b81b5f8d1cf6fa7acdcde9aec31230bfb3",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "setTimeout",
+          "column": "3",
+          "confidence": "low",
+          "line": "261"
+        }
+      },
+      {
+        "id": "7a1538ad97ab56d912ea15b3e018d688487198b6936b8e5684e16e44c6967ec3",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "resolve",
+          "column": "9",
+          "confidence": "low",
+          "line": "139"
+        }
+      },
+      {
+        "id": "7dcfd9f2ed5f4f19ae39e597bdb96a79518930d3dd3b5389ed9339a061c1e50f",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "isServiceWorkerSupported",
+          "column": "8",
+          "confidence": "low",
+          "line": "18"
+        }
+      },
+      {
+        "id": "905c8d0bd1ec189cdee72408e4e1119024a7aa315c7781f7445c644aebcc1523",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "addEventListener",
+          "column": "47",
+          "confidence": "low",
+          "line": "272"
+        }
+      },
+      {
+        "id": "94fd9b7d9a24051dac27bc13946d61de8f573808d278b2e79c223717bb897884",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "addEventListener",
+          "column": "27",
+          "confidence": "low",
+          "line": "120"
+        }
+      },
+      {
+        "id": "9ef6b9cdb2e830e410848feb5374d856757572bd7f2dd785e06417b5ce386f35",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "MessageChannel",
+          "column": "32",
+          "confidence": "low",
+          "line": "135"
+        }
+      },
+      {
+        "id": "a15e7d516f0eece062d9b75317f761d10f3dca98c737bd46cd46cc4e5d0679f9",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "addEventListener",
+          "column": "19",
+          "confidence": "low",
+          "line": "38"
+        }
+      },
+      {
+        "id": "a1a3ceba740ab6006f907c5792c81dad3dd045aa0b11b2bda8d472ffa2b2e6d2",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "match",
+          "column": "38",
+          "confidence": "low",
+          "line": "175"
+        }
+      },
+      {
+        "id": "a23e005f26235e47573967d2d1eef6e5ab6550ef5c1eb38eb86d6b4a323403d5",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "warn",
+          "column": "13",
+          "confidence": "low",
+          "line": "19"
+        }
+      },
+      {
+        "id": "ac8712ca38156dd1c4d3fdcbba456359c30d94925ff2e872c1a772d5b76bcbf5",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "addEventListener",
+          "column": "46",
+          "confidence": "low",
+          "line": "266"
+        }
+      },
+      {
+        "id": "afa81555208f38a1367238e2f64775e956a8f09650bcd1de534c31138a184722",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "error",
+          "column": "13",
+          "confidence": "low",
+          "line": "152"
+        }
+      },
+      {
+        "id": "b46ca13a086374d304df615c7fa2223404313d5b86fb9837b86daf5b37ada1a9",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "all",
+          "column": "19",
+          "confidence": "low",
+          "line": "201"
+        }
+      },
+      {
+        "id": "c057570c2c20f9deaef3c32e6bd4851785face8c71bf5db8281157b0806c515f",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "then",
+          "column": "33",
+          "confidence": "low",
+          "line": "101"
+        }
+      },
+      {
+        "id": "c0911f963624cba1e8aed1c51a7285d43e66d1f4cfe34038b2e9200451aeada9",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "update",
+          "column": "24",
+          "confidence": "low",
+          "line": "88"
+        }
+      },
+      {
+        "id": "c27890b1292af3813d3aefd4c51c69cbe7a0a4069936a312c79d7690a86b1e1e",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "update",
+          "column": "18",
+          "confidence": "low",
+          "line": "55"
+        }
+      },
+      {
+        "id": "c47af3bb8dcae05548db5f88b03fee1fcec79eae740bd31e490423bc71cd6560",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "keys",
+          "column": "36",
+          "confidence": "low",
+          "line": "172"
+        }
+      },
+      {
+        "id": "caeaf74b1578edc791e51fac8a2cea459f18ac6f8de64e90668705b33fc22c36",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "skipWaiting",
+          "column": "5",
+          "confidence": "low",
+          "line": "267"
+        }
+      },
+      {
+        "id": "cdc1e3a7c8b6916859cde0cff995b215357bdd4d904424c21f692d691b9936e1",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "setTimeout",
+          "column": "5",
+          "confidence": "low",
+          "line": "274"
+        }
+      },
+      {
+        "id": "d61c0c4b4d4f00cba873191ffbbf4bc75a4f6486c1394e972b74b7505140ed51",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "open",
+          "column": "34",
+          "confidence": "low",
+          "line": "171"
+        }
+      },
+      {
+        "id": "da2acd8c66737d7abdb174483a21f8991070d775280f14e8442382369819d9ef",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "createElement",
+          "column": "33",
+          "confidence": "low",
+          "line": "212"
+        }
+      },
+      {
+        "id": "dab0b1f128157dd761cd0d4bf9ee10164634faff1ab887ea749a6b64660d6aa7",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "unregister",
+          "column": "39",
+          "confidence": "low",
+          "line": "71"
+        }
+      },
+      {
+        "id": "db0e6753bb3717b2d2457a58a38df2c765c70cf289fb632a2be83d830f51d72d",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "blob",
+          "column": "39",
+          "confidence": "low",
+          "line": "177"
+        }
+      },
+      {
+        "id": "fa854246d9b5d7003213f4ebb750f41181c4c4f52f283037f9093e88b6df1f7c",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "error",
+          "column": "13",
+          "confidence": "low",
+          "line": "205"
+        }
+      },
+      {
+        "id": "fd95aff1ae74912b77e78aa6f82b8de3d0e9d9c9cff7c18f6dc71566f5e6a91c",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "isServiceWorkerSupported",
+          "column": "8",
+          "confidence": "low",
+          "line": "112"
+        }
+      },
+      {
+        "id": "fe269ff2ab2192780846fe1ca1cefd665f9f32a242bfdfc9ddf17308699e3b08",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "removeEventListener",
+          "column": "29",
+          "confidence": "low",
+          "line": "123"
+        }
+      },
+      {
+        "id": "ff8cdbb948b327deba093744345b3a2333c73101c0e407e9708cecc7491f0a65",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/serviceWorker.ts"
+        },
+        "attributes": {
+          "callee": "isServiceWorkerSupported",
+          "column": "8",
+          "confidence": "low",
+          "line": "129"
+        }
+      }
+    ]
+  },
+  "extraction_mode": "heuristic"
+}

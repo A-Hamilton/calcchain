@@ -1,0 +1,703 @@
+{
+  "cache_format_version": 3,
+  "artifact": {
+    "schema_version": "ucg-file-scaffold-v5",
+    "language": "typescript",
+    "path_provenance": {
+      "workspace_relative_path": "src/utils/calculator.ts"
+    },
+    "nodes": [
+      {
+        "id": "6bfea30d6f6b5a2fc6a00fb76bc938570aa4634139175e207a1db808f23c5c34",
+        "kind": "module",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/calculator.ts"
+        }
+      },
+      {
+        "id": "071475c0cae02db96fdd345c9389edfa29d74d326cd8edf3a55f517935703720",
+        "kind": "import_export_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/calculator.ts"
+        },
+        "attributes": {
+          "edge_kind": "import_from",
+          "line": "4",
+          "statement": "import { getAtrPerMin } from \"./atr\";"
+        }
+      },
+      {
+        "id": "7548f9f414cd9e072d2b19286964c70dcad95f64c1db667aec743413521418dc",
+        "kind": "import_export_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/calculator.ts"
+        },
+        "attributes": {
+          "edge_kind": "import_from",
+          "line": "5",
+          "statement": "import { MINUTES_IN_DAY, DEFAULT_ATR_PERIOD } from '../constants';"
+        }
+      },
+      {
+        "id": "ebe68b79cf6c14a33710ef67932b2e64b4da47e21f3042348a70078d7bc6eb36",
+        "kind": "import_export_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/calculator.ts"
+        },
+        "attributes": {
+          "edge_kind": "import_from",
+          "line": "3",
+          "statement": "import { GridParameters, GridResults, GridType } from \"../types\";"
+        }
+      },
+      {
+        "id": "fc8d2ed6bcb93e351f54fe8cb27cd798e8b70eba1a033448a4bd506310068ebc",
+        "kind": "import_export_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/calculator.ts"
+        },
+        "attributes": {
+          "edge_kind": "export",
+          "line": "12",
+          "statement": "export async function calculateGridProfit("
+        }
+      },
+      {
+        "id": "08f2a6d5821aad588e1982b910515c2ed4be6078f5fb75b31d0c18a5203c94b4",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/calculator.ts"
+        },
+        "attributes": {
+          "callee": "Error",
+          "column": "19",
+          "confidence": "low",
+          "line": "95"
+        }
+      },
+      {
+        "id": "10049d4994faf124c9aeff09c8ed20d5fcf8763092189e06b6ca2fbf7a7e4973",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/calculator.ts"
+        },
+        "attributes": {
+          "callee": "isNaN",
+          "column": "66",
+          "confidence": "low",
+          "line": "40"
+        }
+      },
+      {
+        "id": "1ac92e9acef6aa46c464f4e64e6a2b8fc313d49ca55ce4d0f502fb668ab85278",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/calculator.ts"
+        },
+        "attributes": {
+          "callee": "isFinite",
+          "column": "48",
+          "confidence": "low",
+          "line": "201"
+        }
+      },
+      {
+        "id": "29a30d6c1ff1fbde0230450cf605a7b89ae86c4060ff17aa7459334d2836b63f",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/calculator.ts"
+        },
+        "attributes": {
+          "callee": "isFinite",
+          "column": "37",
+          "confidence": "low",
+          "line": "161"
+        }
+      },
+      {
+        "id": "2a44ac9a8f6b850dd19c7acc58deb331c5259d994c3c9573c7a2edb6c64064b5",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/calculator.ts"
+        },
+        "attributes": {
+          "callee": "Error",
+          "column": "17",
+          "confidence": "low",
+          "line": "42"
+        }
+      },
+      {
+        "id": "2d9bc1321e6cd76df449eeab2861ec8837ebd39cb02cbeee9e5b82d235287ea7",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/calculator.ts"
+        },
+        "attributes": {
+          "callee": "pow",
+          "column": "31",
+          "confidence": "low",
+          "line": "93"
+        }
+      },
+      {
+        "id": "30dd8d4fd468d0838f873bf741f31c4d9fce5ff01df5e0a68449c96db3eee488",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/calculator.ts"
+        },
+        "attributes": {
+          "callee": "abs",
+          "column": "14",
+          "confidence": "low",
+          "line": "98"
+        }
+      },
+      {
+        "id": "336fecac619319856040d33b0ec8e1caae238600f4a4435878299316f6e8a163",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/calculator.ts"
+        },
+        "attributes": {
+          "callee": "Error",
+          "column": "53",
+          "confidence": "low",
+          "line": "57"
+        }
+      },
+      {
+        "id": "34c5a8b50b583b068c7a30b79d6bda3612628556c84df1fbe5ff30a654ca26a0",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/calculator.ts"
+        },
+        "attributes": {
+          "callee": "Error",
+          "column": "50",
+          "confidence": "low",
+          "line": "60"
+        }
+      },
+      {
+        "id": "3ba604c1ed4b5ebe60112e79a45269b4b6428534a06d11c4e48191f94935f0e3",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/calculator.ts"
+        },
+        "attributes": {
+          "callee": "Number",
+          "column": "16",
+          "confidence": "low",
+          "line": "50"
+        }
+      },
+      {
+        "id": "3c20f3aa4bbf099b9a69796da1075df4c860721488507f2f6562a015c7e5a678",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/calculator.ts"
+        },
+        "attributes": {
+          "callee": "isFinite",
+          "column": "8",
+          "confidence": "low",
+          "line": "66"
+        }
+      },
+      {
+        "id": "4ced33476b9aa6484021ff28e46090e7dac1edbdce6c1b3210d3c737994239a9",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/calculator.ts"
+        },
+        "attributes": {
+          "callee": "Error",
+          "column": "54",
+          "confidence": "low",
+          "line": "61"
+        }
+      },
+      {
+        "id": "4f57a9d59999f8d0d06350c6e5fa611bea831d0697515310b6c9e05bd31be39e",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/calculator.ts"
+        },
+        "attributes": {
+          "callee": "isFinite",
+          "column": "39",
+          "confidence": "low",
+          "line": "77"
+        }
+      },
+      {
+        "id": "5430e5cb0418068c4758f0e30068a73aa7f309b559f8eb1809d906087ba266d9",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/calculator.ts"
+        },
+        "attributes": {
+          "callee": "Number",
+          "column": "20",
+          "confidence": "low",
+          "line": "55"
+        }
+      },
+      {
+        "id": "55802c398ee338ab13c3acac191d16e9765c6b41795c0b7b77ef27403d784eff",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/calculator.ts"
+        },
+        "attributes": {
+          "callee": "Number",
+          "column": "72",
+          "confidence": "low",
+          "line": "40"
+        }
+      },
+      {
+        "id": "5da9e840727309605d7e603b16b5a5958f9e0c1608f7f72843749aa685b6cf49",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/calculator.ts"
+        },
+        "attributes": {
+          "callee": "isNaN",
+          "column": "7",
+          "confidence": "low",
+          "line": "59"
+        }
+      },
+      {
+        "id": "5fd08f2f8dc820747a87987eb4141343a15f8d935f728aedc0f4b8deaa6d05cd",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/calculator.ts"
+        },
+        "attributes": {
+          "callee": "Number",
+          "column": "14",
+          "confidence": "low",
+          "line": "52"
+        }
+      },
+      {
+        "id": "62da9ec64c1729790c5392bd60139225967014ac0c307911a34ac6fb9ae0a3cc",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/calculator.ts"
+        },
+        "attributes": {
+          "callee": "isNaN",
+          "column": "7",
+          "confidence": "low",
+          "line": "60"
+        }
+      },
+      {
+        "id": "6af81b44649464a303355da17e32bd988bcf888e744afac81a9ace35c697b174",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/calculator.ts"
+        },
+        "attributes": {
+          "callee": "Error",
+          "column": "59",
+          "confidence": "low",
+          "line": "62"
+        }
+      },
+      {
+        "id": "745c647a88fb3a1f667f2428f18766ff263a0eabac4977ddd48ed474b33034b7",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/calculator.ts"
+        },
+        "attributes": {
+          "callee": "getAtrPerMin",
+          "column": "28",
+          "confidence": "low",
+          "line": "44"
+        }
+      },
+      {
+        "id": "74861f755bb5ed554424415f63ee2ee1857d468544e317c57dcd9f09574e43c4",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/calculator.ts"
+        },
+        "attributes": {
+          "callee": "isFinite",
+          "column": "10",
+          "confidence": "low",
+          "line": "137"
+        }
+      },
+      {
+        "id": "75c77d681fe62c1788215c11fffb2facc476d9821e005dc27071af5593605cdd",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/calculator.ts"
+        },
+        "attributes": {
+          "callee": "isFinite",
+          "column": "10",
+          "confidence": "low",
+          "line": "167"
+        }
+      },
+      {
+        "id": "7c3ec85b455e11dc273729c80c7b4b6c2d418c6c06c25a87cc7bb09f46671b5f",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/calculator.ts"
+        },
+        "attributes": {
+          "callee": "isNaN",
+          "column": "7",
+          "confidence": "low",
+          "line": "61"
+        }
+      },
+      {
+        "id": "7e6ba0d55cf2545126680665435bf794c8188214edad74d32c2b71ca849da253",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/calculator.ts"
+        },
+        "attributes": {
+          "callee": "Error",
+          "column": "19",
+          "confidence": "low",
+          "line": "99"
+        }
+      },
+      {
+        "id": "7f2a0b607f56126d2b9569505591e6c585dcecb86820e238e41e264a336ff752",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/calculator.ts"
+        },
+        "attributes": {
+          "callee": "isNaN",
+          "column": "7",
+          "confidence": "low",
+          "line": "58"
+        }
+      },
+      {
+        "id": "803c212c4fc51b0390ad35820986bab1be42d83f7691da4dc589549ad6dde4d5",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/calculator.ts"
+        },
+        "attributes": {
+          "callee": "Number",
+          "column": "38",
+          "confidence": "low",
+          "line": "51"
+        }
+      },
+      {
+        "id": "91d04fb119a85fa97ba88148e5cb75b334d86674196ab0d55f0433ba6f1a5bc3",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/calculator.ts"
+        },
+        "attributes": {
+          "callee": "Number",
+          "column": "18",
+          "confidence": "low",
+          "line": "54"
+        }
+      },
+      {
+        "id": "9cba5eaa6cddabef79690225c4cbfadb0a6e0da973b67cfe666455d7ea346e94",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/calculator.ts"
+        },
+        "attributes": {
+          "callee": "max",
+          "column": "20",
+          "confidence": "low",
+          "line": "51"
+        }
+      },
+      {
+        "id": "9f1a8e4f77ca89daccfc22ac73bd7706a377ea6df67d49a9ce7416321703f6a9",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/calculator.ts"
+        },
+        "attributes": {
+          "callee": "isNaN",
+          "column": "7",
+          "confidence": "low",
+          "line": "57"
+        }
+      },
+      {
+        "id": "a13bcd8012e42029e36b162ae8a3df5212c8ba25b707dbc5bf93e6fda1dbf547",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/calculator.ts"
+        },
+        "attributes": {
+          "callee": "isFinite",
+          "column": "56",
+          "confidence": "low",
+          "line": "205"
+        }
+      },
+      {
+        "id": "a14dbf6b0fcb4a2f01a8947361f9cf3e7e4356ac7a95d3381d9de1ec96e8eb68",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/calculator.ts"
+        },
+        "attributes": {
+          "callee": "Error",
+          "column": "36",
+          "confidence": "low",
+          "line": "58"
+        }
+      },
+      {
+        "id": "a7b482f27e5c161556534634c9dc3c389be189e9682015067b97dcf6c1f16b1b",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/calculator.ts"
+        },
+        "attributes": {
+          "callee": "isNaN",
+          "column": "7",
+          "confidence": "low",
+          "line": "62"
+        }
+      },
+      {
+        "id": "ad0eafd18d98cbd31182fa43b85a50b5e75bb76586a64e60d898500ada46407d",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/calculator.ts"
+        },
+        "attributes": {
+          "callee": "Number",
+          "column": "16",
+          "confidence": "low",
+          "line": "49"
+        }
+      },
+      {
+        "id": "ad3b337b82556797342f2b311c6f289cbbd135bc4521cada3ee6d7d29f721e8b",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/calculator.ts"
+        },
+        "attributes": {
+          "callee": "Number",
+          "column": "22",
+          "confidence": "low",
+          "line": "53"
+        }
+      },
+      {
+        "id": "aedb62e8266bec95a3ef26c6fe634c7d43a58b582bf1c0ba07ad98e3936e47c5",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/calculator.ts"
+        },
+        "attributes": {
+          "callee": "Error",
+          "column": "15",
+          "confidence": "low",
+          "line": "109"
+        }
+      },
+      {
+        "id": "bc23a7bc225e04dfd42061f073daf67e43e266a82f9d97eb5635edfc38bf9ecb",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/calculator.ts"
+        },
+        "attributes": {
+          "callee": "floor",
+          "column": "32",
+          "confidence": "low",
+          "line": "51"
+        }
+      },
+      {
+        "id": "bc7949ff6fd6a188e674aecf25ddcdcec5e15f412aa9427a8017f2960d97b187",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/calculator.ts"
+        },
+        "attributes": {
+          "callee": "Error",
+          "column": "36",
+          "confidence": "low",
+          "line": "59"
+        }
+      },
+      {
+        "id": "bd79d32221de3d776da079cf77bd5ca8533ed8a3a4ec91adaf53510c1d66142d",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/calculator.ts"
+        },
+        "attributes": {
+          "callee": "Error",
+          "column": "17",
+          "confidence": "low",
+          "line": "90"
+        }
+      },
+      {
+        "id": "be6b6018c7eca5f3c2f397501a859b114bf457800ca230b816fda30ba3927ba4",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/calculator.ts"
+        },
+        "attributes": {
+          "callee": "isFinite",
+          "column": "8",
+          "confidence": "low",
+          "line": "108"
+        }
+      },
+      {
+        "id": "c717ef7aeabd8797768fd7354836f5c91782c76b2f5fdf2785ec2adfc892103c",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/calculator.ts"
+        },
+        "attributes": {
+          "callee": "isFinite",
+          "column": "10",
+          "confidence": "low",
+          "line": "94"
+        }
+      },
+      {
+        "id": "d77b8bdcbb490af4e9a42d18b6458e26753dfdb2286c9248f2c9f14cd1951c40",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/calculator.ts"
+        },
+        "attributes": {
+          "callee": "isFinite",
+          "column": "8",
+          "confidence": "low",
+          "line": "147"
+        }
+      },
+      {
+        "id": "e7dbe2e1af08ffdbc32c39c64ef8e435b592bb4f1c343edf182fb9d9ca35af42",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/calculator.ts"
+        },
+        "attributes": {
+          "callee": "Number",
+          "column": "15",
+          "confidence": "low",
+          "line": "48"
+        }
+      },
+      {
+        "id": "e9b2ab6aee0e7d1ab34b7612be60049b8e8cf6b58b4a28f7964636d962c63aaf",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/calculator.ts"
+        },
+        "attributes": {
+          "callee": "Error",
+          "column": "15",
+          "confidence": "low",
+          "line": "67"
+        }
+      },
+      {
+        "id": "ed194edd8c20eb41b4baed7857cc386dc87b9586e17dd7904c55cb767240c808",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/calculator.ts"
+        },
+        "attributes": {
+          "callee": "Error",
+          "column": "15",
+          "confidence": "low",
+          "line": "73"
+        }
+      },
+      {
+        "id": "f0cf4e7521c8585c7fff603b148cedccb6bb49156694ab3c5b6205f2197a7155",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/calculator.ts"
+        },
+        "attributes": {
+          "callee": "isFinite",
+          "column": "38",
+          "confidence": "low",
+          "line": "162"
+        }
+      }
+    ]
+  },
+  "extraction_mode": "heuristic"
+}

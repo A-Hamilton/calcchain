@@ -1,0 +1,2407 @@
+{
+  "cache_format_version": 3,
+  "artifact": {
+    "schema_version": "ucg-file-scaffold-v5",
+    "language": "typescript",
+    "path_provenance": {
+      "workspace_relative_path": "src/components/InputForm.tsx"
+    },
+    "nodes": [
+      {
+        "id": "ee74be4394f1daf21fdb870587145b64e59605b2de779193a8d86af0b6341850",
+        "kind": "module",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        }
+      },
+      {
+        "id": "3614bbdc8b3ae9ab27b02726886f4bc542d7453dcd9ce036119a11e7e62c51c6",
+        "kind": "import_export_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "edge_kind": "export",
+          "line": "78",
+          "statement": "export interface InputFormProps {"
+        }
+      },
+      {
+        "id": "787118ddba41904e8e77f075fc0e21faa02a94f6a2966856698e72fd5b35c966",
+        "kind": "import_export_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "edge_kind": "import_from",
+          "line": "39",
+          "statement": "import { m, AnimatePresence, useSpring, useTransform } from \"framer-motion\";"
+        }
+      },
+      {
+        "id": "939ad4a732a15eaf89b5b93dc5e04896377c0498db362c5059b14e13b6ab58c2",
+        "kind": "import_export_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "edge_kind": "import_from",
+          "line": "1",
+          "statement": "import React, { useState, useEffect, useCallback, useMemo } from \"react\";"
+        }
+      },
+      {
+        "id": "952cec8d5d4dc7e450e5b76cab22e39c0bbc2e7c0015580a4ccb6af6511dd975",
+        "kind": "import_export_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "edge_kind": "import_from",
+          "line": "40",
+          "statement": "import { fetchCandles, getAtrPerMin, Candle } from \"../utils/atr\";"
+        }
+      },
+      {
+        "id": "a48e70641d5b60a4fa947437c0131cd6066ccd24caa04e270e6ed9d4493af446",
+        "kind": "import_export_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "edge_kind": "import_from",
+          "line": "43",
+          "statement": "import { DEFAULT_ATR_PERIOD } from \"../constants\";"
+        }
+      },
+      {
+        "id": "d9a96f8cc27d982f134d0015130a6accdd5b740186fb0a72a92fd12b72297113",
+        "kind": "import_export_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "edge_kind": "import_from",
+          "line": "41",
+          "statement": "import { computeOptimalGridParams } from \"../utils/optimizer\";"
+        }
+      },
+      {
+        "id": "e76f3b63db9e220db71d579b687d97dc7a292da0b412876de98d755706eed759",
+        "kind": "import_export_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "edge_kind": "export",
+          "line": "1530",
+          "statement": "export default React.memo(InputForm);"
+        }
+      },
+      {
+        "id": "eaac87d178f348ed474cd0e3ad431833437976f3e4cc8129f73179a61ea25c97",
+        "kind": "import_export_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "edge_kind": "import_from",
+          "line": "42",
+          "statement": "import { GridParameters, GridType, EntryType } from \"../types\";"
+        }
+      },
+      {
+        "id": "02b95a13effeeaba34477758cc9d45868f69f1c0670c94efb8a67ee697a5a162",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "alpha",
+          "column": "50",
+          "confidence": "low",
+          "line": "753"
+        }
+      },
+      {
+        "id": "0443bb843cb39567412911bfb7860de7043720af99f2769c9e0c817b1d40011c",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "setLocalSymbolFetchError",
+          "column": "7",
+          "confidence": "low",
+          "line": "1003"
+        }
+      },
+      {
+        "id": "06afdf1a61dab8692a7b7b4d0279bb177df0f29a1ba8d0c033c6304961a6b07e",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "useCallback",
+          "column": "26",
+          "confidence": "low",
+          "line": "897"
+        }
+      },
+      {
+        "id": "0a8ef2eb7e0835202e388ce72728e0fd2426b4a27a133665da32b40e1c871460",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "alpha",
+          "column": "42",
+          "confidence": "low",
+          "line": "669"
+        }
+      },
+      {
+        "id": "0d1be2509b94673b6a6ef45bb835adfe8fa9aadca176646a120eb787d1efd1ac",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "appendChild",
+          "column": "19",
+          "confidence": "low",
+          "line": "348"
+        }
+      },
+      {
+        "id": "0f50d5ac235a6e9cd578f956ebbcceb454069b856d04985ee397f0a0349ae736",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "useCallback",
+          "column": "27",
+          "confidence": "low",
+          "line": "1058"
+        }
+      },
+      {
+        "id": "0f9d87645ccde9f98dd0d246c4f72ec4c1e8e55fadb9042af3a2d4b2006b64d1",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "renderField",
+          "column": "25",
+          "confidence": "low",
+          "line": "1461"
+        }
+      },
+      {
+        "id": "10e1a39b44b05406ffc4011a7f0e116f68a34606a8e76a223e4b45f33269a9b9",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "renderField",
+          "column": "25",
+          "confidence": "low",
+          "line": "1264"
+        }
+      },
+      {
+        "id": "11d1a246aada1f707bad1339964631a62ef3f5c6cef1c388778d327ec3a25315",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "isNaN",
+          "column": "27",
+          "confidence": "low",
+          "line": "933"
+        }
+      },
+      {
+        "id": "12aa65d08268af9dba2e34aa96094506b6f5fa158963a3c89a495316e3fde624",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "isNaN",
+          "column": "28",
+          "confidence": "low",
+          "line": "937"
+        }
+      },
+      {
+        "id": "12e1a7fb09cdf30abe24bcede4bafa47171a6fab649e1b20ac4b857a5c26e832",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "useMemo",
+          "column": "25",
+          "confidence": "low",
+          "line": "884"
+        }
+      },
+      {
+        "id": "130712c4a387ddfcff49cabd04e0a42c548b0cc4a4ad7ec2c9ea89708cf7d800",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "Number",
+          "column": "40",
+          "confidence": "low",
+          "line": "437"
+        }
+      },
+      {
+        "id": "166401eaafba9925c42e0832499f1a4e1273afdf0ceff09806ad23551bd5162f",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "Number",
+          "column": "21",
+          "confidence": "low",
+          "line": "1031"
+        }
+      },
+      {
+        "id": "16941f18e9b9daeb37d9e06b8970244feed81020197ce6c3a513b70089371f2f",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "setAdvancedOpen",
+          "column": "32",
+          "confidence": "low",
+          "line": "1409"
+        }
+      },
+      {
+        "id": "17e42e7e145b85c7b4f8ed92c5c31ea5474988ae74c7c947a1803b6572d6c29c",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "setFormTouched",
+          "column": "7",
+          "confidence": "low",
+          "line": "1013"
+        }
+      },
+      {
+        "id": "1909feb48a9bf204ce68378aaccbcd7703a29acb7b80be719f85c516d7cb2ce9",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "onClearCalculationErrorFromApp",
+          "column": "7",
+          "confidence": "low",
+          "line": "1064"
+        }
+      },
+      {
+        "id": "193b1a4251d430ba8c874a07b267a8b8c4f42caab7a9f2b8d5497e902d187688",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "trim",
+          "column": "34",
+          "confidence": "low",
+          "line": "905"
+        }
+      },
+      {
+        "id": "19aee8cee96240cf60d09414039eba5c15d39bdc917ea90c26644ee815239998",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "useState",
+          "column": "43",
+          "confidence": "low",
+          "line": "326"
+        }
+      },
+      {
+        "id": "1c4b5d75153ffe8e4df7c527cc307c41ba753f6b66a88f73dfbacac39872bc06",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "Number",
+          "column": "14",
+          "confidence": "low",
+          "line": "443"
+        }
+      },
+      {
+        "id": "1e9658a3e2d4918fccea2b6ea1ef5e8ee3e33e5ade51af829b93b5b2294cedea",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "Number",
+          "column": "20",
+          "confidence": "low",
+          "line": "1029"
+        }
+      },
+      {
+        "id": "209f7bf881ce22f590014cc4ad647eabb8b9e3575e7148f5a35dd282cdd940ac",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "Number",
+          "column": "17",
+          "confidence": "low",
+          "line": "419"
+        }
+      },
+      {
+        "id": "234d8fa5c333d1eb86eb493fcd2426d83fcd7cc446657f00aaeaa10247ad38c0",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "toUpperCase",
+          "column": "36",
+          "confidence": "low",
+          "line": "862"
+        }
+      },
+      {
+        "id": "241d9515ce9ff812784e51c7150f8c243bffb033dd86e5237cac9b332c6bc93c",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "onClearCalculationErrorFromApp",
+          "column": "9",
+          "confidence": "low",
+          "line": "1001"
+        }
+      },
+      {
+        "id": "2b96f44f2318dcc3e7e21bc458f70c898703607df8e71ef67e48934c6ec9cf39",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "setSnackbar",
+          "column": "5",
+          "confidence": "low",
+          "line": "1066"
+        }
+      },
+      {
+        "id": "2c89b93ba230b7369ed903657a9cc1bc5daef93f874b0f8598e8f8318761e893",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "useMediaQuery",
+          "column": "20",
+          "confidence": "low",
+          "line": "311"
+        }
+      },
+      {
+        "id": "30aa3ec758643993f334a95d2975bb32fa4ffc69c4d2a99f36f40c1ee754da12",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "setIsOptimizing",
+          "column": "7",
+          "confidence": "low",
+          "line": "991"
+        }
+      },
+      {
+        "id": "33530719b89ec65123e0d053477b8ab3d0ac20faaf3b899d88588ba1c4f633a2",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "map",
+          "column": "45",
+          "confidence": "low",
+          "line": "1460"
+        }
+      },
+      {
+        "id": "342852db97fb73a1f2e87dc62be359864ae8f579fd089f587d16445467478c57",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "Number",
+          "column": "34",
+          "confidence": "low",
+          "line": "937"
+        }
+      },
+      {
+        "id": "344f4cf47b333d0cb89be2f191dcb7c7bafa04f2bcbfd6bffe8302c456daa28e",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "isNaN",
+          "column": "8",
+          "confidence": "low",
+          "line": "443"
+        }
+      },
+      {
+        "id": "34660af56187332a2fa399348535d6c01e4c52615a7d2963f46281075a0cb599",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "keys",
+          "column": "47",
+          "confidence": "low",
+          "line": "1225"
+        }
+      },
+      {
+        "id": "348709b0e2e97d7fc3bfb56abfa537cbd52d6542540cda37da9bbc22f2b76398",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "setLocalSymbolFetchError",
+          "column": "9",
+          "confidence": "low",
+          "line": "907"
+        }
+      },
+      {
+        "id": "34960d188651d7b186284bab188789ddfc8f084eb83f6abae010bd6d553d5e61",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "setForm",
+          "column": "7",
+          "confidence": "low",
+          "line": "537"
+        }
+      },
+      {
+        "id": "35aa323763d8e5a7f76148bd9c18c8cf81e09e0df4f4389df9a844c4a0d5bdfa",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "useCallback",
+          "column": "20",
+          "confidence": "low",
+          "line": "360"
+        }
+      },
+      {
+        "id": "37698403453cd0c1b907000fbe71fa30ddbc13f7c586787d9558a412ac4d2853",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "Number",
+          "column": "13",
+          "confidence": "low",
+          "line": "938"
+        }
+      },
+      {
+        "id": "3973cdcee59bbf54481d9e1440d34bbb1ec48b9f9e6dc1d4dfc5afa8bdcbfa10",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "entries",
+          "column": "21",
+          "confidence": "low",
+          "line": "1207"
+        }
+      },
+      {
+        "id": "3b8dd51f14c46294845c69a1b0aa751fcac1575e9fddce68820de2b4b4fbe38f",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "trim",
+          "column": "20",
+          "confidence": "low",
+          "line": "1079"
+        }
+      },
+      {
+        "id": "3fadb32529c170dade9e2605822f7ecfd27e8048c0ff551389cfcb7a0ec5cc15",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "setSnackbar",
+          "column": "9",
+          "confidence": "low",
+          "line": "1016"
+        }
+      },
+      {
+        "id": "41883c7df1d2c821ed25ddd40f4b97f1ae141dc817db597c8a57e343da1bace4",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "Number",
+          "column": "33",
+          "confidence": "low",
+          "line": "933"
+        }
+      },
+      {
+        "id": "41957b714033bc76a5ddfc6d01f71e1a742cd084a9aeb8e77ff5515ab78e3f9b",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "Boolean",
+          "column": "24",
+          "confidence": "low",
+          "line": "546"
+        }
+      },
+      {
+        "id": "4251e51923ba04b64755217ec13c5c774686972dc53e7881cf8af36cf65c0d43",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "Number",
+          "column": "21",
+          "confidence": "low",
+          "line": "1027"
+        }
+      },
+      {
+        "id": "44368c4aa9812223bf26896e392ab3a50be24803a20f7eb01d7cb5a194bd2360",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "reduce",
+          "column": "25",
+          "confidence": "low",
+          "line": "885"
+        }
+      },
+      {
+        "id": "4568b97f8e7045411c026586271bfe8455134494e40e43c9b0c9e284b7ad625f",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "alpha",
+          "column": "42",
+          "confidence": "low",
+          "line": "646"
+        }
+      },
+      {
+        "id": "46dc644027c13ea8f9939bba5de3601b5388edf95185d93fdc9a9707ba34c301",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "setFormTouched",
+          "column": "7",
+          "confidence": "low",
+          "line": "538"
+        }
+      },
+      {
+        "id": "47d9944b2b1ed22af95948b50cd87d0bc3f2285acf1e430a58100d48c7beb2da",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "toFixed",
+          "column": "41",
+          "confidence": "low",
+          "line": "958"
+        }
+      },
+      {
+        "id": "4810a0f7a4cb1a4ae043afc1591c049af237879bc2ffb9d6c45db0b424e85eff",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "includes",
+          "column": "37",
+          "confidence": "low",
+          "line": "974"
+        }
+      },
+      {
+        "id": "48e9a16e7bf52143ac0277823de30b4f7e844352c49435479f912bbb7336dfe0",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "alpha",
+          "column": "26",
+          "confidence": "low",
+          "line": "1174"
+        }
+      },
+      {
+        "id": "49e8abbf4d7d8e722fb16267f67b0fd067a0fde35adf2e276eff217d01215a5e",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "onClearCalculationErrorFromApp",
+          "column": "7",
+          "confidence": "low",
+          "line": "899"
+        }
+      },
+      {
+        "id": "4a8f403373137c4e41e3808b51699f2234a10aa67cd7b6c6863083b59c834cb6",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "alpha",
+          "column": "35",
+          "confidence": "low",
+          "line": "1388"
+        }
+      },
+      {
+        "id": "4b6f2feedf48fa990e4fb697687d690707c5b74c1771cc4cfe7755d0be9bdfab",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "Number",
+          "column": "32",
+          "confidence": "low",
+          "line": "928"
+        }
+      },
+      {
+        "id": "4ba2568c4b67783053542ff1c6439b7077b095775e33b6189b4b5eb412327fe8",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "Number",
+          "column": "19",
+          "confidence": "low",
+          "line": "398"
+        }
+      },
+      {
+        "id": "4c77c2fb7cdb4e3b20ef549fa267c2a40f064e95504da39d1ddd60e5b8525573",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "setIsOptimizing",
+          "column": "5",
+          "confidence": "low",
+          "line": "902"
+        }
+      },
+      {
+        "id": "4e69fff61a9e4f70d34472ad99a9c2bbd36f0ef3bad291d78809f09873bae9b8",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "trim",
+          "column": "29",
+          "confidence": "low",
+          "line": "1025"
+        }
+      },
+      {
+        "id": "4ec64a981af09b60236525902f0de2eb49f8bf622cf1ebc24e7b1d40d3dd79b2",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "useMemo",
+          "column": "31",
+          "confidence": "low",
+          "line": "1073"
+        }
+      },
+      {
+        "id": "502a4705660c99f9c24016bb851fbd0acae7b7d36a09ae1254af6606097234f5",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "isInteger",
+          "column": "56",
+          "confidence": "low",
+          "line": "428"
+        }
+      },
+      {
+        "id": "50aa4cdf8a1e420db1296fd505606c0ebd22d589a4b91c89571312cdfde493ca",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "Number",
+          "column": "19",
+          "confidence": "low",
+          "line": "379"
+        }
+      },
+      {
+        "id": "50b51b9dbaa238271f7b463be299075f0354aadad99ce9e6045572f3f2127df8",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "alpha",
+          "column": "30",
+          "confidence": "low",
+          "line": "1173"
+        }
+      },
+      {
+        "id": "5190959f3de1861f927da12996bab5f873d530595f53ab71c5826f30bb778d7a",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "trim",
+          "column": "22",
+          "confidence": "low",
+          "line": "364"
+        }
+      },
+      {
+        "id": "53f7bb42d1ad94a187b0ca75098e5e7f296c5dae678b90b067f6a7fa884aa85f",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "onClearCalculationErrorFromApp",
+          "column": "9",
+          "confidence": "low",
+          "line": "484"
+        }
+      },
+      {
+        "id": "5667589098a9dc8206f7b3c97f64e61f62f88deff047e6cf8d266b58a04afc71",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "toLowerCase",
+          "column": "23",
+          "confidence": "low",
+          "line": "973"
+        }
+      },
+      {
+        "id": "5699c4eafb8c87349de90ba1652be1a9afb598888c65b510a983c386e6de47be",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "useTheme",
+          "column": "17",
+          "confidence": "low",
+          "line": "310"
+        }
+      },
+      {
+        "id": "580b33cc364996f37db33341cded253f5ee2f04632fe368bb6a81d53e922c383",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "Number",
+          "column": "22",
+          "confidence": "low",
+          "line": "411"
+        }
+      },
+      {
+        "id": "591269d2004cec5139c9e9d08b0c89b3b7b13507227c72f6b3fb83eaa4bd323e",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "keys",
+          "column": "19",
+          "confidence": "low",
+          "line": "449"
+        }
+      },
+      {
+        "id": "5ae1e987dba27c3388d907a08a9fee5d19ce4174953f4a682c6028029d92f7f5",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "toString",
+          "column": "40",
+          "confidence": "low",
+          "line": "959"
+        }
+      },
+      {
+        "id": "5aec2360de86fe83553b7304f9d0ef77defd67611ee0710c5791b6db9c73f776",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "values",
+          "column": "21",
+          "confidence": "low",
+          "line": "183"
+        }
+      },
+      {
+        "id": "5e2ce0f2066f4a72597fe0528ffb92cf1d3c2754475fbbf3c6017628dfb197b2",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "isNaN",
+          "column": "29",
+          "confidence": "low",
+          "line": "385"
+        }
+      },
+      {
+        "id": "602444225119df384f679d3723d00c4240f7eb700f8570a5daaa82ab7d8d41a4",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "handleStepperChange",
+          "column": "44",
+          "confidence": "low",
+          "line": "661"
+        }
+      },
+      {
+        "id": "61b10fc86e9afea9c52231ee10876cc51e5f76836d7fe815638a0223c3aef07e",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "alpha",
+          "column": "38",
+          "confidence": "low",
+          "line": "1154"
+        }
+      },
+      {
+        "id": "6373d997ec3a0ff7c2a8f1a73ecaf26f6ed05454b52b389e9850575429fb23b5",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "Number",
+          "column": "19",
+          "confidence": "low",
+          "line": "380"
+        }
+      },
+      {
+        "id": "66755402a313c5771966c0084697c8cdd2729e03a6216e71449e528c759a19bb",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "setSnackbar",
+          "column": "7",
+          "confidence": "low",
+          "line": "985"
+        }
+      },
+      {
+        "id": "6706c650ba56ed4fe0ae12c08d9c1f23c065bd24406e0ccb480a9a49db9daa72",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "Number",
+          "column": "13",
+          "confidence": "low",
+          "line": "934"
+        }
+      },
+      {
+        "id": "68b44fe40403b56f6db955af49b25f8d4eef2eebfa95f1128eda143ee1c4e513",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "isNaN",
+          "column": "29",
+          "confidence": "low",
+          "line": "382"
+        }
+      },
+      {
+        "id": "6a38062ab52030d75a541f75e366baa755e7611db11fc0644d305ddb8b620f9f",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "createElement",
+          "column": "28",
+          "confidence": "low",
+          "line": "336"
+        }
+      },
+      {
+        "id": "6b9c29d26663516a45e20cd081f98c12630b85e4a13f2aedd1fc1f16b6cc4426",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "isNaN",
+          "column": "30",
+          "confidence": "low",
+          "line": "1038"
+        }
+      },
+      {
+        "id": "6bb1bee53ec4d84edd220d06a7ccc0b83a49e617bb41b69ff36c38e170b64ed2",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "Number",
+          "column": "15",
+          "confidence": "low",
+          "line": "1035"
+        }
+      },
+      {
+        "id": "6c14169fb19b4de220b710e00b6cff1174fde0ab595732a13b44bfb327eb6efd",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "validate",
+          "column": "5",
+          "confidence": "low",
+          "line": "453"
+        }
+      },
+      {
+        "id": "6ec0129a83097322035f83bcc49b750fa60c21a4e6e5b59c4db11b0119a97b0e",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "onCalculate",
+          "column": "7",
+          "confidence": "low",
+          "line": "1046"
+        }
+      },
+      {
+        "id": "71262da31b2057fcf511dc4b54b653731e450066fac8eb79a7d1d190bef67abc",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "toFixed",
+          "column": "41",
+          "confidence": "low",
+          "line": "957"
+        }
+      },
+      {
+        "id": "734f27e8c94eac43a054373058a90090d871fefc51b1da0b9f5699bfc99a0e87",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "toLowerCase",
+          "column": "23",
+          "confidence": "low",
+          "line": "974"
+        }
+      },
+      {
+        "id": "73bf3ecb5fc590ad0fb65a995572f515de0e7df8d6e5f0cd6cc062ac4e24ba7c",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "getAtrPerMin",
+          "column": "25",
+          "confidence": "low",
+          "line": "930"
+        }
+      },
+      {
+        "id": "74ddf264513830f909a4b3602b6482fbe2111648e4a887440076b46de81bb865",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "setLocalSymbolFetchError",
+          "column": "5",
+          "confidence": "low",
+          "line": "1062"
+        }
+      },
+      {
+        "id": "768c324924d6dc9ee4922aded6fced9196434557a0f855711aba06eda66bef15",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "charAt",
+          "column": "24",
+          "confidence": "low",
+          "line": "505"
+        }
+      },
+      {
+        "id": "76cc9d0fbb679772ccf551eb587d882f80ef9a5122efb72c7133194c9b5ce3f0",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "preventDefault",
+          "column": "9",
+          "confidence": "low",
+          "line": "998"
+        }
+      },
+      {
+        "id": "7793142a35f65870b9159dfa1bbd0b6a3708fc8a8279c90d4b5f2cb423031321",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "useTransform",
+          "column": "23",
+          "confidence": "low",
+          "line": "357"
+        }
+      },
+      {
+        "id": "7a0fa3f026ebec2292d8b41ac3abc34ecbe9afccc969fbc886dc7b2216a104c4",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "push",
+          "column": "20",
+          "confidence": "low",
+          "line": "889"
+        }
+      },
+      {
+        "id": "7cb8f3fad97c9e48e9321b3e3012daf3d6f5282d5ff5ae0c633ca3dddb258954",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "useCallback",
+          "column": "29",
+          "confidence": "low",
+          "line": "491"
+        }
+      },
+      {
+        "id": "807fb58130fab127e2a3674f84e1de018d991eb8c50a8022b5cf54c4f10d68d2",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "isNaN",
+          "column": "35",
+          "confidence": "low",
+          "line": "420"
+        }
+      },
+      {
+        "id": "886ddff346566fd0783981845a145c44129afc188d5824b0ed0f0ca7fb154464",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "setSnackbar",
+          "column": "30",
+          "confidence": "low",
+          "line": "1484"
+        }
+      },
+      {
+        "id": "8b897a8c08fac3a3317d72d1737719d831f2dbdc622d62015d164a8263b90a6e",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "Number",
+          "column": "41",
+          "confidence": "low",
+          "line": "443"
+        }
+      },
+      {
+        "id": "8bb35387889b7c55f808e1fadc88a11356e2fa730745721b4956f6f9acded4c4",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "isNaN",
+          "column": "8",
+          "confidence": "low",
+          "line": "437"
+        }
+      },
+      {
+        "id": "8c5a2b39248cd3c48790f7d085af1e21d9505b3c8916e1296f8249563da7dd6e",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "map",
+          "column": "62",
+          "confidence": "low",
+          "line": "852"
+        }
+      },
+      {
+        "id": "8cac4d14aaf3a450cf656f17c331d09ba7134096fca7faa5d195bbd3572c5d8a",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "round",
+          "column": "18",
+          "confidence": "low",
+          "line": "534"
+        }
+      },
+      {
+        "id": "8d6539aaeca9d96f1a40a493f4e728ae220343ab28c350e062b6a75f7dbf1b7c",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "toString",
+          "column": "34",
+          "confidence": "low",
+          "line": "534"
+        }
+      },
+      {
+        "id": "8e379be7f6b69180fd17af46ce2b0e8923b8d9cd3630372b4e0354a4d25d183d",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "setLocalSymbolFetchError",
+          "column": "5",
+          "confidence": "low",
+          "line": "901"
+        }
+      },
+      {
+        "id": "8effc10c7e4fe4c91b0399c34ac80362c5172d6b88bbb781f7379c44fb86f6d9",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "setSnackbar",
+          "column": "7",
+          "confidence": "low",
+          "line": "962"
+        }
+      },
+      {
+        "id": "90c91fd6125c45d60e568fafe2babfe4b5a99341b3cbbb55743084d341e5a3ce",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "Error",
+          "column": "19",
+          "confidence": "low",
+          "line": "922"
+        }
+      },
+      {
+        "id": "932939d236434656e3967b57dba995471ece6fbb73f3122b48edae1874d17b31",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "setForm",
+          "column": "7",
+          "confidence": "low",
+          "line": "468"
+        }
+      },
+      {
+        "id": "94f0d7c71adad6dbb61d502b62c04c479bbbf3f70b8f757055d158a3a3953d3e",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "alpha",
+          "column": "38",
+          "confidence": "low",
+          "line": "1417"
+        }
+      },
+      {
+        "id": "9745224ed33f50cc9b2a039ed290db61d0bc33ed7b5d859a6c300c0a9182d9a7",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "keys",
+          "column": "14",
+          "confidence": "low",
+          "line": "1075"
+        }
+      },
+      {
+        "id": "97d600e32b3ae900d2a94f714ba8e42ccc80aed5cb84743dfd2cf822e12915d7",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "values",
+          "column": "21",
+          "confidence": "low",
+          "line": "176"
+        }
+      },
+      {
+        "id": "990d959b65e5c8915aec81fa6b248bd0df5f96f4526a2ebc357e3a61662e585a",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "fetchCandles",
+          "column": "39",
+          "confidence": "low",
+          "line": "916"
+        }
+      },
+      {
+        "id": "9ab83fe9cb7e4cc56ac0244cb874b966c62697c20215f4924a2ad388dd84f14a",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "setErrors",
+          "column": "5",
+          "confidence": "low",
+          "line": "1060"
+        }
+      },
+      {
+        "id": "a0801fe52f117d8b1561411538d701cb6801dac9890aaa2b63bb2ed2b4c5b820",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "toUpperCase",
+          "column": "41",
+          "confidence": "low",
+          "line": "905"
+        }
+      },
+      {
+        "id": "a2337308e674cf056c33ec89961af922e80f3dcd03c95c32196160f5ee6495bd",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "map",
+          "column": "38",
+          "confidence": "low",
+          "line": "1263"
+        }
+      },
+      {
+        "id": "a3bcb166aa8d028664f46610cbb6a003907fd654d4d4aa0eeb7cf9c46760218f",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "toFixed",
+          "column": "22",
+          "confidence": "low",
+          "line": "535"
+        }
+      },
+      {
+        "id": "a4b1abce234f2ab8761741804e5b440ccc28df038adbbe6e909f5ada1370cc97",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "charAt",
+          "column": "26",
+          "confidence": "low",
+          "line": "862"
+        }
+      },
+      {
+        "id": "a5694dd8d90cbd187fb7ce9b6377771926edce0338df40fb0058b3a20e1647d8",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "toUpperCase",
+          "column": "34",
+          "confidence": "low",
+          "line": "505"
+        }
+      },
+      {
+        "id": "a60d42e1815e8f0b776581d319c0e1a2994f3c9ab37cf6ba09ee6c37ef983295",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "useCallback",
+          "column": "24",
+          "confidence": "low",
+          "line": "457"
+        }
+      },
+      {
+        "id": "a6839c341d0fbfa2034badf546a479601031399b67b2991857919f00615dcda5",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "Number",
+          "column": "14",
+          "confidence": "low",
+          "line": "437"
+        }
+      },
+      {
+        "id": "a6a88af5fb503b4f5b5e7c6a24acea3c8c47b9db66072428f4a8b963298c97e5",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "cloneElement",
+          "column": "30",
+          "confidence": "low",
+          "line": "789"
+        }
+      },
+      {
+        "id": "aabb6e18678be6d068113e22f75715d704f57e3ea3f490a09d61f77873c1e456",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "setLocalSymbolFetchError",
+          "column": "9",
+          "confidence": "low",
+          "line": "481"
+        }
+      },
+      {
+        "id": "ac38ffd509f0454e4fd1718572efef0fb57ddbb4a6c8e022de57809015fe6322",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "useEffect",
+          "column": "9",
+          "confidence": "low",
+          "line": "335"
+        }
+      },
+      {
+        "id": "ad1fe9fa2d018ce5fa2faa763040340dc07f9ab6ab9b53c384285446a4d5bbda",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "setForm",
+          "column": "5",
+          "confidence": "low",
+          "line": "1059"
+        }
+      },
+      {
+        "id": "aea9083582c533380d0c4112e260240175dd03cb8205a5d7938e61f9a7dca3e5",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "setForm",
+          "column": "7",
+          "confidence": "low",
+          "line": "954"
+        }
+      },
+      {
+        "id": "b1e70071a91ed2175c00551deb78407cff03354f001dfd4b2b0e8529daa1b615",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "isNaN",
+          "column": "48",
+          "confidence": "low",
+          "line": "388"
+        }
+      },
+      {
+        "id": "b3218682db4fc4b388786c11097ad0dd3059f0a4f358c85ae4722fce14f3aa9e",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "setFormTouched",
+          "column": "5",
+          "confidence": "low",
+          "line": "1061"
+        }
+      },
+      {
+        "id": "b4cd4759548f5c5a086df29f641d2dae7508d93a9fa6f38186744ef5577fdc7c",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "removeChild",
+          "column": "21",
+          "confidence": "low",
+          "line": "351"
+        }
+      },
+      {
+        "id": "b5e66dad58b1f42f48087892d2ac1e31b467f36203bbf9bf44f4d3889289bb86",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "memo",
+          "column": "22",
+          "confidence": "low",
+          "line": "1530"
+        }
+      },
+      {
+        "id": "b8628723c7387c9abbe181dfb1e1b8f3ec57a0a23267fac2184095589b9ec962",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "alpha",
+          "column": "48",
+          "confidence": "low",
+          "line": "703"
+        }
+      },
+      {
+        "id": "b8bdb857fc1ebd581e51675a21822ca8b86f0352ff93a28596689b317bac869c",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "includes",
+          "column": "37",
+          "confidence": "low",
+          "line": "973"
+        }
+      },
+      {
+        "id": "bacb838b83e7fd968947059bae36af65f9a79f5a2c4966aae1d9f38b694ad049",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "Number",
+          "column": "20",
+          "confidence": "low",
+          "line": "1026"
+        }
+      },
+      {
+        "id": "bca459fe1082e29395d7830a4f79080defb312e9b849c7d6fc7ab17c67688830",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "keys",
+          "column": "33",
+          "confidence": "low",
+          "line": "1006"
+        }
+      },
+      {
+        "id": "bcd89f6a5b5f3653a3e93d4b1d0c21045189e943f78e8aac885451a43a69082c",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "reduce",
+          "column": "44",
+          "confidence": "low",
+          "line": "1006"
+        }
+      },
+      {
+        "id": "bd50385f64dae39f359e61dc8e9d9c0a4b575e93029c0c0159fb82022bb96aa2",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "toUpperCase",
+          "column": "36",
+          "confidence": "low",
+          "line": "1025"
+        }
+      },
+      {
+        "id": "be0822ddfb050bd77615cfacd586cc2050593f0242a8506a3641017ef7c55d37",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "setFormTouched",
+          "column": "7",
+          "confidence": "low",
+          "line": "478"
+        }
+      },
+      {
+        "id": "c3f981d366e374c063a6adfb22b4fc8883b2278f2782120b649d3ad307b4cbec",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "isInteger",
+          "column": "46",
+          "confidence": "low",
+          "line": "401"
+        }
+      },
+      {
+        "id": "c43a45f4419563161d5f36cd0bd3ded803bcf62cd8afd364fbaecc7aa71aff0d",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "isNaN",
+          "column": "29",
+          "confidence": "low",
+          "line": "1034"
+        }
+      },
+      {
+        "id": "c5732dc53a83b1c9cad2d6b54b858cfd9393d364aefa46c187cb8984564c9340",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "slice",
+          "column": "64",
+          "confidence": "low",
+          "line": "505"
+        }
+      },
+      {
+        "id": "c5fd667b728ce28f750884ed5ec6db1a5e774476bc82596033e996438735bf06",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "Number",
+          "column": "31",
+          "confidence": "low",
+          "line": "929"
+        }
+      },
+      {
+        "id": "c620ae7bfce90f8eb96d83a4bcaec9deb904e09e5da087e7bc021a4db161e0cf",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "Number",
+          "column": "35",
+          "confidence": "low",
+          "line": "1034"
+        }
+      },
+      {
+        "id": "c74f3b7b46df45fd57183387c2193d1d2f8f66225ed8388979a99d1eb1ee46f4",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "useEffect",
+          "column": "3",
+          "confidence": "low",
+          "line": "452"
+        }
+      },
+      {
+        "id": "c84a0b6f4b3b0744a70714766eef145f0a5a0a809d511388d92a35d0d72f637b",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "computeOptimalGridParams",
+          "column": "29",
+          "confidence": "low",
+          "line": "941"
+        }
+      },
+      {
+        "id": "c986062ab530cb68ce65acfd9da328dadd9161c3a782828e485e7e58303f9c8f",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "useCallback",
+          "column": "24",
+          "confidence": "low",
+          "line": "996"
+        }
+      },
+      {
+        "id": "ca80dfa14571e2aeb70712cd68cba412a11025e1a2ef56ef8c5836bee4343b7d",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "setErrors",
+          "column": "5",
+          "confidence": "low",
+          "line": "448"
+        }
+      },
+      {
+        "id": "cac7d94577d1046eb09b56a7181e37b650ef88b0c0a1ffa2ee74bd4c27f8e71c",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "validate",
+          "column": "12",
+          "confidence": "low",
+          "line": "1015"
+        }
+      },
+      {
+        "id": "cb0072f8a15ad9a0be892210820ed81ccff1ec676a27d8342ab3a9799c4ebf67",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "isNaN",
+          "column": "65",
+          "confidence": "low",
+          "line": "388"
+        }
+      },
+      {
+        "id": "cf54994ab8b54ed6fbe1b6d986003b3d9afdc165feb3c9d199ea0c217382c4e0",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "Number",
+          "column": "23",
+          "confidence": "low",
+          "line": "1032"
+        }
+      },
+      {
+        "id": "d0db7f37b7152a4f69a9cb4753da6ecf8a92ef4899c198caad54bc6ff2bf8e1a",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "useState",
+          "column": "43",
+          "confidence": "low",
+          "line": "316"
+        }
+      },
+      {
+        "id": "d10230214916d3fe3e792c53d7ea051f64a0e31003b01a17a3509695058af6b7",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "Number",
+          "column": "23",
+          "confidence": "low",
+          "line": "371"
+        }
+      },
+      {
+        "id": "d132f01a907ebc0754fd48ab05e5231bad8ef1d80a75c506fbd1b7514eed5f72",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "Number",
+          "column": "28",
+          "confidence": "low",
+          "line": "513"
+        }
+      },
+      {
+        "id": "d2ce32704133824e51d9a08d1c1d49e1417ee7cf4b6a000e4c4461565ddcb7d4",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "Number",
+          "column": "22",
+          "confidence": "low",
+          "line": "427"
+        }
+      },
+      {
+        "id": "d34a4ef760e702eeffd13ef7307ed8c61db60c4c240ffcd94df52011710dbcab",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "setSnackbar",
+          "column": "28",
+          "confidence": "low",
+          "line": "1474"
+        }
+      },
+      {
+        "id": "d3bffe61e43e1ff8719a1e0301086c6de2f48ac75b0062d1752b2093920e6b2c",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "down",
+          "column": "52",
+          "confidence": "low",
+          "line": "311"
+        }
+      },
+      {
+        "id": "d9a27c620b1a9ebc9f486ee3a7e943e43978c156a5f6334b3a4a3a40fd295f6b",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "Number",
+          "column": "36",
+          "confidence": "low",
+          "line": "1038"
+        }
+      },
+      {
+        "id": "df00e56e7cdcd759e5f8db8278b59eb4a6737abc82531e35f4a6ecf404956b7f",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "trim",
+          "column": "28",
+          "confidence": "low",
+          "line": "366"
+        }
+      },
+      {
+        "id": "e1db8f7b3111c932d4059c5ed1b7d2fd7804cc602b1efd0d105e1518221d1920",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "slice",
+          "column": "56",
+          "confidence": "low",
+          "line": "862"
+        }
+      },
+      {
+        "id": "e27e4d94d8b0b2470e11e711c0619f0caf600a70940513f2f602ee79c184fe61",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "useCallback",
+          "column": "23",
+          "confidence": "low",
+          "line": "544"
+        }
+      },
+      {
+        "id": "e5a72ee9c5baf07fbeb512a9cd22d59b1628942f74a58f14d0559cb5fa4f7bc2",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "max",
+          "column": "18",
+          "confidence": "low",
+          "line": "528"
+        }
+      },
+      {
+        "id": "e5e0731ae3a48e57e0ec144ad5314eee1a02cb2be1b2e8a645a16510f0bca408",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "useSpring",
+          "column": "24",
+          "confidence": "low",
+          "line": "356"
+        }
+      },
+      {
+        "id": "e6dcf13cb8a185cda8081f06678a48421065dba4bbc096a9443e59e883e6e3d9",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "alpha",
+          "column": "36",
+          "confidence": "low",
+          "line": "814"
+        }
+      },
+      {
+        "id": "e8a54932e2402327efe169ad8551370b20d8dc1b7558569da04496c8fadf4315",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "Number",
+          "column": "15",
+          "confidence": "low",
+          "line": "1039"
+        }
+      },
+      {
+        "id": "ec2124aec417ab76512ed2cea7b9d3708066a78ce04b4d3f5beb153cb6c81d42",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "isNaN",
+          "column": "8",
+          "confidence": "low",
+          "line": "401"
+        }
+      },
+      {
+        "id": "ed00afc0a4708bf1fdf353f11f58715d2df8796f77e379320bd456314535447b",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "handleStepperChange",
+          "column": "44",
+          "confidence": "low",
+          "line": "638"
+        }
+      },
+      {
+        "id": "ed3fccc4ff21e4bccd620b12a5c11a00ceb5a1bcfc28eca21d282f4f3d69780e",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "setLocalSymbolFetchError",
+          "column": "7",
+          "confidence": "low",
+          "line": "984"
+        }
+      },
+      {
+        "id": "edc165a0ebd24bf4b4c66a55800858b5e6c0557e175a630a5d022fca9bdd4615",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "map",
+          "column": "44",
+          "confidence": "low",
+          "line": "1207"
+        }
+      },
+      {
+        "id": "ee8f92db7b7d042c66a331ff5c2040f037985133daaef6834afd0a666098f146",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "Number",
+          "column": "21",
+          "confidence": "low",
+          "line": "1028"
+        }
+      },
+      {
+        "id": "f1e0b470216cb3b2c850907e7231ada8ad805b8044ad0aa32df0568584af33b0",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "Number",
+          "column": "19",
+          "confidence": "low",
+          "line": "1030"
+        }
+      },
+      {
+        "id": "f337bc18cc63c6968fae67c9428f357a56af947c7e9583773909a56b8e71a9ef",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "alpha",
+          "column": "28",
+          "confidence": "low",
+          "line": "1127"
+        }
+      },
+      {
+        "id": "f4332b16fa6a62ed9b6be5cdb44c1d445dcf5a72e10b34d0caf2aedbce4ff930",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "setSnackbar",
+          "column": "9",
+          "confidence": "low",
+          "line": "908"
+        }
+      },
+      {
+        "id": "f4a61fa96a63f9bac572629a1b5146e829c0a313eea8b6233398574e20e07a78",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "Boolean",
+          "column": "7",
+          "confidence": "low",
+          "line": "1076"
+        }
+      },
+      {
+        "id": "f53a78adf18ffd1a73d55ed84897603db6df492639b8f1a0fc3509a4462c5d2b",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "includes",
+          "column": "11",
+          "confidence": "low",
+          "line": "565"
+        }
+      },
+      {
+        "id": "f78ed75730b6937ddc4bf13f097b4a631d433d5acfc25b5d0c5b317cdd79b248",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "trim",
+          "column": "56",
+          "confidence": "low",
+          "line": "1327"
+        }
+      },
+      {
+        "id": "fa69b8f5cb64c93e93762370a3ea8619690ca7a147a6d9029e022ed674917bbb",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "useCallback",
+          "column": "31",
+          "confidence": "low",
+          "line": "511"
+        }
+      },
+      {
+        "id": "fd6985184bdd397b4c420f92578ab3b58c2892f8c7bdbefb4d335773bf715ae2",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/InputForm.tsx"
+        },
+        "attributes": {
+          "callee": "Boolean",
+          "column": "7",
+          "confidence": "low",
+          "line": "1077"
+        }
+      }
+    ]
+  },
+  "extraction_mode": "heuristic"
+}

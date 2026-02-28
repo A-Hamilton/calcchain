@@ -1,0 +1,729 @@
+{
+  "cache_format_version": 3,
+  "artifact": {
+    "schema_version": "ucg-file-scaffold-v5",
+    "language": "typescript",
+    "path_provenance": {
+      "workspace_relative_path": "src/utils/atr.ts"
+    },
+    "nodes": [
+      {
+        "id": "579a36db21227958a09ff5db6e571fae50af3dd5952ada5b8c415e2cce386a7f",
+        "kind": "module",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        }
+      },
+      {
+        "id": "b0df4ea6fbed72bc712ab56b5e60f10e296e45bfd6a5b2d328a310601bdea8a7",
+        "kind": "symbol",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "end_line": "160",
+          "line": "111",
+          "protection_range_source": "body_range",
+          "symbol_kind": "function",
+          "symbol_name": "computeAtr"
+        }
+      },
+      {
+        "id": "096e1a1d9270cd053f73aeaff9bb3f9cb68b81953928cb2432c3ad975eec1e31",
+        "kind": "import_export_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "edge_kind": "export",
+          "line": "163",
+          "statement": "export async function getAtr(symbol: string, interval: string, period: number = DEFAULT_ATR_PERIOD): Promise<number> {"
+        }
+      },
+      {
+        "id": "3752139ab76efbc2140cd4d7d1912d509b2eee8ac78e12911f71875d6c9dcffe",
+        "kind": "import_export_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "edge_kind": "export",
+          "line": "23",
+          "statement": "export interface Candle {"
+        }
+      },
+      {
+        "id": "492f6bb8ff64a890564655574f44a929c8d95a7cfb77a07b4bb674503a7525b2",
+        "kind": "import_export_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "edge_kind": "export",
+          "line": "33",
+          "statement": "export async function fetchCandles(symbol: string, interval: string, limit: number): Promise<Candle[]> {"
+        }
+      },
+      {
+        "id": "590a32eeaf0ff6b55b61d7e7b3e05ca33c2256c0307d2c2f295af56cfa85637a",
+        "kind": "import_export_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "edge_kind": "import_from",
+          "line": "3",
+          "statement": "import { BINANCE_API_BASE_URL, MINUTES_IN_DAY, DEFAULT_ATR_PERIOD } from '../constants';"
+        }
+      },
+      {
+        "id": "df6648aaec538d36b89196f61740e83510316a6a5c130c42ca8faeea10855d97",
+        "kind": "import_export_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "edge_kind": "export",
+          "line": "173",
+          "statement": "export async function getAtrPerMin(symbol: string, period: number = DEFAULT_ATR_PERIOD): Promise<number> {"
+        }
+      },
+      {
+        "id": "ec843f8d5db85311b9198b7df89c6b53f7d8b8aeb2af6b2aca8a7426dce8c708",
+        "kind": "import_export_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "edge_kind": "import_from",
+          "line": "2",
+          "statement": "import axios from 'axios';"
+        }
+      },
+      {
+        "id": "f9dade415216f47fc8d38fa082dd9a1c3a676a9daea5bb5faf9f46be07a083b5",
+        "kind": "import_export_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "edge_kind": "export",
+          "line": "111",
+          "statement": "export function computeAtr(candles: Candle[], period: number): number {"
+        }
+      },
+      {
+        "id": "07e2a0ceafa5f69acac1ebb33dee0f0a82f72c1a249bfae5c41d719682944b99",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "callee": "parseFloat",
+          "column": "15",
+          "confidence": "low",
+          "line": "58"
+        }
+      },
+      {
+        "id": "15fb649cdef543c34ce9c676fcdb9bb00e6e54aef691134b5c7d136e24dc9a81",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "callee": "Error",
+          "column": "19",
+          "confidence": "low",
+          "line": "72"
+        }
+      },
+      {
+        "id": "1ebc34f9c65484268087433eb19f9cca4824b534134a0abf0059c8e6865884aa",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "callee": "Error",
+          "column": "17",
+          "confidence": "low",
+          "line": "132"
+        }
+      },
+      {
+        "id": "1fe415ff160fe5cafe1155c320631db1ad641866283e84a645e5e0fbdb526b16",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "callee": "isFinite",
+          "column": "67",
+          "confidence": "low",
+          "line": "66"
+        }
+      },
+      {
+        "id": "2ca5fab947c46ef747610265ceea6ae7574bfbfa58033525b54261131153f8af",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "callee": "Error",
+          "column": "15",
+          "confidence": "low",
+          "line": "156"
+        }
+      },
+      {
+        "id": "390162e10c07330adbd032ebfd208b43baad61045316048826871535e2d26dcb",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "callee": "parseFloat",
+          "column": "14",
+          "confidence": "low",
+          "line": "59"
+        }
+      },
+      {
+        "id": "3f3bc7189e40078bea269b5506f66cac6cc1f30f37fbccfffd7cb2ac776c9ea0",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "callee": "Error",
+          "column": "17",
+          "confidence": "low",
+          "line": "175"
+        }
+      },
+      {
+        "id": "417522a9af6ef65f0c84da733d9c344d767960fc721b8884af40e9bfe60ce009",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "callee": "Error",
+          "column": "15",
+          "confidence": "low",
+          "line": "119"
+        }
+      },
+      {
+        "id": "431e411eb450a5f98e5768ff8327d2a2b947a97ca703e30cec29cea1fad91e2d",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "callee": "fetchCandles",
+          "column": "25",
+          "confidence": "low",
+          "line": "168"
+        }
+      },
+      {
+        "id": "444972050ed0a8454c6f65c31b1470447963475c8bfd9dab5ccbf7f9c06f0a3c",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "callee": "fetchCandles",
+          "column": "30",
+          "confidence": "low",
+          "line": "178"
+        }
+      },
+      {
+        "id": "45df9a249b42135a406e5940d5caafc295e57e28c49641483b9ef2e6f4a5ad6b",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "callee": "parseFloat",
+          "column": "17",
+          "confidence": "low",
+          "line": "61"
+        }
+      },
+      {
+        "id": "49cb6d7484b72bdbf1faae19a35dab2bc62894bb0dfcba85e84f33a67305339a",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "callee": "computeAtr",
+          "column": "17",
+          "confidence": "low",
+          "line": "179"
+        }
+      },
+      {
+        "id": "4a2a65c1fba1ce8e8e6fa258cfdda9f9e1fcc13dfbf82d967db31e3671b9ddb4",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "callee": "Error",
+          "column": "17",
+          "confidence": "low",
+          "line": "50"
+        }
+      },
+      {
+        "id": "4c1efa206aebea155cd7c007bf565730871a807d28ea2aa2d0557ad7e589bc4c",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "callee": "isFinite",
+          "column": "64",
+          "confidence": "low",
+          "line": "65"
+        }
+      },
+      {
+        "id": "4db87edf0b6888afda8d9655d8ddb4d2c23ae5ed5110e29501241e2502bf09aa",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "callee": "Error",
+          "column": "15",
+          "confidence": "low",
+          "line": "106"
+        }
+      },
+      {
+        "id": "639097ec5b2d53c5f3fb60d1437371d7f6dca4d4f272f61bbed2089d8e35f6b8",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "callee": "Error",
+          "column": "19",
+          "confidence": "low",
+          "line": "43"
+        }
+      },
+      {
+        "id": "6d95b47a51abd42f08ca2640bdd39ce84fc45ade01202f525ac600a0f32fd1e5",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "callee": "Error",
+          "column": "15",
+          "confidence": "low",
+          "line": "113"
+        }
+      },
+      {
+        "id": "70d96e2da39c5798df6d9718fabee6fa82fabfcee85a18946f6b84a8de6b9012",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "callee": "Error",
+          "column": "17",
+          "confidence": "low",
+          "line": "165"
+        }
+      },
+      {
+        "id": "72eb72e2ec27f63bf68cae05e0861e4033df77260068df7fc417576352235c88",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "callee": "parseFloat",
+          "column": "15",
+          "confidence": "low",
+          "line": "57"
+        }
+      },
+      {
+        "id": "73b812734eebc53458b68f0564a38b06a3a99a120eda4908c5d3f489d2965674",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "callee": "map",
+          "column": "20",
+          "confidence": "low",
+          "line": "54"
+        }
+      },
+      {
+        "id": "7b1581f7d36418f8a37b1ca1652b007f440b0999d12cba8e6a0ca562b4f849b9",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "callee": "push",
+          "column": "16",
+          "confidence": "low",
+          "line": "145"
+        }
+      },
+      {
+        "id": "7bbf036be636b52926a8ca642030997307f13870d1c2b3e13d52170f20614a4b",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "callee": "computeAtr",
+          "column": "10",
+          "confidence": "low",
+          "line": "169"
+        }
+      },
+      {
+        "id": "859401748235d822de8719809d648847b06b5545fa363676f9e87c78ac0516b4",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "callee": "Error",
+          "column": "17",
+          "confidence": "low",
+          "line": "142"
+        }
+      },
+      {
+        "id": "8622f27fa32a4d39f84baafee7a89c7bb31bcb1b7c7af73b1c2fae522b580f20",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "callee": "max",
+          "column": "28",
+          "confidence": "low",
+          "line": "138"
+        }
+      },
+      {
+        "id": "87e51be5d8f0d65c8471af0b62ffa563cf3d2107106b890aa4253546c069ee11",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "callee": "isFinite",
+          "column": "38",
+          "confidence": "low",
+          "line": "65"
+        }
+      },
+      {
+        "id": "8b6e6188531be719cff38dad46cd1b89895957832c8a3cb6e2c4d53e0bfc47c4",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "callee": "Number",
+          "column": "15",
+          "confidence": "low",
+          "line": "56"
+        }
+      },
+      {
+        "id": "a27e1c2542be1ac6ed02e406afed248cddc8fd8834fa787869bf72ef80149d19",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "callee": "Error",
+          "column": "17",
+          "confidence": "low",
+          "line": "181"
+        }
+      },
+      {
+        "id": "a3d7706a5d7fcc696d37166d4173c3c7e8f8e2e3d27632659b0e71624bcc5a10",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "callee": "reduce",
+          "column": "38",
+          "confidence": "low",
+          "line": "151"
+        }
+      },
+      {
+        "id": "a4a2de12d825df02e1482574e8370269eeb1b0961f53178e6c17c9b1bf5ee9ec",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "callee": "abs",
+          "column": "31",
+          "confidence": "low",
+          "line": "137"
+        }
+      },
+      {
+        "id": "a90826cdd802e4e4bc93fcca92f797a59dffa9e974a5af43bcf11c01befb991a",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "callee": "isFinite",
+          "column": "12",
+          "confidence": "low",
+          "line": "66"
+        }
+      },
+      {
+        "id": "ac394f219523aeaed61ce4478d1b596907a26433152c81449a8ad477b9041656",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "callee": "Error",
+          "column": "19",
+          "confidence": "low",
+          "line": "67"
+        }
+      },
+      {
+        "id": "b4ef3e88308962035060076b1f458685410b5d6f53878233ad47dc8acd3c8507",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "callee": "isFinite",
+          "column": "39",
+          "confidence": "low",
+          "line": "66"
+        }
+      },
+      {
+        "id": "bf82032377dee344fa6fd14b8f02c652816f5079d62c6f811e7f49dc1bf2c862",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "callee": "isFinite",
+          "column": "12",
+          "confidence": "low",
+          "line": "65"
+        }
+      },
+      {
+        "id": "c202f5d4f132d6cf7aed2122148f4ec0f2b6f2318ebcaccccfb396dbf9a0a467",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "callee": "abs",
+          "column": "32",
+          "confidence": "low",
+          "line": "136"
+        }
+      },
+      {
+        "id": "c5bef0d323fe9fff564f31a5a09a9bdfe39ef572f3d1d3528f897c2417082916",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "callee": "isAxiosError",
+          "column": "15",
+          "confidence": "low",
+          "line": "79"
+        }
+      },
+      {
+        "id": "c8a2ee303b02af177bcbade54eefcce63007c57abdb4ed9862ebfbaa68b4c9f9",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "callee": "includes",
+          "column": "53",
+          "confidence": "low",
+          "line": "87"
+        }
+      },
+      {
+        "id": "c987f2dcfc67bf3f294c71c0a77011b2fd7be523051c1da36602c03ce40a89aa",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "callee": "isFinite",
+          "column": "10",
+          "confidence": "low",
+          "line": "141"
+        }
+      },
+      {
+        "id": "e0a839f964312c69926988f7d222c0503934daf425651bffec2583067d7a0196",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "callee": "String",
+          "column": "15",
+          "confidence": "low",
+          "line": "87"
+        }
+      },
+      {
+        "id": "e0e19919964c5b8a458c01be5c8e0e429a83c5b785eefc7bab71604a16012b44",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "callee": "isArray",
+          "column": "16",
+          "confidence": "low",
+          "line": "41"
+        }
+      },
+      {
+        "id": "e2ec8ee3664a97e8407f258b81b40bfdad3ad0aee75eb8a0f607cf4774878226",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "callee": "toLowerCase",
+          "column": "39",
+          "confidence": "low",
+          "line": "87"
+        }
+      },
+      {
+        "id": "e7fe6b718c13867fd86e13fb8a72735a9c8bdfc81f9d67ac4cc0d17a4062a31c",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "callee": "Error",
+          "column": "17",
+          "confidence": "low",
+          "line": "46"
+        }
+      },
+      {
+        "id": "f7860bf6c1b603fdaa0c3af8677992e2fd706ef251950f5c44427e85e6d7bd5c",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "callee": "parseFloat",
+          "column": "16",
+          "confidence": "low",
+          "line": "60"
+        }
+      },
+      {
+        "id": "fa44dc5bb86de85d13e42fb1375f771b9973138f4385d327164bd43a65e749de",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/utils/atr.ts"
+        },
+        "attributes": {
+          "callee": "isFinite",
+          "column": "8",
+          "confidence": "low",
+          "line": "155"
+        }
+      }
+    ]
+  },
+  "extraction_mode": "heuristic"
+}

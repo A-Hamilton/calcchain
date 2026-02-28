@@ -1,0 +1,21 @@
+{
+  "cache_format_version": 3,
+  "artifact": {
+    "schema_version": "ucg-file-scaffold-v5",
+    "language": "javascript",
+    "path_provenance": {
+      "workspace_relative_path": "public/sw.js"
+    },
+    "nodes": [
+      {
+        "id": "56025da2be0de32f12d9a793dfe8517a60a6f4b70e16ed927ebf5894d2ed2a23",
+        "kind": "module",
+        "language": "javascript",
+        "path_provenance": {
+          "workspace_relative_path": "public/sw.js"
+        }
+      }
+    ]
+  },
+  "extraction_mode": "heuristic"
+}

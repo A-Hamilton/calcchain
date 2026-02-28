@@ -1,0 +1,115 @@
+{
+  "cache_format_version": 3,
+  "artifact": {
+    "schema_version": "ucg-file-scaffold-v5",
+    "language": "typescript",
+    "path_provenance": {
+      "workspace_relative_path": "vite.config.ts"
+    },
+    "nodes": [
+      {
+        "id": "aa8e396af635f91f2b5af827fc0af06691a59e8303528478d657d7239b5f4a65",
+        "kind": "module",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "vite.config.ts"
+        }
+      },
+      {
+        "id": "0da9d390a36bff6288f112a984e52a11aa04ff16073250be2380f41095e55a05",
+        "kind": "import_export_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "vite.config.ts"
+        },
+        "attributes": {
+          "edge_kind": "import_from",
+          "line": "1",
+          "statement": "import { defineConfig } from 'vite';"
+        }
+      },
+      {
+        "id": "187c2a506f56c263abe5ee3d62e28bad703f8d60d6bc2360d91a6ff28e3d1c5b",
+        "kind": "import_export_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "vite.config.ts"
+        },
+        "attributes": {
+          "edge_kind": "import_from",
+          "line": "2",
+          "statement": "import react from '@vitejs/plugin-react-swc'; // Using SWC for faster builds"
+        }
+      },
+      {
+        "id": "5c1ea657d8a5716be475e1b72c0b6660eee0fdf6c7736afd7e537fa65207d599",
+        "kind": "import_export_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "vite.config.ts"
+        },
+        "attributes": {
+          "edge_kind": "import_from",
+          "line": "3",
+          "statement": "import { visualizer } from 'rollup-plugin-visualizer'; // To analyze bundle sizes"
+        }
+      },
+      {
+        "id": "7b3861de2c54bcab725e6cf4ac45c619b265a33b5ef3da8e61217d37423c2afc",
+        "kind": "import_export_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "vite.config.ts"
+        },
+        "attributes": {
+          "edge_kind": "export",
+          "line": "6",
+          "statement": "export default defineConfig(({ mode }) => { // Add mode to access environment"
+        }
+      },
+      {
+        "id": "54357c168dbfc53cfe2a2a84b48bdf34b7f4c0be7032de764282571ec63575c2",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "vite.config.ts"
+        },
+        "attributes": {
+          "callee": "react",
+          "column": "7",
+          "confidence": "low",
+          "line": "12"
+        }
+      },
+      {
+        "id": "b094467e58a325247501ff8404cf74fe3e75a5523a9b01afeee3ea2710621755",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "vite.config.ts"
+        },
+        "attributes": {
+          "callee": "visualizer",
+          "column": "24",
+          "confidence": "low",
+          "line": "14"
+        }
+      },
+      {
+        "id": "ec58ed9529ce224a111ad270afe44caa359e123102c61eb25ebc5cf02ad14042",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "vite.config.ts"
+        },
+        "attributes": {
+          "callee": "defineConfig",
+          "column": "16",
+          "confidence": "low",
+          "line": "6"
+        }
+      }
+    ]
+  },
+  "extraction_mode": "heuristic"
+}

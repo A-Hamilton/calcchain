@@ -1,0 +1,819 @@
+{
+  "cache_format_version": 3,
+  "artifact": {
+    "schema_version": "ucg-file-scaffold-v5",
+    "language": "typescript",
+    "path_provenance": {
+      "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+    },
+    "nodes": [
+      {
+        "id": "47a96d77139d7ea299d9aaa2920b0a22ab977a48441678604a4370c3d34ead6c",
+        "kind": "module",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        }
+      },
+      {
+        "id": "28431b93eb65336b3098ec00f564cd09177962aac2d9afcfa4c801f7d5500631",
+        "kind": "symbol",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "end_line": "140",
+          "line": "123",
+          "protection_range_source": "body_range",
+          "symbol_kind": "variable",
+          "symbol_name": "measureFPS"
+        }
+      },
+      {
+        "id": "947829eb2b5aca6699338ffa7d6aff0c22cabbbd69f22cdcaeec43f1e09de15d",
+        "kind": "symbol",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "end_line": "175",
+          "line": "160",
+          "protection_range_source": "body_range",
+          "symbol_kind": "variable",
+          "symbol_name": "sendMetricsOnExit"
+        }
+      },
+      {
+        "id": "b0d4647550c13cddddda8484e147753513bff9d349bb3ec08ff525fe704177d5",
+        "kind": "import_export_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "edge_kind": "export",
+          "line": "198",
+          "statement": "export default React.memo(PerformanceMonitor);"
+        }
+      },
+      {
+        "id": "f509ad86a28ffc8d46ecf82027c313e54d9fd7c5d096532dcd4560cccee4f69d",
+        "kind": "import_export_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "edge_kind": "import_from",
+          "line": "1",
+          "statement": "import React, { useEffect, useRef, useState } from 'react';"
+        }
+      },
+      {
+        "id": "04c31658b06bf8919b68fabf432d7e7e45a71c0439df835c6f131b9e24b77b58",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "PerformanceObserver",
+          "column": "42",
+          "confidence": "low",
+          "line": "98"
+        }
+      },
+      {
+        "id": "0bc3a1dcc0702e1a6551ce4cc67c81edeaf71ae98a7d9986fa5d259dc6685823",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "push",
+          "column": "28",
+          "confidence": "low",
+          "line": "158"
+        }
+      },
+      {
+        "id": "0e0b198757d941b26e897f6e517469ab53a69e473ab4b392880c269c9f098c52",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "cancelAnimationFrame",
+          "column": "39",
+          "confidence": "low",
+          "line": "143"
+        }
+      },
+      {
+        "id": "0e5d8d6ed669839a7a6fbf31f04c10b20157312ea7ffc22fe223feb79bf55e9f",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "getEntries",
+          "column": "39",
+          "confidence": "low",
+          "line": "99"
+        }
+      },
+      {
+        "id": "163c1d453d53732f9a79ca88f09ee2bff955406f48da8c82ad3357a31f3e3390",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "setMetrics",
+          "column": "17",
+          "confidence": "low",
+          "line": "82"
+        }
+      },
+      {
+        "id": "1c778bcb7c200285f5321d924fe3762e574411ff8b74a500de9a927d98ff3246",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "now",
+          "column": "33",
+          "confidence": "low",
+          "line": "165"
+        }
+      },
+      {
+        "id": "2bf0a7f4a3f86efb7bf9722b5338c36d947b52ccc912de0be52c3d421ce0051a",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "addEventListener",
+          "column": "18",
+          "confidence": "low",
+          "line": "177"
+        }
+      },
+      {
+        "id": "2da88690dea9ca0e26a179293322fda9dc57ec4de0d958fbc930c8c249e472fb",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "getEntries",
+          "column": "39",
+          "confidence": "low",
+          "line": "58"
+        }
+      },
+      {
+        "id": "303ba5039d11e320d0a47419b771a15e3bc1a631c4d60fecc06dc8c15a6ba54c",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "random",
+          "column": "32",
+          "confidence": "low",
+          "line": "29"
+        }
+      },
+      {
+        "id": "31fb7c1c37cae8846f3ca977716cb959ed5af9e1b8732aad59d6ab1371c2a7c4",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "setMetrics",
+          "column": "17",
+          "confidence": "low",
+          "line": "102"
+        }
+      },
+      {
+        "id": "323330cad94b7b1869394e05473cfa75513333cc6e62fe2a45ce1ffb5be4d24f",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "info",
+          "column": "23",
+          "confidence": "low",
+          "line": "173"
+        }
+      },
+      {
+        "id": "339624c7207afe7f0efadd46acdc4926eaf13bb8fa222dd20f2ff816efba33a1",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "memo",
+          "column": "22",
+          "confidence": "low",
+          "line": "198"
+        }
+      },
+      {
+        "id": "3a973a7339202a852a99dc67da2f95702fad81837c9900036c8c3c1fd576809b",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "error",
+          "column": "19",
+          "confidence": "low",
+          "line": "181"
+        }
+      },
+      {
+        "id": "3df273b7ab7e0da9f10feba8d49abe369a405cca06f26bd5ae62218cd4e3c400",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "observe",
+          "column": "32",
+          "confidence": "low",
+          "line": "111"
+        }
+      },
+      {
+        "id": "43927c27379527a090c0f7fa9a56b58bc83cddf2fca10a708f8f2eb6a8d3c632",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "setMetrics",
+          "column": "15",
+          "confidence": "low",
+          "line": "132"
+        }
+      },
+      {
+        "id": "4938e4732eb973a79c4d507639a3172d74efefc797b70b347af9b2f1e98006e3",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "now",
+          "column": "38",
+          "confidence": "low",
+          "line": "119"
+        }
+      },
+      {
+        "id": "4ca80ac196cc80f43f283c36325bee9c75042d0f6c47c1246e30ec140d924ec7",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "Blob",
+          "column": "41",
+          "confidence": "low",
+          "line": "162"
+        }
+      },
+      {
+        "id": "4edfae5b8cb248c5af6b75bd7a16581a3f83eff482bfba0ed5229127384199f8",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "disconnect",
+          "column": "53",
+          "confidence": "low",
+          "line": "92"
+        }
+      },
+      {
+        "id": "516e1e259d66233ed56e69cd6a524044ea97a06320160d54d5228f9cefda8c75",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "useEffect",
+          "column": "3",
+          "confidence": "low",
+          "line": "27"
+        }
+      },
+      {
+        "id": "5af3b4ec99e9bb3be9ba39fd07aab0e0eb2354b9782b1768ff519b67c1e07693",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "setMetrics",
+          "column": "17",
+          "confidence": "low",
+          "line": "150"
+        }
+      },
+      {
+        "id": "5c87d912a8d733f6b12f8a15bd54b013fb616829483badfb363474ca35ce591f",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "PerformanceObserver",
+          "column": "35",
+          "confidence": "low",
+          "line": "57"
+        }
+      },
+      {
+        "id": "60fffff1650c0545ed6a4b3ee4795908ad12ca17f7b4f98cfbafe4eed9245a7a",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "requestAnimationFrame",
+          "column": "23",
+          "confidence": "low",
+          "line": "139"
+        }
+      },
+      {
+        "id": "63e30c17be620a56fb4ab92e7ccd32ad16caeba61f4862fe914ffc886d64127e",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "disconnect",
+          "column": "60",
+          "confidence": "low",
+          "line": "112"
+        }
+      },
+      {
+        "id": "68313f33ce6ce54352e0cd11135b6e1edbc32ceefcd1e33a4ce4b6b8c3c52fde",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "stringify",
+          "column": "52",
+          "confidence": "low",
+          "line": "162"
+        }
+      },
+      {
+        "id": "6ad74619f533a8ad51018855e71a5c0a2971bc16878269423c90d91d27bfc1ff",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "setMetrics",
+          "column": "15",
+          "confidence": "low",
+          "line": "61"
+        }
+      },
+      {
+        "id": "6ef8586ace7a6bf11a338bd40bb9c66d6b291f9fb9ee79d8d2de27947a0ce0fa",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "fn",
+          "column": "40",
+          "confidence": "low",
+          "line": "187"
+        }
+      },
+      {
+        "id": "761d4da34bfaa02c071ad37ba14daf08e122457da577dd04d96794c9a96b3880",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "setMetrics",
+          "column": "15",
+          "confidence": "low",
+          "line": "42"
+        }
+      },
+      {
+        "id": "7d71964184b09ae4cbdad9adea780582d7111b3bfc788b00909644fc5fd686b9",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "error",
+          "column": "21",
+          "confidence": "low",
+          "line": "72"
+        }
+      },
+      {
+        "id": "8541bbdb10b9f72c7972978f940b912a0adeed59a5211f948e3cf348246d4e71",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "error",
+          "column": "21",
+          "confidence": "low",
+          "line": "94"
+        }
+      },
+      {
+        "id": "85507ff90fd4555d8f7677da751cd0f3d73b0c7e68f664b03e13622623579f55",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "forEach",
+          "column": "26",
+          "confidence": "low",
+          "line": "187"
+        }
+      },
+      {
+        "id": "89d1af973072b55bc14600aa1bae7f83dc29380c2ebb1aaecadee451f52738dc",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "push",
+          "column": "30",
+          "confidence": "low",
+          "line": "70"
+        }
+      },
+      {
+        "id": "8e86933bc51f4badb111c199d795aedef64f455e450e0084e6a378094db450cd",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "push",
+          "column": "28",
+          "confidence": "low",
+          "line": "178"
+        }
+      },
+      {
+        "id": "9572769c05cdc3f1213b8cf590d9c50089925b32cf5e517732410b1d0d6c9348",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "disconnect",
+          "column": "53",
+          "confidence": "low",
+          "line": "70"
+        }
+      },
+      {
+        "id": "97a269b20db80b67b1000b9db7c930ef04868b3c4f1321cb3b60fd02d044fe2e",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "PerformanceObserver",
+          "column": "35",
+          "confidence": "low",
+          "line": "77"
+        }
+      },
+      {
+        "id": "9b26aa294efe4567ca10f759c7d20d92a8f0a1881a3005a96df5a33a6431a468",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "observe",
+          "column": "25",
+          "confidence": "low",
+          "line": "50"
+        }
+      },
+      {
+        "id": "a13e10d246f1edcbbbfc44922934be6b712d4ec1c46d9e0108886365249b4618",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "now",
+          "column": "37",
+          "confidence": "low",
+          "line": "124"
+        }
+      },
+      {
+        "id": "a1d33370734ad26488e7f495dd4eb74389cae22567b5359f32567a56ec4b4eb2",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "requestAnimationFrame",
+          "column": "21",
+          "confidence": "low",
+          "line": "142"
+        }
+      },
+      {
+        "id": "aafd2a30dca18b382c8b808b31aa1ab6b4b7ce775e6661a8d7f0c34816d6a10f",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "push",
+          "column": "28",
+          "confidence": "low",
+          "line": "143"
+        }
+      },
+      {
+        "id": "ab407410a91c41dbda95c949a281b059e80f6fb6e4dba5decbebf640bacb48a6",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "getEntries",
+          "column": "39",
+          "confidence": "low",
+          "line": "78"
+        }
+      },
+      {
+        "id": "b2442527307870d3c71b266084ff8ef607173ea15e269569b90547986a253640",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "push",
+          "column": "30",
+          "confidence": "low",
+          "line": "112"
+        }
+      },
+      {
+        "id": "b56d69f4cebece3ce39209e799e2084c788da3a7a9ca519e0a110558d67762ec",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "error",
+          "column": "21",
+          "confidence": "low",
+          "line": "53"
+        }
+      },
+      {
+        "id": "b6476561446fe2330d9d6bdfe913330c6d2fbd4197edd2679138e57c17ae203c",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "removeEventListener",
+          "column": "46",
+          "confidence": "low",
+          "line": "178"
+        }
+      },
+      {
+        "id": "c085c890e5755bb16e85af6be2045629d651c76689c44dafb87a18cde2583ea5",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "getEntries",
+          "column": "39",
+          "confidence": "low",
+          "line": "40"
+        }
+      },
+      {
+        "id": "d0cd8316eac1f44664f4b8a895520d6ef85ec9cd7c74c995ea6d5a788c35064e",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "error",
+          "column": "21",
+          "confidence": "low",
+          "line": "114"
+        }
+      },
+      {
+        "id": "d61cfd38f931d9bb108eb428cff0eab9c7c1d43a1070cc9274bcfcae03275777",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "observe",
+          "column": "25",
+          "confidence": "low",
+          "line": "69"
+        }
+      },
+      {
+        "id": "d84745cf8c20399b62eecd6d6152319833a50786fd022989aa9e8210ebe7c213",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "push",
+          "column": "30",
+          "confidence": "low",
+          "line": "92"
+        }
+      },
+      {
+        "id": "da8c28a91e22564b94c3f27db80a005316d2222a6eaefde0ef294a8e363710b1",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "push",
+          "column": "30",
+          "confidence": "low",
+          "line": "51"
+        }
+      },
+      {
+        "id": "dfe771a600cf0336432e796612792a7b8ab7e3c31d49e86044710a669257ff96",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "clearInterval",
+          "column": "39",
+          "confidence": "low",
+          "line": "158"
+        }
+      },
+      {
+        "id": "e026a31374e69e22745eeee33f025e5c4681bde51c1f2809866e819b993eab47",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "disconnect",
+          "column": "53",
+          "confidence": "low",
+          "line": "51"
+        }
+      },
+      {
+        "id": "ea5ed36ac86eed166c1fbda22240db1b3d31ac9f8420d80da64a2cde780ad5a7",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "observe",
+          "column": "25",
+          "confidence": "low",
+          "line": "91"
+        }
+      },
+      {
+        "id": "ebf69ba6a5ecb296504ae48e5654cbd6ade1b2bd6fdaf34ce5aa17aff283c8b8",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "PerformanceObserver",
+          "column": "35",
+          "confidence": "low",
+          "line": "39"
+        }
+      },
+      {
+        "id": "ee658a51ae9912df6a8a192f70ded2fa46b5d1b3de86172d93572a9880a63128",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "useRef",
+          "column": "28",
+          "confidence": "low",
+          "line": "25"
+        }
+      },
+      {
+        "id": "f78d8af1d2870d2e248d7cc3caec762ce47d9031f86b23f73bf3beb42a1d0ffc",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/PerformanceMonitor.tsx"
+        },
+        "attributes": {
+          "callee": "setInterval",
+          "column": "34",
+          "confidence": "low",
+          "line": "146"
+        }
+      }
+    ]
+  },
+  "extraction_mode": "heuristic"
+}

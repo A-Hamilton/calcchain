@@ -1,0 +1,816 @@
+{
+  "cache_format_version": 3,
+  "artifact": {
+    "schema_version": "ucg-file-scaffold-v5",
+    "language": "typescript",
+    "path_provenance": {
+      "workspace_relative_path": "src/components/CryptoInsights.tsx"
+    },
+    "nodes": [
+      {
+        "id": "b57f74a62ef9d55f7b60b18e912ff15930c3eeedc2f88ac7a6e174c67c14fc19",
+        "kind": "module",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        }
+      },
+      {
+        "id": "03263f4c058865928341c102b4b1bdf843c15657ee1cc6615745f5ebcca491f1",
+        "kind": "import_export_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "edge_kind": "import_from",
+          "line": "1",
+          "statement": "import React, { useState, useCallback, useMemo } from \"react\";"
+        }
+      },
+      {
+        "id": "35c8a3432448487e2e765db4dc0782c2d34d2b4c824dd1ecaaafe562ef8f0568",
+        "kind": "import_export_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "edge_kind": "export",
+          "line": "475",
+          "statement": "export default CryptoInsights;"
+        }
+      },
+      {
+        "id": "daf9ffcc42da5da1552a649df77995f97577afe5fb54df8c1eab76fbd523311d",
+        "kind": "import_export_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "edge_kind": "import_from",
+          "line": "22",
+          "statement": "import { m, AnimatePresence } from \"framer-motion\";"
+        }
+      },
+      {
+        "id": "050d7f953cb5fceabec39e2c91d3e92fb05befa600075342c9344089af2793b4",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "useTheme",
+          "column": "19",
+          "confidence": "low",
+          "line": "81"
+        }
+      },
+      {
+        "id": "09e8b9356d528a7684146301220ae3adef293cfc08d222a4bcebf48e791166dc",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "setBookmarked",
+          "column": "7",
+          "confidence": "low",
+          "line": "157"
+        }
+      },
+      {
+        "id": "0d7c344d9ea6399a04483fa57c11a193bdbd83a169b14e1fc1dc418349e33f06",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "useMediaQuery",
+          "column": "22",
+          "confidence": "low",
+          "line": "82"
+        }
+      },
+      {
+        "id": "0f29609027edbca284618694685fa1737dafc0f2de00fdd40568be12d927dcf8",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "setItem",
+          "column": "22",
+          "confidence": "low",
+          "line": "172"
+        }
+      },
+      {
+        "id": "0f5ed2f80e96dcab1ff986e5e2078e6f2b36c012f98beaac4583d7a8c7cb065f",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "setTimeout",
+          "column": "9",
+          "confidence": "low",
+          "line": "131"
+        }
+      },
+      {
+        "id": "18e01e449dbb5721fb432116b164234a6c701f2b6d9bd832e26b9e78e77686f7",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "alpha",
+          "column": "20",
+          "confidence": "low",
+          "line": "118"
+        }
+      },
+      {
+        "id": "1dc8d88d0ec5260bdf1a75513fe3aa06450e55deb2e85bc84076ad95a9cbbd6c",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "alpha",
+          "column": "20",
+          "confidence": "low",
+          "line": "110"
+        }
+      },
+      {
+        "id": "217a14c9ea9f15991b6473e1897b07cfff690d7203700e94ee2fc90fc872ad3d",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "alpha",
+          "column": "34",
+          "confidence": "low",
+          "line": "314"
+        }
+      },
+      {
+        "id": "21cb23d828734488b33a4960a1e1fb08bcabad00131cbfa33fb1be3e80ae51d4",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "alpha",
+          "column": "20",
+          "confidence": "low",
+          "line": "94"
+        }
+      },
+      {
+        "id": "232491e127cf29035054135869f5e37793ede7f2282bef638126fbc75217168d",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "setShared",
+          "column": "9",
+          "confidence": "low",
+          "line": "149"
+        }
+      },
+      {
+        "id": "2a344876905a8c2fbc9ef52eb189602cae6c5ab200a7d6b49269a507e47b92d3",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "alpha",
+          "column": "24",
+          "confidence": "low",
+          "line": "111"
+        }
+      },
+      {
+        "id": "2cce9963fd7241f804a01c54f6f709f3f926dd05ca21635142e8739624518981",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "setShared",
+          "column": "26",
+          "confidence": "low",
+          "line": "150"
+        }
+      },
+      {
+        "id": "2e5e3fe885fc42a81b2f09954c536334e459ef23fcc0d4e7bcf23e3e1b32a434",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "useState",
+          "column": "33",
+          "confidence": "low",
+          "line": "83"
+        }
+      },
+      {
+        "id": "311713c1a9d24052596d772ff9e726904389255fdb1249b3c94ed613af4ac104",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "setCopied",
+          "column": "9",
+          "confidence": "low",
+          "line": "130"
+        }
+      },
+      {
+        "id": "35f2abfd009db01aa03ec8fd4cc42b96cf48c903f6cc8c0c1207852a2173e64a",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "writeText",
+          "column": "35",
+          "confidence": "low",
+          "line": "129"
+        }
+      },
+      {
+        "id": "44ad9e56254ac11aba54ccb4d153dafa3e6f3738b229c9b904a257764b9488ed",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "useCallback",
+          "column": "24",
+          "confidence": "low",
+          "line": "127"
+        }
+      },
+      {
+        "id": "48429ab3eafc38a901f8e315b3fd39a1e4f2c94d1fe4ee0d17e4571e52e96894",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "alpha",
+          "column": "20",
+          "confidence": "low",
+          "line": "102"
+        }
+      },
+      {
+        "id": "4e54264ebf215c6d62fd94ce2a65ce749343c700fff9f3843213a6beab7ec844",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "alpha",
+          "column": "27",
+          "confidence": "low",
+          "line": "344"
+        }
+      },
+      {
+        "id": "5624ea4a046b66bdd0dd627d1abf567e70de7a3f559c756b8303172e29ca62c2",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "useState",
+          "column": "41",
+          "confidence": "low",
+          "line": "84"
+        }
+      },
+      {
+        "id": "5bc3c5218e1fd49a27fab4e3a6dea592bbbc229aa1364d6e25f07bf7596679d5",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "alpha",
+          "column": "24",
+          "confidence": "low",
+          "line": "95"
+        }
+      },
+      {
+        "id": "5f62737e01b23aeeb93ef1371d7797d764e3cead5083019fc27eb4d97d360210",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "parse",
+          "column": "32",
+          "confidence": "low",
+          "line": "182"
+        }
+      },
+      {
+        "id": "6062994baa677b696b37a276ec3f3d141b4385dbe4563d2f9f5e6805f94f89fb",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "stringify",
+          "column": "16",
+          "confidence": "low",
+          "line": "174"
+        }
+      },
+      {
+        "id": "611372b7d2303b2b72b862a5c4757249b4678d0dbfead4b6caf9c39ba0f8f821",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "stringify",
+          "column": "16",
+          "confidence": "low",
+          "line": "166"
+        }
+      },
+      {
+        "id": "64b5c77e12c78d327ab41d3dc5e9c259fda1a243e3d760bafa12b57b20e08aef",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "alpha",
+          "column": "34",
+          "confidence": "low",
+          "line": "348"
+        }
+      },
+      {
+        "id": "65d34d43d0be3b42153ee0034f86b7416155905f6b05e4004b490c0e80e9cab0",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "useEffect",
+          "column": "11",
+          "confidence": "low",
+          "line": "180"
+        }
+      },
+      {
+        "id": "68de975253899ed63b590b838c380e4553feb5850299dc83b5b6cefa4d11f536",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "alpha",
+          "column": "31",
+          "confidence": "low",
+          "line": "412"
+        }
+      },
+      {
+        "id": "6df22280f257d2ff24b54daa6b54c7171cf6daf5fd9154db7467066b0100741f",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "share",
+          "column": "27",
+          "confidence": "low",
+          "line": "140"
+        }
+      },
+      {
+        "id": "783aae369f0921ef80050655a390c682aadcad050cb018bb69ef1878c60a1531",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "setItem",
+          "column": "22",
+          "confidence": "low",
+          "line": "164"
+        }
+      },
+      {
+        "id": "7b4a78d59cbc24d6d1b603d30d204eb358445e83602cbaab218d9b7e0b9be9fe",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "alpha",
+          "column": "36",
+          "confidence": "low",
+          "line": "383"
+        }
+      },
+      {
+        "id": "834e261461d934a3455f559b9bab08815c1b4b21c825c8414f42a715d86d8935",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "filter",
+          "column": "36",
+          "confidence": "low",
+          "line": "169"
+        }
+      },
+      {
+        "id": "88ca1a7e6bae577ae54e77603cf65c70ef475bb38b77795d39d61380a1f354cb",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "handleCopy",
+          "column": "17",
+          "confidence": "low",
+          "line": "147"
+        }
+      },
+      {
+        "id": "91cc9eda364cea980b1b529c1e218eaf3affdc7cc9aacdefbab8949c4d3f1652",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "warn",
+          "column": "17",
+          "confidence": "low",
+          "line": "133"
+        }
+      },
+      {
+        "id": "92bdb52db265ba648e0867d441c423804121e119b10c1d3dbed5c784ed77d957",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "now",
+          "column": "51",
+          "confidence": "low",
+          "line": "163"
+        }
+      },
+      {
+        "id": "949d0d54d44b81f980f5d4680f28f8866b6e362215f7cfa5ba64c57f72785eda",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "useCallback",
+          "column": "28",
+          "confidence": "low",
+          "line": "156"
+        }
+      },
+      {
+        "id": "9a9bba8bd866e366188cb389eb534889da9ae980862f5d309d2a25fb6e0c2fb9",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "push",
+          "column": "19",
+          "confidence": "low",
+          "line": "163"
+        }
+      },
+      {
+        "id": "9d628360131c2a9abd34b68521a04f29dfaf5293121860337383af8b308e738a",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "setBookmarked",
+          "column": "9",
+          "confidence": "low",
+          "line": "185"
+        }
+      },
+      {
+        "id": "b110fc243927e4733030b7a8470f48a3aeb5036728cec811905769cb2009df34",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "alpha",
+          "column": "24",
+          "confidence": "low",
+          "line": "103"
+        }
+      },
+      {
+        "id": "b4ca95d4c106d14ac07649ee754c81d309ac7b66b73441b01e92de7ac1861abd",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "useState",
+          "column": "33",
+          "confidence": "low",
+          "line": "85"
+        }
+      },
+      {
+        "id": "ba93c91b4cb2ffd94e06eb76d90d95f6e04b786b7d184bebaf9ca0870fe2bb37",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "getItem",
+          "column": "24",
+          "confidence": "low",
+          "line": "183"
+        }
+      },
+      {
+        "id": "bc91da92751c65ea043e361e59c6d2d098766218a3be0c86f7c6d830ab6ee431",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "memo",
+          "column": "61",
+          "confidence": "low",
+          "line": "74"
+        }
+      },
+      {
+        "id": "bf50cf6fa585572e3fbb23c262d88b3a2cce2752dcca4d7a21aa2d008b815168",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "setTimeout",
+          "column": "9",
+          "confidence": "low",
+          "line": "150"
+        }
+      },
+      {
+        "id": "c8f554e2ecc92b1ebbb157fcdec3b87a0b6a4da3ae8de7d99409c07870d5a931",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "setCopied",
+          "column": "26",
+          "confidence": "low",
+          "line": "131"
+        }
+      },
+      {
+        "id": "c9d204830ded6920fb043ebf6b90e65a32f84eb996fcb134876c8a1b9f33d0bb",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "warn",
+          "column": "17",
+          "confidence": "low",
+          "line": "152"
+        }
+      },
+      {
+        "id": "cefc7f818a6f99032d20c137fda961133c4e592bbace52045cb72b96f19ee940",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "some",
+          "column": "33",
+          "confidence": "low",
+          "line": "185"
+        }
+      },
+      {
+        "id": "d1111f8377f37a465991a03fb7326c3e1abcb5c0442417fbebdbed53165ab6f4",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "alpha",
+          "column": "24",
+          "confidence": "low",
+          "line": "119"
+        }
+      },
+      {
+        "id": "d1f315946a69a1935d2b7f8416e4522a7a7e9980d8f0ae0a4c4bdd07e6c3ab3f",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "alpha",
+          "column": "31",
+          "confidence": "low",
+          "line": "439"
+        }
+      },
+      {
+        "id": "d91eb6b876f9c75a01d5d794830d58b46035da15983d741838c0eedb13bf789c",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "alpha",
+          "column": "28",
+          "confidence": "low",
+          "line": "263"
+        }
+      },
+      {
+        "id": "e6bcc5d827a93a644b09ed73b649280f9bf1466762e30d50375db4494efba20e",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "warn",
+          "column": "17",
+          "confidence": "low",
+          "line": "187"
+        }
+      },
+      {
+        "id": "eb1a15380153b19d31b961852d2b04d02aaac782302d930a5b9504176b498f82",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "useCallback",
+          "column": "25",
+          "confidence": "low",
+          "line": "137"
+        }
+      },
+      {
+        "id": "efeaae278dc3e577ab49e25f6aab2e1f714d162040cf72613834723033ac5231",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "getItem",
+          "column": "22",
+          "confidence": "low",
+          "line": "160"
+        }
+      },
+      {
+        "id": "f36db9b557b7177adbc646a44a4b6c0a3e7e13eb05194b84b5911f352131d843",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "parse",
+          "column": "30",
+          "confidence": "low",
+          "line": "159"
+        }
+      },
+      {
+        "id": "fe78a61ae3a2ac057275279177636d42bc4123e4d5b7b1d4a53a7784b500fedb",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "alpha",
+          "column": "28",
+          "confidence": "low",
+          "line": "217"
+        }
+      },
+      {
+        "id": "ff54114a85ae01c62e9d119f265986e53ed20670edd112a6a2bdb02dd6ab7908",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "useMemo",
+          "column": "27",
+          "confidence": "low",
+          "line": "88"
+        }
+      },
+      {
+        "id": "ffe9f6274462caf8973cbf259bc4c59527a356e4a9b12f96bf34edc0de79ece4",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "src/components/CryptoInsights.tsx"
+        },
+        "attributes": {
+          "callee": "down",
+          "column": "54",
+          "confidence": "low",
+          "line": "82"
+        }
+      }
+    ]
+  },
+  "extraction_mode": "heuristic"
+}

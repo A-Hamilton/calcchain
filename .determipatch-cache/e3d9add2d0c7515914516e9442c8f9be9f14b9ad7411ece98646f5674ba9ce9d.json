@@ -1,0 +1,88 @@
+{
+  "cache_format_version": 3,
+  "artifact": {
+    "schema_version": "ucg-file-scaffold-v5",
+    "language": "typescript",
+    "path_provenance": {
+      "workspace_relative_path": "vitest.config.ts"
+    },
+    "nodes": [
+      {
+        "id": "7314633f5a2e23afece26d0c581442ad3675a27dd5ef437af2c6406e0c6c1dfe",
+        "kind": "module",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "vitest.config.ts"
+        }
+      },
+      {
+        "id": "47829e017e8c754acb8f55151c6a2055f5acc60e349c04adf5f3b1e1e7d2c4f1",
+        "kind": "import_export_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "vitest.config.ts"
+        },
+        "attributes": {
+          "edge_kind": "import_from",
+          "line": "3",
+          "statement": "import react from '@vitejs/plugin-react-swc';"
+        }
+      },
+      {
+        "id": "6bf73d0809faf535f28be89675cf620c16c4276cdb6169e6bc6bbaae61f729f6",
+        "kind": "import_export_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "vitest.config.ts"
+        },
+        "attributes": {
+          "edge_kind": "import_from",
+          "line": "2",
+          "statement": "import { defineConfig } from 'vite';"
+        }
+      },
+      {
+        "id": "f89b26311383fa4ee794b9b8ee2c41206a15d8db6aef5008945ff2b529737d77",
+        "kind": "import_export_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "vitest.config.ts"
+        },
+        "attributes": {
+          "edge_kind": "export",
+          "line": "5",
+          "statement": "export default defineConfig({"
+        }
+      },
+      {
+        "id": "1a47ad15a066db287855f1bc51e341ea70e8aef4181db27c4aa331498ec4a7e2",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "vitest.config.ts"
+        },
+        "attributes": {
+          "callee": "react",
+          "column": "13",
+          "confidence": "low",
+          "line": "6"
+        }
+      },
+      {
+        "id": "6ebfafaa554596ac47f950c8a31e78e8129c8bbad7613cc8a925eaa3174ebfbd",
+        "kind": "call_edge",
+        "language": "typescript",
+        "path_provenance": {
+          "workspace_relative_path": "vitest.config.ts"
+        },
+        "attributes": {
+          "callee": "defineConfig",
+          "column": "16",
+          "confidence": "low",
+          "line": "5"
+        }
+      }
+    ]
+  },
+  "extraction_mode": "heuristic"
+}
