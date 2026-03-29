@@ -121,13 +121,13 @@ const sectionVariants = {
     scale: 1,
     transition: {
       duration: 0.5,
-      ease: [0.25, 0.1, 0.25, 1],
-      type: "spring",
+      ease: [0.25, 0.1, 0.25, 1] as const,
+      type: "spring" as const,
       stiffness: 100,
       damping: 15,
     },
   },
-};
+} as const;
 
 const resultsContainerVariants = {
   hidden: { opacity: 1 },
@@ -136,21 +136,21 @@ const resultsContainerVariants = {
     transition: {
       staggerChildren: 0.1,
       delayChildren: 0.1,
-      when: "beforeChildren",
+      when: "beforeChildren" as const,
     },
   },
-};
+} as const;
 
 const pulseVariant = {
   animate: {
-    scale: [1, 1.02, 1],
+    scale: [1, 1.02, 1] as number[],
     transition: {
       duration: 3,
       repeat: Infinity,
-      ease: "easeInOut",
+      ease: "easeInOut" as const,
     },
   },
-};
+} as const;
 
 // Enhanced TypeScript interfaces
 interface InfoSectionProps {

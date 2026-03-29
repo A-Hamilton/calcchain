@@ -205,13 +205,13 @@ const EnhancedErrorUI = React.memo<{
       scale: 1,
       transition: {
         duration: 0.5,
-        ease: [0.25, 0.1, 0.25, 1],
-        type: "spring",
+        ease: [0.25, 0.1, 0.25, 1] as const,
+        type: "spring" as const,
         stiffness: 120,
         damping: 20,
       }
     }
-  }), []);
+  } as const), []);
 
   return (
     <Box
